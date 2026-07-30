@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тень — школьный портал</title>
+    <style>
+        :root {
+            --vk-blue: #4a76a8;
+            --vk-bg: #edeef0;
+            --vk-white: #ffffff;
+            --vk-border: #d8dbdf;
+            --vk-link: #2b587a;
+            --gold: #f5a623;
+            --header-h: 42px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Tahoma, Verdana, sans-serif;
+            background: var(--vk-bg);
+            color: #2a2a2a;
+            font-size: 12px;
+            line-height: 1.4;
+            min-height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='60' height='60' fill='none' stroke='%23d8dbdf' stroke-width='0.5'/%3E%3C/svg%3E");
+            background-size: 60px 60px;
+        }
+        .vk-header {
+            background: var(--vk-blue);
+            height: var(--header-h);
+            width: 100%;
+            position: fixed;
+            top: 0; left: 0; z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .vk-header-inner {
+            max-width: 1000px; margin: 0 auto;
+            display: flex; align-items: center; height: 100%;
+            padding: 0 10px; gap: 10px;
+        }
+        .vk-logo { font-weight: bold; font-size: 16px; color: #fff; text-decoration: none; }
+        .vk-header-nav { display: flex; gap: 4px; margin-left: 10px; flex: 1; }
+        .vk-header-nav a { color: #dce4f0; text-decoration: none; padding: 6px 10px; border-radius: 3px; font-size: 11px; }
+        .vk-header-nav a:hover, .vk-header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: bold; }
+        .user-mini { display: flex; align-items: center; gap: 7px; color: #fff; font-size: 11px; cursor: pointer; margin-left: auto; }
+        .user-mini-ava {
+            width: 28px; height: 28px; border-radius: 50%; background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; border: 2px solid transparent;
+        }
+        .user-mini-ava.vip { border-color: var(--gold); box-shadow: 0 0 6px var(--gold); }
+        .app-layout { max-width: 1000px; margin: 0 auto; display: flex; gap: 10px; padding-top: calc(var(--header-h) + 10px); padding-bottom: 20px; }
+        .left-col { width: 180px; flex-shrink: 0; }
+        .center-col { flex: 1; min-width: 0; }
+        .vk-block { background: var(--vk-white); border-radius: 3px; border: 1px solid var(--vk-border); margin-bottom: 10px; }
+        .vk-block-header {
+            padding: 10px 14px; border-bottom: 1px solid var(--vk-border);
+            font-weight: bold; font-size: 13px; background: #fafbfc;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .vk-block-body { padding: 10px 14px; max-height: 55vh; overflow-y: auto; }
+        .msg-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f2f3f5; }
+        .msg-ava {
+            width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: #fff; border: 2px solid transparent;
+        }
+        .msg-ava.vip { border-color: var(--gold); box-shadow: 0 0 6px var(--gold); }
+        .msg-content { flex: 1; }
+        .msg-meta { font-size: 11px; color: #999; margin-bottom: 3px; }
+        .msg-author { font-weight: bold; color: var(--vk-link); cursor: pointer; }
+        .vip-badge { background: var(--gold); color: #fff; font-size: 9px; padding: 1px 5px; border-radius: 8px; margin-left: 4px; }
+        .btn { padding: 6px 14px; background: #5b88bd; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .btn:hover { background: #3b5f8a; }
+        input, textarea {
+            border: 1px solid var(--vk-border); border-radius: 3px;
+            padding: 6px 10px; font-family: Tahoma, sans-serif; font-size: 12px; outline: none;
+        }
+        textarea { resize: vertical; width: 100%; min-height: 45px; }
+        .side-menu a { display: block; padding: 9px 14px; color: var(--vk-link); text-decoration: none; border-bottom: 1px solid #f0f1f3; }
+        .side-menu a:hover, .side-menu a.active { background: #e8edf3; font-weight: bold; color: #333; }
+        .modal-overlay {
+            position: fixed; top:0;left:0;width:100%;height:100%; background:rgba(0,0,0,0.55); z-index:2000;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .modal-box {
+            background:#fff; border-radius:6px; padding:24px; width:400px; max-height:80vh; overflow-y:auto; text-align:center;
+        }
+        /* Адаптация под вертикальные и горизонтальные экраны */
+        @media (max-width: 850px) {
+            .left-col { display: none; }
+            .app-layout { padding: calc(var(--header-h) + 6px) 6px 20px; }
+            .vk-header-inner { gap: 6px; }
+            .vk-header-nav a { padding: 6px 8px; font-size: 10px; }
+        }
+        @media (max-width: 600px) {
+            .vk-header-nav { gap: 2px; }
+            .vk-header-nav a { padding: 6px 6px; font-size: 9px; }
+            .user-mini { font-size: 10px; }
+            .modal-box { width: 90%; }
+            .msg-ava { width: 32px; height: 32px; font-size: 12px; }
+        }
+        /* Горизонтальная ориентация на мобильных устройствах */
+        @media (max-width: 850px) and (orientation: landscape) {
+            .left-col { display: block; width: 140px; }
+            .side-menu a { padding: 7px 10px; font-size: 11px; }
+            .vk-header-nav a { font-size: 10px; }
+            .app-layout { gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+<div class="vk-header">
+    <div class="vk-header-inner">
+        <a href="#" class="vk-logo">📚 Тень</a>
+        <div class="vk-header-nav">
+            <a href="#" data-page="profile" class="active">👤 Профиль</a>
+            <a href="#" data-page="wall">📝 Стена</a>
+            <a href="#" data-page="forum">💬 Форум</a>
+            <a href="#" data-page="messages">✉️ Сообщения</a>
+        </div>
+        <div class="user-mini" onclick="openAuthModal()">
+            <div class="user-mini-ava" id="userMiniAva"></div>
+            <span id="userMiniName">Войти</span>
+        </div>
+    </div>
+</div>
+
+<div class="app-layout">
+    <div class="left-col"><div class="vk-block side-menu" id="sideMenu"></div></div>
+    <div class="center-col" id="mainContent"></div>
+</div>
+
+<!-- Модалки -->
+<div id="authModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <h3>Вход / Регистрация</h3>
+        <input type="email" id="email" placeholder="Email" style="width:100%; margin-bottom:8px;">
+        <input type="password" id="password" placeholder="Пароль" style="width:100%; margin-bottom:8px;">
+        <button class="btn" onclick="signUp()" style="width:100%; margin-bottom:6px;">Зарегистрироваться</button>
+        <button class="btn" onclick="signIn()" style="width:100%;">Войти</button>
+        <button class="btn" onclick="signOut()" style="width:100%; margin-top:6px; background:#888;">Выйти</button>
+        <button onclick="document.getElementById('authModal').style.display='none'" style="margin-top:10px; background:none; border:none; color:#999;">Закрыть</button>
+    </div>
+</div>
+
+<div id="editProfileModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <h3>Редактировать профиль</h3>
+        <label>Никнейм</label><br>
+        <input id="editNick" style="width:100%;"><br><br>
+        <label>Аватар (URL картинки)</label><br>
+        <input id="editAvatar" placeholder="https://..." style="width:100%;"><br><br>
+        <label>Описание</label><br>
+        <input id="editDesc" style="width:100%;"><br><br>
+        <label><input type="checkbox" id="editVip"> VIP-статус (тестовый)</label><br><br>
+        <button class="btn" onclick="saveProfile()">Сохранить</button>
+        <button class="btn" onclick="document.getElementById('editProfileModal').style.display='none'" style="background:#888;">Отмена</button>
+    </div>
+</div>
+
+<div id="addContactModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <h3>Добавить контакт</h3>
+        <input id="searchNick" placeholder="Введите никнейм" style="width:100%; margin-bottom:8px;">
+        <button class="btn" onclick="addContactByNick()">Найти и добавить</button>
+        <button class="btn" onclick="document.getElementById('addContactModal').style.display='none'" style="background:#888;">Отмена</button>
+    </div>
+</div>
+
+<div id="toast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;z-index:3000;opacity:0;transition:opacity 0.3s;pointer-events:none;"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+    (function() {
+        // ---------- КОНФИГУРАЦИЯ FIREBASE (твой проект) ----------
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6pS8EIEn2MuXI5ALVtzLv47i6_TCIBNc",
+            authDomain: "shadow-cdd92.firebaseapp.com",
+            projectId: "shadow-cdd92",
+            storageBucket: "shadow-cdd92.firebasestorage.app",
+            messagingSenderId: "680697444173",
+            appId: "1:680697444173:web:a762854719f1a08413e904"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ---------- ГЛОБАЛЬНОЕ СОСТОЯНИЕ ----------
+        let currentUser = null;
+        let userProfile = { nickname: 'Гость', isPremium: false, avatarUrl: '', description: '' };
+        let currentPage = 'profile';
+        let profileUid = null;
+        let activeDialogUid = null;
+        let contacts = [];
+
+        // ---------- АВТОРИЗАЦИЯ ----------
+        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                const doc = await db.collection('users').doc(user.uid).get();
+                if (doc.exists) {
+                    userProfile = doc.data();
+                } else {
+                    userProfile = { nickname: user.email.split('@')[0], isPremium: false, avatarUrl: '', description: '' };
+                    await db.collection('users').doc(user.uid).set(userProfile);
+                }
+                loadContacts();
+            } else {
+                currentUser = null;
+                userProfile = { nickname: 'Гость', isPremium: false, avatarUrl: '', description: '' };
+                contacts = [];
+            }
+            updateUserUI();
+            render();
+        });
+
+        function updateUserUI() {
+            const nameSpan = document.getElementById('userMiniName');
+            const avaDiv = document.getElementById('userMiniAva');
+            if (currentUser) {
+                nameSpan.textContent = userProfile.nickname;
+                if (userProfile.avatarUrl) {
+                    avaDiv.style.backgroundImage = `url(${userProfile.avatarUrl})`;
+                    avaDiv.textContent = '';
+                } else {
+                    avaDiv.style.backgroundImage = '';
+                    avaDiv.textContent = userProfile.nickname.substring(0,2).toUpperCase();
+                }
+                avaDiv.className = 'user-mini-ava' + (userProfile.isPremium ? ' vip' : '');
+            } else {
+                nameSpan.textContent = 'Войти';
+                avaDiv.textContent = '?';
+                avaDiv.style.backgroundImage = '';
+                avaDiv.className = 'user-mini-ava';
+            }
+        }
+
+        function loadContacts() {
+            const key = `contacts_${currentUser.uid}`;
+            const stored = localStorage.getItem(key);
+            contacts = stored ? JSON.parse(stored) : [];
+        }
+        function saveContacts() {
+            const key = `contacts_${currentUser.uid}`;
+            localStorage.setItem(key, JSON.stringify(contacts));
+        }
+        function getContact(uid) {
+            return contacts.find(c => c.uid === uid);
+        }
+        function upsertContact(uid, nickname) {
+            const existing = contacts.find(c => c.uid === uid);
+            if (!existing) {
+                contacts.push({ uid, nickname, customName: null });
+            } else {
+                existing.nickname = nickname;
+            }
+            saveContacts();
+        }
+        function renameContact(uid, newName) {
+            const c = contacts.find(c => c.uid === uid);
+            if (c) {
+                c.customName = newName || null;
+                saveContacts();
+                if (activeDialogUid === uid) render();
+            }
+        }
+
+        // ---------- НАВИГАЦИЯ ----------
+        function navigate(page, uid = null) {
+            currentPage = page;
+            if (page === 'profile') {
+                profileUid = uid || (currentUser ? currentUser.uid : null);
+            } else {
+                profileUid = null;
+            }
+            if (page === 'messages' && uid) {
+                activeDialogUid = uid;
+            }
+            render();
+        }
+
+        function goToProfile(uid) {
+            if (uid === currentUser.uid) {
+                navigate('profile');
+            } else {
+                navigate('profile', uid);
+            }
+        }
+
+        // ---------- РЕНДЕР ----------
+        function render() {
+            if (!currentUser) {
+                document.getElementById('mainContent').innerHTML =
+                    '<div class="vk-block"><div class="vk-block-body" style="text-align:center;padding:40px;">Пожалуйста, войдите или зарегистрируйтесь</div></div>';
+                document.getElementById('sideMenu').innerHTML = '';
+                return;
+            }
+
+            const side = document.getElementById('sideMenu');
+            side.innerHTML = `
+                <a href="#" class="${currentPage==='profile' && !profileUid ?'active':''}" data-nav="profile">👤 Мой профиль</a>
+                <a href="#" class="${currentPage==='wall'?'active':''}" data-nav="wall">📝 Стена</a>
+                <a href="#" class="${currentPage==='forum'?'active':''}" data-nav="forum">💬 Форум</a>
+                <a href="#" class="${currentPage==='messages'?'active':''}" data-nav="messages">✉️ Сообщения</a>
+            `;
+            document.querySelectorAll('.vk-header-nav a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`.vk-header-nav a[data-page="${currentPage}"]`)?.classList.add('active');
+
+            const content = document.getElementById('mainContent');
+            switch (currentPage) {
+                case 'profile': renderProfile(content); break;
+                case 'wall': renderWall(content); break;
+                case 'forum': renderForum(content); break;
+                case 'messages': renderMessages(content); break;
+            }
+        }
+
+        // ---------- ПРОФИЛЬ ----------
+        async function renderProfile(container) {
+            const uid = profileUid || currentUser.uid;
+            const isMe = uid === currentUser.uid;
+            let profile = userProfile;
+            if (!isMe) {
+                const doc = await db.collection('users').doc(uid).get();
+                profile = doc.exists ? doc.data() : null;
+            }
+            if (!profile) {
+                container.innerHTML = '<div class="vk-block"><div class="vk-block-body">Пользователь не найден</div></div>';
+                return;
+            }
+            container.innerHTML = `
+                <div class="vk-block">
+                    <div class="vk-block-header">👤 Профиль</div>
+                    <div class="vk-block-body" style="text-align:center;">
+                        <div class="msg-ava ${profile.isPremium?'vip':''}" style="width:80px;height:80px;font-size:30px;margin:0 auto;${profile.avatarUrl ? 'background-image:url('+profile.avatarUrl+');background-size:cover;' : ''}">${profile.avatarUrl ? '' : profile.nickname.substring(0,2).toUpperCase()}</div>
+                        <h3>${escapeHTML(profile.nickname)} ${profile.isPremium ? '<span class="vip-badge">VIP</span>' : ''}</h3>
+                        <p>${escapeHTML(profile.description || 'Нет описания')}</p>
+                        ${isMe ? '<button class="btn btn-sm" onclick="openEditProfile()">✏️ Редактировать</button>' :
+                        `<button class="btn btn-sm" onclick="startChat('${uid}')">💬 Отправить сообщение</button>`}
+                    </div>
+                </div>`;
+        }
+
+        window.openEditProfile = () => {
+            document.getElementById('editNick').value = userProfile.nickname;
+            document.getElementById('editAvatar').value = userProfile.avatarUrl || '';
+            document.getElementById('editDesc').value = userProfile.description || '';
+            document.getElementById('editVip').checked = userProfile.isPremium;
+            document.getElementById('editProfileModal').style.display = 'flex';
+        };
+        window.saveProfile = async () => {
+            userProfile.nickname = document.getElementById('editNick').value.trim() || 'Гость';
+            userProfile.avatarUrl = document.getElementById('editAvatar').value.trim();
+            userProfile.description = document.getElementById('editDesc').value.trim();
+            userProfile.isPremium = document.getElementById('editVip').checked;
+            await db.collection('users').doc(currentUser.uid).set(userProfile, { merge: true });
+            document.getElementById('editProfileModal').style.display = 'none';
+            updateUserUI();
+            render();
+        };
+
+        // ---------- СТЕНА ----------
+        function renderWall(container) {
+            container.innerHTML = `
+                <div class="vk-block"><div class="vk-block-header">📝 Школьная стена</div><div class="vk-block-body" id="wallMessages">Загрузка...</div></div>
+                <div class="vk-block"><div class="vk-block-header">✍️ Новая запись</div><div class="vk-block-body">
+                    <textarea id="wallInput" placeholder="Что нового?"></textarea>
+                    <div style="margin-top:8px;"><button class="btn" onclick="postWall()">Отправить</button> <label><input type="checkbox" id="wallAnon"> Анонимно</label></div>
+                </div></div>`;
+
+            db.collection('wall').orderBy('timestamp', 'asc').limit(50)
+                .onSnapshot(snapshot => {
+                    const cont = document.getElementById('wallMessages');
+                    if (!cont) return;
+                    let html = '';
+                    snapshot.forEach(doc => {
+                        const m = doc.data();
+                        const anon = m.anonymous;
+                        html += `
+                        <div class="msg-item">
+                            <div class="msg-ava" style="background:${getColor(m.authorName)};">${m.authorName.substring(0,2).toUpperCase()}</div>
+                            <div class="msg-content">
+                                <div class="msg-meta">
+                                    ${anon ? '<span class="msg-author">Аноним</span>' : `<span class="msg-author" onclick="goToProfile('${m.authorId}')">${escapeHTML(m.authorName)}</span>`}
+                                    · ${formatTime(m.timestamp?.toDate())}
+                                </div>
+                                <div>${escapeHTML(m.text).replace(/\n/g,'<br>')}</div>
+                            </div>
+                        </div>`;
+                    });
+                    cont.innerHTML = html || '<div class="empty">Нет записей.</div>';
+                });
+        }
+
+        window.postWall = async () => {
+            const text = document.getElementById('wallInput').value.trim();
+            if (!text) return;
+            const anon = document.getElementById('wallAnon')?.checked || false;
+            await db.collection('wall').add({
+                authorId: currentUser.uid,
+                authorName: userProfile.nickname,
+                anonymous: anon,
+                text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('wallInput').value = '';
+        };
+
+        // ---------- ФОРУМ ----------
+        function renderForum(container) {
+            container.innerHTML = `
+                <div class="vk-block"><div class="vk-block-header">💬 Форум</div><div class="vk-block-body" id="forumList">Загрузка...</div></div>
+                <div class="vk-block"><div class="vk-block-header">➕ Новая тема</div><div class="vk-block-body">
+                    <input id="newTopicTitle" placeholder="Название" style="width:100%;margin-bottom:5px;">
+                    <textarea id="newTopicPost" placeholder="Первое сообщение"></textarea>
+                    <button class="btn" style="margin-top:5px;" onclick="createTopic()">Создать</button>
+                </div></div>`;
+
+            db.collection('forumTopics').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+                const cont = document.getElementById('forumList');
+                if (!cont) return;
+                let html = '';
+                snapshot.forEach(doc => {
+                    const t = doc.data();
+                    html += `<div style="padding:8px;border-bottom:1px solid #eee;cursor:pointer;" onclick="openTopic('${doc.id}')">
+                        <b>${escapeHTML(t.title)}</b><br><small>${escapeHTML(t.authorName)} · ${formatTime(t.createdAt?.toDate())}</small>
+                    </div>`;
+                });
+                cont.innerHTML = html || '<div class="empty">Нет тем.</div>';
+            });
+        }
+
+        window.createTopic = async () => {
+            const title = document.getElementById('newTopicTitle').value.trim();
+            const text = document.getElementById('newTopicPost').value.trim();
+            if (!title || !text) return;
+            const ref = await db.collection('forumTopics').add({
+                title, authorId: currentUser.uid, authorName: userProfile.nickname,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            await ref.collection('posts').add({
+                authorId: currentUser.uid, authorName: userProfile.nickname, text,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('newTopicTitle').value = '';
+            document.getElementById('newTopicPost').value = '';
+        };
+
+        window.openTopic = (topicId) => {
+            currentPage = 'forumTopic';
+            window._topicId = topicId;
+            renderForumTopic(document.getElementById('mainContent'));
+        };
+
+        function renderForumTopic(container) {
+            const topicId = window._topicId;
+            db.collection('forumTopics').doc(topicId).get().then(topicDoc => {
+                if (!topicDoc.exists) { navigate('forum'); return; }
+                const topic = topicDoc.data();
+                container.innerHTML = `
+                    <div class="vk-block"><div class="vk-block-header">📌 ${escapeHTML(topic.title)} <button class="btn btn-sm" onclick="navigate('forum')">← Назад</button></div>
+                    <div class="vk-block-body" id="topicPosts">Загрузка...</div></div>
+                    <div class="vk-block"><div class="vk-block-header">Ответ</div><div class="vk-block-body">
+                        <textarea id="replyInput"></textarea>
+                        <button class="btn" style="margin-top:5px;" onclick="replyTopic('${topicId}')">Отправить</button>
+                    </div></div>`;
+
+                db.collection('forumTopics').doc(topicId).collection('posts').orderBy('timestamp', 'asc')
+                    .onSnapshot(snapshot => {
+                        const cont = document.getElementById('topicPosts');
+                        if (!cont) return;
+                        let html = '';
+                        snapshot.forEach(doc => {
+                            const p = doc.data();
+                            html += `
+                            <div class="msg-item">
+                                <div class="msg-ava" style="background:${getColor(p.authorName)};">${p.authorName.substring(0,2).toUpperCase()}</div>
+                                <div class="msg-content">
+                                    <div class="msg-meta">
+                                        <span class="msg-author" onclick="goToProfile('${p.authorId}')">${escapeHTML(p.authorName)}</span>
+                                        · ${formatTime(p.timestamp?.toDate())}
+                                    </div>
+                                    <div>${escapeHTML(p.text).replace(/\n/g,'<br>')}</div>
+                                </div>
+                            </div>`;
+                        });
+                        cont.innerHTML = html || '<div class="empty">Нет ответов.</div>';
+                    });
+            });
+        }
+
+        window.replyTopic = async (topicId) => {
+            const text = document.getElementById('replyInput').value.trim();
+            if (!text) return;
+            await db.collection('forumTopics').doc(topicId).collection('posts').add({
+                authorId: currentUser.uid, authorName: userProfile.nickname, text,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('replyInput').value = '';
+        };
+
+        // ---------- ЛИЧНЫЕ СООБЩЕНИЯ ----------
+        function renderMessages(container) {
+            container.innerHTML = `
+                <div class="vk-block"><div class="vk-block-header">✉️ Сообщения</div>
+                    <div style="display:flex; height:55vh;">
+                        <div style="width:200px; border-right:1px solid #eee; overflow-y:auto;" id="contactList"></div>
+                        <div style="flex:1; display:flex; flex-direction:column;" id="chatArea"></div>
+                    </div>
+                </div>`;
+            renderContactList();
+            renderChat();
+        }
+
+        function renderContactList() {
+            const list = document.getElementById('contactList');
+            if (!list) return;
+            let html = '<div style="padding:8px;"><button class="btn" onclick="openAddContact()">➕ Добавить</button></div>';
+            contacts.forEach(c => {
+                const name = c.customName || c.nickname;
+                html += `
+                <div style="padding:8px;border-bottom:1px solid #eee;cursor:pointer; ${activeDialogUid===c.uid?'background:#e8edf3':''}"
+                     onclick="openDialog('${c.uid}')">
+                    <span>${escapeHTML(name)}</span>
+                    <button onclick="event.stopPropagation(); renameContactPrompt('${c.uid}')" style="background:none;border:none;cursor:pointer;float:right;">✏️</button>
+                </div>`;
+            });
+            list.innerHTML = html;
+        }
+
+        function renderChat() {
+            const area = document.getElementById('chatArea');
+            if (!area) return;
+            if (!activeDialogUid) {
+                area.innerHTML = '<div style="flex:1;padding:20px;text-align:center;color:#999;">Выберите контакт</div>';
+                return;
+            }
+            const contact = getContact(activeDialogUid);
+            const name = contact ? (contact.customName || contact.nickname) : '...';
+            area.innerHTML = `
+                <div style="padding:8px;background:#fafbfc;border-bottom:1px solid #eee;">💬 ${escapeHTML(name)}</div>
+                <div style="flex:1;overflow-y:auto;padding:10px;" id="privateMessages"></div>
+                <div style="padding:10px;border-top:1px solid #eee;display:flex;">
+                    <input id="privInput" placeholder="Сообщение..." style="flex:1;">
+                    <button class="btn" onclick="sendPrivate()">➤</button>
+                </div>`;
+
+            db.collection('privateMessages')
+                .where('participants', 'array-contains', currentUser.uid)
+                .orderBy('timestamp', 'asc')
+                .onSnapshot(snapshot => {
+                    const cont = document.getElementById('privateMessages');
+                    if (!cont) return;
+                    let html = '';
+                    snapshot.forEach(doc => {
+                        const m = doc.data();
+                        if ((m.from === currentUser.uid && m.to === activeDialogUid) ||
+                            (m.from === activeDialogUid && m.to === currentUser.uid)) {
+                            const isMe = m.from === currentUser.uid;
+                            html += `<div style="text-align:${isMe?'right':'left'}; margin:4px;">
+                                <span style="background:#e8edf3;padding:4px 8px;border-radius:8px;display:inline-block;">${escapeHTML(m.text)}</span>
+                                <div style="font-size:9px;color:#999;">${formatTime(m.timestamp?.toDate())}</div>
+                            </div>`;
+                        }
+                    });
+                    cont.innerHTML = html || '<div class="empty">Нет сообщений</div>';
+                });
+        }
+
+        window.openDialog = (uid) => {
+            activeDialogUid = uid;
+            upsertContact(uid, '');
+            render();
+        };
+
+        window.startChat = (uid) => {
+            upsertContact(uid, '');
+            activeDialogUid = uid;
+            currentPage = 'messages';
+            render();
+        };
+
+        window.sendPrivate = async () => {
+            const text = document.getElementById('privInput').value.trim();
+            if (!text || !activeDialogUid) return;
+            await db.collection('privateMessages').add({
+                from: currentUser.uid,
+                to: activeDialogUid,
+                participants: [currentUser.uid, activeDialogUid],
+                text,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('privInput').value = '';
+        };
+
+        window.openAddContact = () => {
+            document.getElementById('addContactModal').style.display = 'flex';
+        };
+        window.addContactByNick = async () => {
+            const nick = document.getElementById('searchNick').value.trim();
+            if (!nick) return;
+            const snap = await db.collection('users').where('nickname', '==', nick).limit(1).get();
+            if (snap.empty) {
+                showToast('Пользователь не найден');
+                return;
+            }
+            const userDoc = snap.docs[0];
+            const uid = userDoc.id;
+            const profile = userDoc.data();
+            upsertContact(uid, profile.nickname);
+            document.getElementById('addContactModal').style.display = 'none';
+            activeDialogUid = uid;
+            render();
+        };
+        window.renameContactPrompt = (uid) => {
+            const c = getContact(uid);
+            const newName = prompt('Переименовать контакт', c?.customName || c?.nickname || '');
+            if (newName !== null) {
+                renameContact(uid, newName.trim());
+                render();
+            }
+        };
+
+        // ---------- ВСПОМОГАТЕЛЬНЫЕ ----------
+        function getColor(name) {
+            const colors = ['#e91e63','#4caf50','#ff9800','#2196f3','#9c27b0'];
+            let hash=0; for(let i=0;i<name.length;i++) hash=name.charCodeAt(i)+((hash<<5)-hash);
+            return colors[Math.abs(hash)%colors.length];
+        }
+        function formatTime(ts) {
+            if (!ts) return '';
+            const d = ts instanceof Date ? ts : new Date(ts);
+            return `${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+        }
+        function escapeHTML(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+        function showToast(msg) {
+            const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1';
+            clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',2000);
+        }
+
+        window.signUp = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            try {
+                await auth.createUserWithEmailAndPassword(email, pass);
+                document.getElementById('authModal').style.display = 'none';
+            } catch (e) { showToast('❌ ' + e.message); }
+        };
+        window.signIn = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            try {
+                await auth.signInWithEmailAndPassword(email, pass);
+                document.getElementById('authModal').style.display = 'none';
+            } catch (e) { showToast('❌ ' + e.message); }
+        };
+        window.signOut = async () => {
+            await auth.signOut();
+            document.getElementById('authModal').style.display = 'none';
+        };
+
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('[data-nav]')) {
+                e.preventDefault();
+                const page = e.target.dataset.nav;
+                if (page === 'profile') navigate('profile');
+                else if (page === 'wall') navigate('wall');
+                else if (page === 'forum') navigate('forum');
+                else if (page === 'messages') navigate('messages');
+            }
+            if (e.target.matches('.vk-header-nav a')) {
+                e.preventDefault();
+                const page = e.target.dataset.page;
+                navigate(page);
+            }
+        });
+    })();
+</script>
+</body>
+</html>
