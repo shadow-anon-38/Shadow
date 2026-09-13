@@ -154,6 +154,12 @@ textarea{resize:vertical;min-height:50px}
 .search-section{padding:8px 12px;background:#f0f6ff;border-bottom:1px solid var(--bd)}
 .search-section h4{font-size:11px;color:#666;margin-bottom:6px;font-weight:bold;text-transform:uppercase}
 
+/* VIP-лок */
+.vip-lock{background:#fff8e1 !important;border:1px dashed var(--gold) !important}
+.vip-lock .vip-label{color:var(--gold);font-size:11px;font-weight:bold;margin-right:6px}
+.locked{opacity:.5;pointer-events:none}
+.vip-hint{color:#c90;font-size:11px;margin:4px 0}
+
 @media(max-width:800px){
   .sd{display:none}
   .tabbar{display:block}
@@ -228,6 +234,8 @@ textarea{resize:vertical;min-height:50px}
 
 <div class="mo" id="profModal"><div class="mb">
 <h3>Редактировать профиль</h3>
+
+<!-- ОБЫЧНЫЕ ФУНКЦИИ -->
 <input id="profNick" placeholder="Никнейм" maxlength="20">
 <label style="display:block;text-align:left;font-size:11px;color:#666;margin:4px 0">Описание</label>
 <textarea id="profDesc" placeholder="О себе" maxlength="200" style="min-height:60px"></textarea>
@@ -236,25 +244,44 @@ textarea{resize:vertical;min-height:50px}
 <button class="bt bt2" onclick="document.getElementById('profAvaFile').click()">📷 Загрузить аватар</button>
 <img id="profAvaPreview" style="max-width:80px;max-height:80px;margin:6px auto;display:none;border-radius:50%">
 <button class="bt btg bt-sm" onclick="removeAva()" style="margin-top:4px">🗑 Убрать аватар</button>
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Баннер (VIP)</label>
-<input type="file" id="profBannerFile" accept="image/*" class="file-inp">
-<button class="bt bt2" onclick="document.getElementById('profBannerFile').click()">🖼 Баннер</button>
-<img id="profBannerPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
-<button class="bt btg bt-sm" onclick="removeBanner()" style="margin-top:4px">🗑 Убрать баннер</button>
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Фон профиля</label>
-<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-  <label style="font-size:11px"><input type="radio" name="bgType" value="color" onchange="bgTypeChange()"> Цвет</label>
-  <label style="font-size:11px"><input type="radio" name="bgType" value="image" onchange="bgTypeChange()"> Картинка</label>
+
+<!-- VIP: ЦВЕТ НИКА -->
+<div id="vipNickColorBlock" class="vip-lock">
+  <label style="display:block;text-align:left;font-size:11px;margin:8px 0 4px"><span class="vip-label">⭐ VIP</span> Цвет ника</label>
+  <input type="color" id="profNickColor" value="#2b587a" style="height:40px">
 </div>
-<input type="color" id="profBgColor" value="#edeef0" style="height:40px">
-<input type="file" id="profBgFile" accept="image/*" class="file-inp">
-<button class="bt bt2" onclick="document.getElementById('profBgFile').click()" style="margin-top:4px">🎨 Загрузить фон</button>
-<img id="profBgPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
-<button class="bt btg bt-sm" onclick="removeBg()" style="margin-top:4px">🗑 Убрать фон</button>
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Цвет ника (VIP)</label>
-<input type="color" id="profNickColor" value="#2b587a" style="height:40px">
-<label style="display:block;text-align:left;font-size:12px;margin:8px 0"><input type="checkbox" id="hideStats" style="width:auto;margin-right:6px">Скрыть лайки и подписки</label>
-<label style="display:block;text-align:left;font-size:12px;margin:8px 0"><input type="checkbox" id="hideFromTop" style="width:auto;margin-right:6px">Скрыть меня из топа и поиска</label>
+
+<!-- VIP: ФОН -->
+<div id="vipBgBlock" class="vip-lock">
+  <label style="display:block;text-align:left;font-size:11px;margin:8px 0 4px"><span class="vip-label">⭐ VIP</span> Фон профиля</label>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+    <label style="font-size:11px"><input type="radio" name="bgType" value="color" onchange="bgTypeChange()"> Цвет</label>
+    <label style="font-size:11px"><input type="radio" name="bgType" value="image" onchange="bgTypeChange()"> Картинка</label>
+  </div>
+  <input type="color" id="profBgColor" value="#edeef0" style="height:40px">
+  <input type="file" id="profBgFile" accept="image/*" class="file-inp">
+  <button class="bt bt2" onclick="document.getElementById('profBgFile').click()" style="margin-top:4px">🎨 Загрузить фон</button>
+  <img id="profBgPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
+  <button class="bt btg bt-sm" onclick="removeBg()" style="margin-top:4px">🗑 Убрать фон</button>
+</div>
+
+<!-- VIP: БАННЕР -->
+<div id="vipBannerBlock" class="vip-lock">
+  <label style="display:block;text-align:left;font-size:11px;margin:8px 0 4px"><span class="vip-label">⭐ VIP</span> Баннер профиля</label>
+  <input type="file" id="profBannerFile" accept="image/*" class="file-inp">
+  <button class="bt bt2" onclick="document.getElementById('profBannerFile').click()">🖼 Загрузить баннер</button>
+  <img id="profBannerPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
+  <button class="bt btg bt-sm" onclick="removeBanner()" style="margin-top:4px">🗑 Убрать баннер</button>
+</div>
+
+<!-- VIP: СКРЫТИЕ -->
+<div id="vipHideBlock" class="vip-lock">
+  <label class="chk"><input type="checkbox" id="hideStats"> <span class="vip-label">⭐ VIP</span> Скрыть лайки и подписки</label>
+  <label class="chk"><input type="checkbox" id="hideFromTop"> <span class="vip-label">⭐ VIP</span> Скрыть меня из топа и поиска</label>
+</div>
+
+<div id="vipHint" class="vip-hint" style="display:none;">⭐ Функции с пометкой VIP доступны только премиум-аккаунтам</div>
+
 <button class="bt btgr" onclick="saveProfile()" style="margin-top:8px">💾 Сохранить</button>
 <button class="bt btg" onclick="closeModal('profModal')">Отмена</button>
 </div></div>
@@ -461,6 +488,20 @@ function checkGlobalRate() {
       return { blocked: false };
     });
   }).catch(function() { return { blocked: false }; });
+}
+
+// ============ VIP-БЛОКИРОВКА ============
+function updateVipBlocks() {
+  var isVip = !!state.profile.isPremium;
+  var blocks = ['vipNickColorBlock','vipBgBlock','vipBannerBlock','vipHideBlock'];
+  for (var i = 0; i < blocks.length; i++) {
+    var el = $(blocks[i]);
+    if (!el) continue;
+    if (isVip) el.classList.remove('locked');
+    else el.classList.add('locked');
+  }
+  var hint = $('vipHint');
+  if (hint) hint.style.display = isVip ? 'none' : 'block';
 }
 
 // ============ MAINTENANCE ============
@@ -709,7 +750,7 @@ function searchTag(tag) {
   state.page = 'wall'; render();
 }
 
-// ============ ПОИСК ПОЛЬЗОВАТЕЛЕЙ ============
+// ============ ПОИСК ============
 function searchUsersByQuery(q, cb) {
   q = (q || '').trim().toLowerCase();
   if (q.length < 2) { cb([]); return; }
@@ -848,20 +889,24 @@ function renderProfile(app) {
   }).catch(function(e) { app.innerHTML = '<div class="bk"><div class="bb">Ошибка: ' + esc(e.message) + '</div></div>'; });
 }
 function showProfileCard(app, p, isMe, uid) {
-  var hasBanner = !!p.bannerUrl;
+  // Баннер и фон видны только если владелец VIP
+  var hasBanner = p.isPremium && !!p.bannerUrl;
   var headerStyle = hasBanner ? 'background-image:url(' + p.bannerUrl + ');' : '';
   var headerClass = hasBanner ? 'profile-header' : 'profile-header no-banner';
   var bannerHint = '';
   if (isMe && !hasBanner && p.isPremium) bannerHint = '<span class="banner-hint">Баннер не установлен</span>';
-  if (isMe && !p.isPremium) bannerHint = '<span class="banner-hint">VIP → баннер</span>';
+  if (isMe && !p.isPremium) bannerHint = '<span class="banner-hint">VIP → баннер и фон</span>';
   var avaStyle = p.avatarUrl
     ? 'background-image:url(' + p.avatarUrl + ');background-size:cover;background-position:center;'
     : 'background-color:' + color(p.nickname) + ';';
   var initial = p.avatarUrl ? '' : (p.nickname || '?').substring(0,2).toUpperCase();
+  // Фон и цвет ника — только у VIP
   var pageBg = '';
-  if (p.bgUrl) pageBg = 'background-image:url(' + p.bgUrl + ');background-size:cover;background-position:center;';
-  else if (p.bgColor) pageBg = 'background-color:' + p.bgColor + ';';
-  var hideStats = !!p.hideStats && !isMe;
+  if (p.isPremium) {
+    if (p.bgUrl) pageBg = 'background-image:url(' + p.bgUrl + ');background-size:cover;background-position:center;';
+    else if (p.bgColor) pageBg = 'background-color:' + p.bgColor + ';';
+  }
+  var hideStats = !!p.hideStats && !isMe && p.isPremium;
   var statsHtml = '';
   if (!hideStats) {
     statsHtml = '<div class="prof-stats">' +
@@ -876,7 +921,8 @@ function showProfileCard(app, p, isMe, uid) {
   var xpInfo = xpProgress(p.xp || 0);
   var xpHtml = '<div style="margin:10px 0 0"><div class="xp-bar"><div class="xp-fill" style="width:' + xpInfo.pct + '%"></div></div>' +
     '<div style="font-size:10px;color:#666">Уровень ' + xpInfo.level + ' · ' + xpInfo.cur.toFixed(1) + '/' + xpInfo.need + ' XP</div></div>';
-  var nickStyle = p.nickColor ? 'color:' + p.nickColor + ';' : '';
+  // Цвет ника — только у VIP
+  var nickStyle = (p.isPremium && p.nickColor) ? 'color:' + p.nickColor + ';' : '';
   var lvl = p.level || 1;
   var lvlBadge = '<span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span>';
   var subBtn = '';
@@ -913,6 +959,7 @@ function openProfEdit() {
   $('profAvaPreview').style.display = 'none';
   $('profBannerPreview').style.display = 'none';
   $('profBgPreview').style.display = 'none';
+  updateVipBlocks();
   openModal('profModal');
 }
 function bgTypeChange() {
@@ -940,18 +987,25 @@ document.addEventListener('change', function(e) {
   }
 });
 function removeAva() { state.promoPreview.ava = ''; state.profile.avatarUrl = ''; $('profAvaPreview').style.display = 'none'; toast('Аватар будет убран'); }
-function removeBanner() { state.promoPreview.banner = ''; state.profile.bannerUrl = ''; $('profBannerPreview').style.display = 'none'; toast('Баннер будет убран'); }
-function removeBg() { state.promoPreview.bg = ''; state.profile.bgUrl = ''; state.profile.bgColor = ''; $('profBgPreview').style.display = 'none'; toast('Фон будет убран'); }
+function removeBanner() {
+  if (!state.profile.isPremium) { toast('Только для VIP'); return; }
+  state.promoPreview.banner = ''; state.profile.bannerUrl = ''; $('profBannerPreview').style.display = 'none'; toast('Баннер будет убран');
+}
+function removeBg() {
+  if (!state.profile.isPremium) { toast('Только для VIP'); return; }
+  state.promoPreview.bg = ''; state.profile.bgUrl = ''; state.profile.bgColor = ''; $('profBgPreview').style.display = 'none'; toast('Фон будет убран');
+}
 function saveProfile() {
   if (!state.user) return;
   var newP = {
     nickname: $('profNick').value.trim() || 'Гость',
-    description: $('profDesc').value.trim(),
-    hideStats: $('hideStats').checked,
-    hideFromTop: $('hideFromTop').checked
+    description: $('profDesc').value.trim()
   };
   if (state.promoPreview.ava !== null) newP.avatarUrl = state.promoPreview.ava;
+  // VIP-поля сохраняются только если пользователь VIP
   if (state.profile.isPremium) {
+    newP.hideStats = $('hideStats').checked;
+    newP.hideFromTop = $('hideFromTop').checked;
     if (state.promoPreview.banner !== null) newP.bannerUrl = state.promoPreview.banner;
     if (state.promoPreview.bg !== null) {
       if (state.bgType === 'image') { newP.bgUrl = state.promoPreview.bg; newP.bgColor = ''; }
@@ -974,8 +1028,11 @@ function renderPremium(app) {
   app.innerHTML = '<div class="bk"><div class="bh">⭐ Премиум</div>' +
     '<div class="bb" style="text-align:center;padding:20px">' +
       (state.profile.isPremium
-        ? '<h3 style="color:var(--gold)">✅ У вас VIP</h3>'
-        : '<h3>Получите VIP</h3><p style="margin:8px 0">Введите промокод:</p><button class="bt btgold" onclick="openModal(\'promoModal\')">🎟 Активировать</button>') +
+        ? '<h3 style="color:var(--gold)">✅ У вас VIP</h3>' +
+          '<p style="margin-top:10px;font-size:12px;color:#666">Доступно: цвет ника, фон профиля, баннер, скрытие из топа и статистики.</p>'
+        : '<h3>Получите VIP</h3>' +
+          '<p style="margin:8px 0;font-size:12px;color:#666">Цвет ника · Фон профиля · Баннер · Скрытие из топа и статистики</p>' +
+          '<p style="margin:8px 0">Введите промокод:</p><button class="bt btgold" onclick="openModal(\'promoModal\')">🎟 Активировать</button>') +
     '</div></div>';
 }
 function activatePromo() {
