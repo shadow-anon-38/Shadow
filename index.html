@@ -56,6 +56,8 @@ textarea{resize:vertical;min-height:50px}
 .mb h3{margin-bottom:12px;font-size:16px}
 .mb input,.mb textarea{margin-bottom:8px;text-align:left}
 .mb .bt{width:100%;margin-bottom:6px}
+.chk{display:block;text-align:left;font-size:12px;margin:6px 0;padding:6px 8px;background:#fafbfc;border-radius:4px;cursor:pointer}
+.chk input{width:auto;margin-right:8px;vertical-align:middle}
 .ts{position:fixed;bottom:calc(var(--tabbar) + 20px);left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 18px;border-radius:20px;font-size:12px;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
 .ts.on{opacity:1}
 .em{text-align:center;padding:30px 15px;color:#999;font-size:12px}
@@ -144,14 +146,13 @@ textarea{resize:vertical;min-height:50px}
 .tabbar a .ic{font-size:20px;line-height:1}
 .tabbar a .badge-notif{position:absolute;top:4px;right:calc(50% - 22px);margin:0;font-size:8px;padding:0 4px}
 
-/* Поиск пользователей */
-.search-section{padding:8px 12px;background:#f0f6ff;border-bottom:1px solid var(--bd)}
-.search-section h4{font-size:11px;color:#666;margin-bottom:6px;font-weight:bold;text-transform:uppercase}
 .user-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:4px;cursor:pointer;transition:background .1s}
 .user-row:hover{background:rgba(74,118,168,.1)}
 .user-row .info{flex:1;min-width:0}
 .user-row .info b{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .user-row .info small{color:#999;font-size:10px}
+.search-section{padding:8px 12px;background:#f0f6ff;border-bottom:1px solid var(--bd)}
+.search-section h4{font-size:11px;color:#666;margin-bottom:6px;font-weight:bold;text-transform:uppercase}
 
 @media(max-width:800px){
   .sd{display:none}
@@ -290,6 +291,18 @@ textarea{resize:vertical;min-height:50px}
 <button class="bt btg" onclick="closeModal('adminMaintModal')">Отмена</button>
 </div></div>
 
+<div class="mo" id="resetModal"><div class="mb">
+<h3>⚠️ Сброс сайта</h3>
+<p style="font-size:11px;color:#c00;margin-bottom:10px">Отметьте, что нужно удалить. Действие необратимо.</p>
+<label class="chk"><input type="checkbox" id="rContent" checked> Контент (стена, форум, ЛС, промокоды)</label>
+<label class="chk"><input type="checkbox" id="rProfiles"> Профили не-админов (ник, аватар, описание)</label>
+<label class="chk"><input type="checkbox" id="rSubs"> Подписки и подписчики</label>
+<label class="chk"><input type="checkbox" id="rLikes"> Лайки и счётчики лайков</label>
+<label class="chk"><input type="checkbox" id="rXp"> Опыт и уровни (кроме админов)</label>
+<button class="bt btr" onclick="executeReset()">💥 Выполнить</button>
+<button class="bt btg" onclick="closeModal('resetModal')">Отмена</button>
+</div></div>
+
 <div class="mo" id="imgModal"><div class="mb" style="max-width:90vw;background:transparent;padding:0">
 <img id="imgFull" style="max-width:100%;max-height:85vh;border-radius:6px">
 <button class="bt btg" style="margin-top:10px" onclick="closeModal('imgModal')">Закрыть</button>
@@ -336,7 +349,7 @@ var state = {
   unreadTotal: 0,
   maintenance: false,
   maintenanceText: '',
-  searchUsers: []   // найденные пользователи
+  searchUsers: []
 };
 
 var CLOUD_COOLDOWN = 5000;
@@ -573,10 +586,7 @@ function startUnreadListener() {
         var lastRead = lastSeen[m.from] || 0;
         var ts = m.timestamp && m.timestamp.toMillis ? m.timestamp.toMillis() : 0;
         if (ts > lastRead) unread[m.from] = (unread[m.from] || 0) + 1;
-        // Автодобавление контакта
-        if (m.to === state.user.uid && !getContact(m.from)) {
-          addOrUpdateContact(m.from, '');
-        }
+        if (m.to === state.user.uid && !getContact(m.from)) addOrUpdateContact(m.from, '');
       });
       state.unread = unread;
       var total = 0;
@@ -709,16 +719,13 @@ function searchUsersByQuery(q, cb) {
       var u = doc.data();
       var nick = (u.nickname || '').toLowerCase();
       if (nick.indexOf(q) === -1) return;
-      // Скрытые от поиска видны только админам
       if (u.hideFromTop && !state.isAdmin) return;
       res.push({ uid: doc.id, nickname: u.nickname, avatarUrl: u.avatarUrl || '', isPremium: !!u.isPremium, level: u.level || 1, description: u.description || '' });
     });
     cb(res.slice(0, 10));
   }).catch(function() { cb([]); });
 }
-
 function onSearchInput(value, mode) {
-  // mode = 'wall' | 'forum'
   if (mode === 'wall') state.wallSearch = value;
   if (mode === 'forum') state.forumSearch = value;
   if (searchDebounce) clearTimeout(searchDebounce);
@@ -736,7 +743,6 @@ function onSearchInput(value, mode) {
     }
   }, 300);
 }
-
 function renderUserSearchSection() {
   if (!state.searchUsers.length) return '';
   var html = '<div class="search-section"><h4>👥 Пользователи</h4>';
@@ -781,7 +787,6 @@ function render() {
   else renderProfile(app);
   applyMaintenance();
 }
-
 function renderTopNav() {
   var pages = [
     {id:'profile',l:'👤 Профиль'},{id:'wall',l:'📝 Стена'},
@@ -1083,7 +1088,6 @@ function renderWallPost(id, m) {
     : 'background-color:' + color(name) + ';';
   var initial = ava ? '' : name.substring(0,2).toUpperCase();
   var imgHtml = m.imageUrl ? '<img class="post-img" src="' + m.imageUrl + '" onclick="openImg(\'' + m.imageUrl + '\')">' : '';
-  // FIX: админ видит настоящий ник анонима
   var authorSpan;
   if (anon) {
     if (state.isAdmin && m.authorName) {
@@ -1479,7 +1483,6 @@ function renderRating(app) {
       var html = '', pos = 1;
       snap.forEach(function(doc) {
         var u = doc.data();
-        // Скрытые из топа не показываются (кроме админа)
         if (u.hideFromTop && !state.isAdmin) return;
         var ava = u.avatarUrl || '';
         var avaStyle = ava
@@ -1514,7 +1517,7 @@ function renderAdmin(app) {
     '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">' +
       '<button class="bt btgr" onclick="openModal(\'adminPromoModal\')">🎟 Промокод</button>' +
       '<button class="bt btr" onclick="openMaintDialog()" id="mtBtn">🚧 Закрыть сайт</button>' +
-      '<button class="bt btr" onclick="fullReset()">💥 Сброс</button>' +
+      '<button class="bt btr" onclick="openResetDialog()">💥 Сброс</button>' +
     '</div>' +
     '<h4 style="margin:10px 0 6px">🎟 Промокоды</h4><div id="promoList">Загрузка...</div>' +
     '<h4 style="margin:14px 0 6px">👥 Пользователи</h4><div id="userList">Загрузка...</div>' +
@@ -1609,18 +1612,126 @@ function refreshMtBtn() {
     var btn = $('mtBtn'); if (btn) btn.textContent = mt ? '✅ Открыть сайт' : '🚧 Закрыть сайт';
   });
 }
-function fullReset() {
-  if (!confirm('⚠️ Удалить ВСЕ данные?')) return;
-  if (!confirm('Точно?')) return;
-  var collections = ['wall', 'forumTopics', 'privateMessages', 'promocodes'];
-  var promises = collections.map(function(c) {
-    return db.collection(c).get().then(function(snap) {
-      var batch = db.batch();
-      snap.forEach(function(d) { batch.delete(d.ref); });
-      return batch.commit();
-    });
+
+// ============ RESET ============
+function openResetDialog() {
+  $('rContent').checked = true;
+  $('rProfiles').checked = false;
+  $('rSubs').checked = false;
+  $('rLikes').checked = false;
+  $('rXp').checked = false;
+  openModal('resetModal');
+}
+function getAdminUids() {
+  return db.collection('admins').get().then(function(snap) {
+    var admins = {};
+    snap.forEach(function(d) { admins[d.id] = true; });
+    return admins;
   });
-  Promise.all(promises).then(function() { toast('Все удалено'); render(); });
+}
+function wipeCollection(name) {
+  return db.collection(name).get().then(function(snap) {
+    var batches = [];
+    var batch = db.batch();
+    var count = 0;
+    snap.forEach(function(d) {
+      batch.delete(d.ref);
+      count++;
+      if (count % 400 === 0) { batches.push(batch.commit()); batch = db.batch(); }
+    });
+    if (count % 400 !== 0) batches.push(batch.commit());
+    return Promise.all(batches);
+  });
+}
+function wipeNonAdminUsers(adminUids) {
+  return db.collection('users').get().then(function(snap) {
+    var batches = [];
+    var batch = db.batch();
+    var count = 0;
+    snap.forEach(function(d) {
+      if (adminUids[d.id]) return;
+      batch.delete(d.ref);
+      count++;
+      if (count % 400 === 0) { batches.push(batch.commit()); batch = db.batch(); }
+    });
+    if (count % 400 !== 0) batches.push(batch.commit());
+    return Promise.all(batches);
+  });
+}
+function wipeUserField(adminUids, fields) {
+  return db.collection('users').get().then(function(snap) {
+    var batches = [];
+    var batch = db.batch();
+    var count = 0;
+    snap.forEach(function(d) {
+      if (adminUids[d.id]) return;
+      batch.update(d.ref, fields);
+      count++;
+      if (count % 400 === 0) { batches.push(batch.commit()); batch = db.batch(); }
+    });
+    if (count % 400 !== 0) batches.push(batch.commit());
+    return Promise.all(batches);
+  });
+}
+function executeReset() {
+  var doContent = $('rContent').checked;
+  var doProfiles = $('rProfiles').checked;
+  var doSubs = $('rSubs').checked;
+  var doLikes = $('rLikes').checked;
+  var doXp = $('rXp').checked;
+  if (!doContent && !doProfiles && !doSubs && !doLikes && !doXp) { toast('Ничего не выбрано'); return; }
+  var parts = [];
+  if (doContent) parts.push('контент');
+  if (doProfiles) parts.push('профили');
+  if (doSubs) parts.push('подписки');
+  if (doLikes) parts.push('лайки');
+  if (doXp) parts.push('опыт');
+  if (!confirm('Будет удалено: ' + parts.join(', ') + '. Продолжить?')) return;
+  if (!confirm('Точно? Отменить будет нельзя.')) return;
+  closeModal('resetModal');
+  toast('⏳ Идёт сброс...');
+  getAdminUids().then(function(adminUids) {
+    var promises = [];
+    if (doContent) {
+      ['wall', 'forumTopics', 'privateMessages', 'promocodes'].forEach(function(c) { promises.push(wipeCollection(c)); });
+    }
+    if (doProfiles) {
+      promises.push(wipeNonAdminUsers(adminUids));
+    } else {
+      if (doSubs) {
+        promises.push(wipeUserField(adminUids, { followers: 0, following: 0 }));
+        promises.push(wipeCollection('subs'));
+      }
+      if (doLikes) {
+        promises.push(wipeUserField(adminUids, { likesReceived: 0 }));
+        promises.push(wipeCollection('likes'));
+      }
+      if (doXp) {
+        promises.push(wipeUserField(adminUids, { xp: 0, level: 1 }));
+      }
+    }
+    Promise.all(promises).then(function() {
+      toast('✅ Сброс выполнен');
+      if (doProfiles && state.user && !adminUids[state.user.uid]) {
+        auth.signOut();
+        return;
+      }
+      if (state.user) {
+        db.collection('users').doc(state.user.uid).get().then(function(d) {
+          if (d.exists) {
+            state.profile = Object.assign(state.profile, d.data());
+            state.profile.level = calcLevel(state.profile.xp || 0);
+            updateUserUI();
+          }
+        });
+      }
+      state.userLikes = {};
+      state.userSubs = {};
+      state.unread = {};
+      state.unreadTotal = 0;
+      render();
+    }).catch(function(e) { toast('❌ Ошибка: ' + e.message); });
+  });
 }
 
 // ============ INIT ============
