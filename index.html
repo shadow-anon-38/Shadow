@@ -16,7 +16,7 @@ input,textarea,select{font-size:16px}
 .nv a{color:#dce4f0;text-decoration:none;padding:6px 8px;border-radius:3px;font-size:11px;white-space:nowrap;position:relative}
 .nv a.ac{background:rgba(255,255,255,.2);color:#fff;font-weight:bold}
 .us{display:flex;align-items:center;gap:5px;color:#fff;font-size:11px;cursor:pointer;padding:3px 5px;border-radius:3px;white-space:nowrap}
-.av{width:28px;height:28px;border-radius:50%;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:11px;border:2px solid transparent;background-color:#999;position:relative}
+.av{width:28px;height:28px;border-radius:50%;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:11px;border:2px solid transparent;background-color:#999}
 .av.vp{border-color:var(--gold);box-shadow:0 0 5px var(--gold)}
 .badge-notif{background:var(--red);color:#fff;font-size:9px;font-weight:bold;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center;display:inline-block;margin-left:4px;vertical-align:top}
 .nv a .badge-notif{position:absolute;top:-2px;right:-2px;margin:0;font-size:8px;padding:0 4px}
@@ -78,7 +78,6 @@ textarea{resize:vertical;min-height:50px}
 .msg-row.mine{flex-direction:row-reverse}
 .msg-row > div:last-child{min-width:0;max-width:85%}
 
-/* ЗАГЛУШКА MAINTENANCE */
 .maintenance-screen{position:fixed;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff;text-align:center;flex-direction:column;gap:20px}
 .maintenance-screen .icon{font-size:80px}
 .maintenance-screen h2{font-size:24px}
@@ -144,6 +143,15 @@ textarea{resize:vertical;min-height:50px}
 .tabbar a.ac{color:var(--blue);font-weight:bold}
 .tabbar a .ic{font-size:20px;line-height:1}
 .tabbar a .badge-notif{position:absolute;top:4px;right:calc(50% - 22px);margin:0;font-size:8px;padding:0 4px}
+
+/* Поиск пользователей */
+.search-section{padding:8px 12px;background:#f0f6ff;border-bottom:1px solid var(--bd)}
+.search-section h4{font-size:11px;color:#666;margin-bottom:6px;font-weight:bold;text-transform:uppercase}
+.user-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:4px;cursor:pointer;transition:background .1s}
+.user-row:hover{background:rgba(74,118,168,.1)}
+.user-row .info{flex:1;min-width:0}
+.user-row .info b{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-row .info small{color:#999;font-size:10px}
 
 @media(max-width:800px){
   .sd{display:none}
@@ -232,7 +240,7 @@ textarea{resize:vertical;min-height:50px}
 <button class="bt bt2" onclick="document.getElementById('profBannerFile').click()">🖼 Баннер</button>
 <img id="profBannerPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
 <button class="bt btg bt-sm" onclick="removeBanner()" style="margin-top:4px">🗑 Убрать баннер</button>
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Фон профиля (VIP)</label>
+<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Фон профиля</label>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
   <label style="font-size:11px"><input type="radio" name="bgType" value="color" onchange="bgTypeChange()"> Цвет</label>
   <label style="font-size:11px"><input type="radio" name="bgType" value="image" onchange="bgTypeChange()"> Картинка</label>
@@ -245,6 +253,7 @@ textarea{resize:vertical;min-height:50px}
 <label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Цвет ника (VIP)</label>
 <input type="color" id="profNickColor" value="#2b587a" style="height:40px">
 <label style="display:block;text-align:left;font-size:12px;margin:8px 0"><input type="checkbox" id="hideStats" style="width:auto;margin-right:6px">Скрыть лайки и подписки</label>
+<label style="display:block;text-align:left;font-size:12px;margin:8px 0"><input type="checkbox" id="hideFromTop" style="width:auto;margin-right:6px">Скрыть меня из топа и поиска</label>
 <button class="bt btgr" onclick="saveProfile()" style="margin-top:8px">💾 Сохранить</button>
 <button class="bt btg" onclick="closeModal('profModal')">Отмена</button>
 </div></div>
@@ -306,10 +315,9 @@ firebase.initializeApp(firebaseConfig);
 var auth = firebase.auth();
 var db = firebase.firestore();
 
-// ============ STATE ============
 var state = {
   user: null,
-  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, xp: 0, level: 1, postsCount: 0 },
+  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, xp: 0, level: 1, postsCount: 0 },
   page: 'profile',
   viewUid: null,
   dialogUid: null,
@@ -327,7 +335,8 @@ var state = {
   unread: {},
   unreadTotal: 0,
   maintenance: false,
-  maintenanceText: ''
+  maintenanceText: '',
+  searchUsers: []   // найденные пользователи
 };
 
 var CLOUD_COOLDOWN = 5000;
@@ -335,6 +344,7 @@ var lastActionAt = 0;
 var unreadUnsub = null;
 var settingsUnsub = null;
 var profileUnsub = null;
+var searchDebounce = null;
 
 // ============ HELPERS ============
 function $(id) { return document.getElementById(id); }
@@ -493,7 +503,7 @@ auth.onAuthStateChanged(function(user) {
           nickname: user.email.split('@')[0],
           isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '',
           description: '', banned: false,
-          likesReceived: 0, followers: 0, following: 0, hideStats: false,
+          likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false,
           xp: 0, level: 1, postsCount: 0,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           lastSeen: firebase.firestore.FieldValue.serverTimestamp()
@@ -505,7 +515,6 @@ auth.onAuthStateChanged(function(user) {
     }).then(function(adm) {
       state.isAdmin = adm.exists;
       db.collection('users').doc(user.uid).update({ lastSeen: firebase.firestore.FieldValue.serverTimestamp() }).catch(function(){});
-      // FIX: слушаем изменения своего профиля (бан, VIP, ник и т.д.)
       if (profileUnsub) profileUnsub();
       profileUnsub = db.collection('users').doc(user.uid).onSnapshot(function(d) {
         if (!d.exists) return;
@@ -524,9 +533,9 @@ auth.onAuthStateChanged(function(user) {
     }).catch(function(e) { console.error(e); toast('Ошибка: ' + e.message); });
   } else {
     state.user = null;
-    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, xp: 0, level: 1, postsCount: 0 };
+    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, xp: 0, level: 1, postsCount: 0 };
     state.isAdmin = false; state.contacts = []; state.userLikes = {}; state.userSubs = {};
-    state.unread = {}; state.unreadTotal = 0;
+    state.unread = {}; state.unreadTotal = 0; state.searchUsers = [];
     if (unreadUnsub) { unreadUnsub(); unreadUnsub = null; }
     if (profileUnsub) { profileUnsub(); profileUnsub = null; }
     updateUserUI(); render();
@@ -547,12 +556,11 @@ function updateUserUI() {
   }
 }
 
-// ============ UNREAD NOTIFICATIONS ============
+// ============ UNREAD ============
 function startUnreadListener() {
   if (unreadUnsub) unreadUnsub();
   var lastSeen = {};
   try { lastSeen = JSON.parse(localStorage.getItem('lastRead_' + state.user.uid) || '{}'); } catch(e) { lastSeen = {}; }
-
   unreadUnsub = db.collection('privateMessages')
     .where('participants', 'array-contains', state.user.uid)
     .orderBy('timestamp', 'desc')
@@ -561,31 +569,23 @@ function startUnreadListener() {
       var unread = {};
       snap.forEach(function(d) {
         var m = d.data();
-        if (m.from === state.user.uid) return; // свои не считаем
+        if (m.from === state.user.uid) return;
         var lastRead = lastSeen[m.from] || 0;
         var ts = m.timestamp && m.timestamp.toMillis ? m.timestamp.toMillis() : 0;
-        if (ts > lastRead) {
-          unread[m.from] = (unread[m.from] || 0) + 1;
+        if (ts > lastRead) unread[m.from] = (unread[m.from] || 0) + 1;
+        // Автодобавление контакта
+        if (m.to === state.user.uid && !getContact(m.from)) {
+          addOrUpdateContact(m.from, '');
         }
       });
       state.unread = unread;
       var total = 0;
       for (var k in unread) total += unread[k];
       state.unreadTotal = total;
-      updateUserUI();
-      renderTopNav();
-      renderSideMenu();
-      renderTabbar();
-      // Если открыт раздел messages — обновим список контактов (пометки непрочитанного)
-      if (state.page === 'messages' && !state.dialogUid) {
-        renderContactList();
-      }
-    }, function(err) {
-      // Если составной индекс ещё не создан — не спамим
-      console.warn('unread listener:', err.message);
-    });
+      updateUserUI(); renderTopNav(); renderSideMenu(); renderTabbar();
+      if (state.page === 'messages' && !state.dialogUid) renderContactList();
+    }, function(err) { console.warn('unread:', err.message); });
 }
-
 function markDialogRead(uid) {
   var lastSeen = {};
   try { lastSeen = JSON.parse(localStorage.getItem('lastRead_' + state.user.uid) || '{}'); } catch(e) { lastSeen = {}; }
@@ -648,7 +648,6 @@ function toggleSubscribe(targetUid) {
   var subsRef = db.collection('subs').doc(state.user.uid);
   var targetRef = db.collection('users').doc(targetUid);
   var myRef = db.collection('users').doc(state.user.uid);
-
   db.runTransaction(function(tx) {
     return tx.get(targetRef).then(function(doc) {
       if (!doc.exists) return;
@@ -690,8 +689,7 @@ function addOrUpdateContact(uid, nickname) {
 function nav(page, uid) {
   state.page = page;
   state.viewUid = (page === 'profile') ? (uid || (state.user ? state.user.uid : null)) : null;
-  if (page === 'messages' && uid) state.dialogUid = uid;
-  if (page === 'messages' && uid) markDialogRead(uid);
+  if (page === 'messages' && uid) { state.dialogUid = uid; markDialogRead(uid); }
   render();
 }
 function goProfile(uid) { if (!state.user) { openModal('authModal'); return; } nav('profile', uid); }
@@ -699,6 +697,64 @@ function startChat(uid) { if (!state.user) { openModal('authModal'); return; } a
 function searchTag(tag) {
   state.wallSearch = '#' + tag; state.forumSearch = '#' + tag;
   state.page = 'wall'; render();
+}
+
+// ============ ПОИСК ПОЛЬЗОВАТЕЛЕЙ ============
+function searchUsersByQuery(q, cb) {
+  q = (q || '').trim().toLowerCase();
+  if (q.length < 2) { cb([]); return; }
+  db.collection('users').limit(200).get().then(function(snap) {
+    var res = [];
+    snap.forEach(function(doc) {
+      var u = doc.data();
+      var nick = (u.nickname || '').toLowerCase();
+      if (nick.indexOf(q) === -1) return;
+      // Скрытые от поиска видны только админам
+      if (u.hideFromTop && !state.isAdmin) return;
+      res.push({ uid: doc.id, nickname: u.nickname, avatarUrl: u.avatarUrl || '', isPremium: !!u.isPremium, level: u.level || 1, description: u.description || '' });
+    });
+    cb(res.slice(0, 10));
+  }).catch(function() { cb([]); });
+}
+
+function onSearchInput(value, mode) {
+  // mode = 'wall' | 'forum'
+  if (mode === 'wall') state.wallSearch = value;
+  if (mode === 'forum') state.forumSearch = value;
+  if (searchDebounce) clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(function() {
+    if (value.trim().length >= 2) {
+      searchUsersByQuery(value, function(users) {
+        state.searchUsers = users;
+        if (mode === 'wall') listenWall();
+        if (mode === 'forum') listenForum();
+      });
+    } else {
+      state.searchUsers = [];
+      if (mode === 'wall') listenWall();
+      if (mode === 'forum') listenForum();
+    }
+  }, 300);
+}
+
+function renderUserSearchSection() {
+  if (!state.searchUsers.length) return '';
+  var html = '<div class="search-section"><h4>👥 Пользователи</h4>';
+  for (var i = 0; i < state.searchUsers.length; i++) {
+    var u = state.searchUsers[i];
+    var avaStyle = u.avatarUrl
+      ? 'background-image:url(' + u.avatarUrl + ');background-size:cover;background-position:center;'
+      : 'background-color:' + color(u.nickname) + ';';
+    var initial = u.avatarUrl ? '' : (u.nickname || '?').substring(0,2).toUpperCase();
+    html += '<div class="user-row" onclick="goProfile(\'' + u.uid + '\')">' +
+      '<div class="mva' + (u.isPremium ? ' vp' : '') + '" style="width:32px;height:32px;font-size:11px;' + avaStyle + '">' + initial + '</div>' +
+      '<div class="info"><b>' + esc(u.nickname) + (u.isPremium ? ' <span class="bd">VIP</span>' : '') + '</b>' +
+      '<small>Ур. ' + u.level + (u.description ? ' · ' + esc(u.description.substring(0,40)) : '') + '</small></div>' +
+      '<button class="sub-btn ' + (state.userSubs[u.uid] ? 'subd' : '') + '" onclick="event.stopPropagation();toggleSubscribe(\'' + u.uid + '\')">' + (state.userSubs[u.uid] ? '✓' : '➕') + '</button>' +
+    '</div>';
+  }
+  html += '</div>';
+  return html;
 }
 
 // ============ RENDER ============
@@ -742,7 +798,6 @@ function renderTopNav() {
   }
   $('navTop').innerHTML = html;
 }
-
 function renderSideMenu() {
   var pages = [
     {id:'profile',l:'👤 Мой профиль'},{id:'wall',l:'📝 Стена'},
@@ -760,7 +815,6 @@ function renderSideMenu() {
   }
   $('sideMenu').innerHTML = html;
 }
-
 function renderTabbar() {
   var pages = [
     {id:'profile',l:'Профиль',ic:'👤'},{id:'wall',l:'Стена',ic:'📝'},
@@ -788,7 +842,6 @@ function renderProfile(app) {
     showProfileCard(app, doc.data(), false, uid);
   }).catch(function(e) { app.innerHTML = '<div class="bk"><div class="bb">Ошибка: ' + esc(e.message) + '</div></div>'; });
 }
-
 function showProfileCard(app, p, isMe, uid) {
   var hasBanner = !!p.bannerUrl;
   var headerStyle = hasBanner ? 'background-image:url(' + p.bannerUrl + ');' : '';
@@ -796,7 +849,6 @@ function showProfileCard(app, p, isMe, uid) {
   var bannerHint = '';
   if (isMe && !hasBanner && p.isPremium) bannerHint = '<span class="banner-hint">Баннер не установлен</span>';
   if (isMe && !p.isPremium) bannerHint = '<span class="banner-hint">VIP → баннер</span>';
-
   var avaStyle = p.avatarUrl
     ? 'background-image:url(' + p.avatarUrl + ');background-size:cover;background-position:center;'
     : 'background-color:' + color(p.nickname) + ';';
@@ -804,7 +856,6 @@ function showProfileCard(app, p, isMe, uid) {
   var pageBg = '';
   if (p.bgUrl) pageBg = 'background-image:url(' + p.bgUrl + ');background-size:cover;background-position:center;';
   else if (p.bgColor) pageBg = 'background-color:' + p.bgColor + ';';
-
   var hideStats = !!p.hideStats && !isMe;
   var statsHtml = '';
   if (!hideStats) {
@@ -817,21 +868,17 @@ function showProfileCard(app, p, isMe, uid) {
   } else {
     statsHtml = '<div class="prof-stats" style="color:#999">Статистика скрыта</div>';
   }
-
   var xpInfo = xpProgress(p.xp || 0);
   var xpHtml = '<div style="margin:10px 0 0"><div class="xp-bar"><div class="xp-fill" style="width:' + xpInfo.pct + '%"></div></div>' +
     '<div style="font-size:10px;color:#666">Уровень ' + xpInfo.level + ' · ' + xpInfo.cur.toFixed(1) + '/' + xpInfo.need + ' XP</div></div>';
-
   var nickStyle = p.nickColor ? 'color:' + p.nickColor + ';' : '';
   var lvl = p.level || 1;
   var lvlBadge = '<span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span>';
-
   var subBtn = '';
   if (!isMe) {
     var subbed = !!state.userSubs[uid];
     subBtn = '<button class="bt ' + (subbed ? 'btg' : 'btgr') + '" onclick="toggleSubscribe(\'' + uid + '\')">' + (subbed ? '❌ Отписаться' : '➕ Подписаться') + '</button>';
   }
-
   app.innerHTML = '<div class="bk" style="' + pageBg + '">' +
     '<div class="' + headerClass + '" style="' + headerStyle + '">' + bannerHint + '</div>' +
     '<div style="position:relative">' +
@@ -847,11 +894,11 @@ function showProfileCard(app, p, isMe, uid) {
       '</div>' +
     '</div></div>';
 }
-
 function openProfEdit() {
   $('profNick').value = state.profile.nickname || '';
   $('profDesc').value = state.profile.description || '';
   $('hideStats').checked = !!state.profile.hideStats;
+  $('hideFromTop').checked = !!state.profile.hideFromTop;
   $('profBgColor').value = state.profile.bgColor || '#edeef0';
   $('profNickColor').value = state.profile.nickColor || '#2b587a';
   state.promoPreview = { ava: null, banner: null, bg: null };
@@ -890,13 +937,13 @@ document.addEventListener('change', function(e) {
 function removeAva() { state.promoPreview.ava = ''; state.profile.avatarUrl = ''; $('profAvaPreview').style.display = 'none'; toast('Аватар будет убран'); }
 function removeBanner() { state.promoPreview.banner = ''; state.profile.bannerUrl = ''; $('profBannerPreview').style.display = 'none'; toast('Баннер будет убран'); }
 function removeBg() { state.promoPreview.bg = ''; state.profile.bgUrl = ''; state.profile.bgColor = ''; $('profBgPreview').style.display = 'none'; toast('Фон будет убран'); }
-
 function saveProfile() {
   if (!state.user) return;
   var newP = {
     nickname: $('profNick').value.trim() || 'Гость',
     description: $('profDesc').value.trim(),
-    hideStats: $('hideStats').checked
+    hideStats: $('hideStats').checked,
+    hideFromTop: $('hideFromTop').checked
   };
   if (state.promoPreview.ava !== null) newP.avatarUrl = state.promoPreview.ava;
   if (state.profile.isPremium) {
@@ -967,7 +1014,8 @@ function renderWall(app) {
           '<a class="' + (state.sortMode==='top'?'ac':'') + '" onclick="setSort(\'top\')">🔥 Лучшее</a>' +
         '</div>' +
       '</div>' +
-      '<div class="search-bar"><input id="wallSearch" placeholder="🔍 Поиск и #хештеги" value="' + esc(state.wallSearch) + '" oninput="onWallSearch(this.value)"></div>' +
+      '<div class="search-bar"><input id="wallSearch" placeholder="🔍 Поиск: сообщения, #хештеги, пользователи" value="' + esc(state.wallSearch) + '" oninput="onSearchInput(this.value,\'wall\')"></div>' +
+      '<div id="wallSearchSection"></div>' +
       '<div class="bb" id="wallList">Загрузка...</div>' +
     '</div>' +
     '<div class="bk"><div class="bh">✍️ Новая запись</div><div class="bb">' +
@@ -981,7 +1029,6 @@ function renderWall(app) {
         '<label style="font-size:12px"><input type="checkbox" id="wallAnon" style="width:auto;margin-right:4px">Анонимно</label>' +
       '</div>' +
     '</div></div>';
-
   var wallImgTmp = '';
   var fileInput = $('wallImgFile');
   if (fileInput) {
@@ -998,7 +1045,6 @@ function renderWall(app) {
   window._clearWallImg = function() { wallImgTmp = ''; if ($('wallImgPreview')) $('wallImgPreview').style.display = 'none'; };
   listenWall();
 }
-function onWallSearch(v) { state.wallSearch = v; listenWall(); }
 function setSort(mode) { state.sortMode = mode; render(); }
 function listenWall() {
   var ref = db.collection('wall');
@@ -1006,6 +1052,8 @@ function listenWall() {
   else ref = ref.orderBy('timestamp', 'desc').limit(50);
   ref.onSnapshot(function(snap) {
     var list = $('wallList'); if (!list) return;
+    var sectionEl = $('wallSearchSection');
+    if (sectionEl) sectionEl.innerHTML = renderUserSearchSection();
     var search = (state.wallSearch || '').toLowerCase().trim();
     var html = '', count = 0;
     snap.forEach(function(doc) {
@@ -1013,12 +1061,13 @@ function listenWall() {
       if (search) {
         var hay = (m.text || '').toLowerCase();
         var tags = (m.tags || []).join(' ');
-        if (hay.indexOf(search.replace('#','')) === -1 && tags.indexOf(search.replace('#','')) === -1) return;
+        var author = (m.authorName || '').toLowerCase();
+        if (hay.indexOf(search.replace('#','')) === -1 && tags.indexOf(search.replace('#','')) === -1 && author.indexOf(search) === -1) return;
       }
       count++;
       html += renderWallPost(doc.id, m);
     });
-    list.innerHTML = count ? html : '<div class="em">Пока нет записей</div>';
+    list.innerHTML = count ? html : '<div class="em">Ничего не найдено</div>';
   }, function(err) { var list = $('wallList'); if (list) list.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>'; });
 }
 function renderWallPost(id, m) {
@@ -1034,10 +1083,18 @@ function renderWallPost(id, m) {
     : 'background-color:' + color(name) + ';';
   var initial = ava ? '' : name.substring(0,2).toUpperCase();
   var imgHtml = m.imageUrl ? '<img class="post-img" src="' + m.imageUrl + '" onclick="openImg(\'' + m.imageUrl + '\')">' : '';
-  var authorSpan = anon
-    ? '<span class="au an">Аноним</span>'
-    : '<span class="au" onclick="goProfile(\'' + m.authorId + '\')">' + esc(name) + '</span>' +
+  // FIX: админ видит настоящий ник анонима
+  var authorSpan;
+  if (anon) {
+    if (state.isAdmin && m.authorName) {
+      authorSpan = '<span class="au an">Аноним</span> <span style="color:#c00;font-size:10px" title="Видно только админам">(' + esc(m.authorName) + ')</span>';
+    } else {
+      authorSpan = '<span class="au an">Аноним</span>';
+    }
+  } else {
+    authorSpan = '<span class="au" onclick="goProfile(\'' + m.authorId + '\')">' + esc(name) + '</span>' +
       (vip ? ' <span class="bd">VIP</span>' : '') + subBtnHtml(m.authorId, name);
+  }
   return '<div class="ms">' +
     '<div class="mva' + (vip ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
     '<div class="mbd"><div class="mmt">' + authorSpan +
@@ -1098,7 +1155,8 @@ function renderForum(app) {
           '<a class="' + (state.sortMode==='top'?'ac':'') + '" onclick="setSort(\'top\')">🔥 Лучшее</a>' +
         '</div>' +
       '</div>' +
-      '<div class="search-bar"><input id="forumSearch" placeholder="🔍 Поиск и #хештеги" value="' + esc(state.forumSearch) + '" oninput="onForumSearch(this.value)"></div>' +
+      '<div class="search-bar"><input id="forumSearch" placeholder="🔍 Поиск: темы, #хештеги, пользователи" value="' + esc(state.forumSearch) + '" oninput="onSearchInput(this.value,\'forum\')"></div>' +
+      '<div id="forumSearchSection"></div>' +
       '<div class="bb" id="forumList">Загрузка...</div>' +
     '</div>' +
     '<div class="bk"><div class="bh">➕ Новая тема</div><div class="bb">' +
@@ -1108,13 +1166,14 @@ function renderForum(app) {
     '</div></div>';
   listenForum();
 }
-function onForumSearch(v) { state.forumSearch = v; listenForum(); }
 function listenForum() {
   var ref = db.collection('forumTopics');
   if (state.sortMode === 'top') ref = ref.orderBy('likesCount', 'desc').limit(50);
   else ref = ref.orderBy('createdAt', 'desc').limit(50);
   ref.onSnapshot(function(snap) {
     var list = $('forumList'); if (!list) return;
+    var sectionEl = $('forumSearchSection');
+    if (sectionEl) sectionEl.innerHTML = renderUserSearchSection();
     var search = (state.forumSearch || '').toLowerCase().trim();
     var html = '', count = 0;
     snap.forEach(function(doc) {
@@ -1136,7 +1195,7 @@ function listenForum() {
           '<div style="min-width:0"><b>' + esc(t.title) + '</b><br><small style="color:#999">' + esc(t.authorName) + ' · ' + fmtDate(t.createdAt) + ' · ❤️ ' + (t.likesCount || 0) + '</small></div>' +
         '</div></div>';
     });
-    list.innerHTML = count ? html : '<div class="em">Тем не найдено</div>';
+    list.innerHTML = count ? html : '<div class="em">Ничего не найдено</div>';
   });
 }
 function createTopic() {
@@ -1305,7 +1364,6 @@ function renderMessages(app) {
 function renderContactList() {
   var list = $('contactList'); if (!list) return;
   var html = '<div style="padding:8px"><button class="bt" onclick="openModal(\'addContactModal\')">➕</button></div>';
-  // Сортируем контакты: сначала с непрочитанными, потом по имени
   var sorted = state.contacts.slice().sort(function(a, b) {
     var ua = state.unread[a.uid] || 0;
     var ub = state.unread[b.uid] || 0;
@@ -1329,7 +1387,6 @@ function renderChat() {
   var c = getContact(state.dialogUid);
   var name = c ? (c.customName || c.nickname || '...') : '...';
   area.innerHTML = '<div style="padding:8px;background:#fafbfc;border-bottom:1px solid #eee">💬 ' + esc(name) + '</div><div class="chms" id="chatMsgs"></div><div class="chi"><input id="privInput" placeholder="Сообщение..."><button class="bt" onclick="sendPrivate()">➤</button></div>';
-
   var avatarCache = {};
   Promise.all([
     db.collection('users').doc(state.user.uid).get(),
@@ -1339,7 +1396,6 @@ function renderChat() {
     var other = res[1].exists ? res[1].data() : {};
     avatarCache[state.user.uid] = { url: me.avatarUrl || '', name: me.nickname || 'Я', premium: !!me.isPremium };
     avatarCache[state.dialogUid] = { url: other.avatarUrl || '', name: other.nickname || name, premium: !!other.isPremium };
-
     db.collection('privateMessages')
       .where('participants', 'array-contains', state.user.uid)
       .orderBy('timestamp', 'asc')
@@ -1368,11 +1424,7 @@ function renderChat() {
       }, function(err) { var cont = $('chatMsgs'); if (cont) cont.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>'; });
   });
 }
-function openDialog(uid) {
-  state.dialogUid = uid;
-  markDialogRead(uid);
-  render();
-}
+function openDialog(uid) { state.dialogUid = uid; markDialogRead(uid); render(); }
 function sendPrivate() {
   if (!state.user) return;
   var text = $('privInput').value.trim();
@@ -1383,11 +1435,7 @@ function sendPrivate() {
     from: state.user.uid, to: state.dialogUid,
     participants: [state.user.uid, state.dialogUid],
     text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(function() {
-    addXP(0.1);
-    // FIX: у собеседника тоже должен появиться контакт — сохраним это в его коллекцию contacts? Нет, используем обратный механизм:
-    // Просто отправим — а получатель получит через listener контактов.
-  }).catch(function(e) { toast(e.message); });
+  }).then(function() { addXP(0.1); }).catch(function(e) { toast(e.message); });
 }
 function addContact() {
   var nick = $('findNick').value.trim();
@@ -1431,6 +1479,8 @@ function renderRating(app) {
       var html = '', pos = 1;
       snap.forEach(function(doc) {
         var u = doc.data();
+        // Скрытые из топа не показываются (кроме админа)
+        if (u.hideFromTop && !state.isAdmin) return;
         var ava = u.avatarUrl || '';
         var avaStyle = ava
           ? 'background-image:url(' + ava + ');background-size:cover;background-position:center;'
@@ -1442,7 +1492,8 @@ function renderRating(app) {
         html += '<div class="leader" onclick="goProfile(\'' + doc.id + '\')">' +
           '<span class="pos ' + posCls + '">' + pos + '</span>' +
           '<div class="mva' + (u.isPremium ? ' vp' : '') + '" style="width:32px;height:32px;font-size:11px;' + avaStyle + '">' + initial + '</div>' +
-          '<div><b>' + esc(u.nickname) + '</b> <span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span></div>' +
+          '<div><b>' + esc(u.nickname) + '</b> <span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span>' +
+          (u.hideFromTop ? ' <span style="color:#999;font-size:10px" title="Скрыт из топа">👁‍🗨</span>' : '') + '</div>' +
           '<span class="score">' + (typeof score === 'number' ? score.toFixed(score % 1 ? 1 : 0) : score) + '</span>' +
         '</div>';
         pos++;
@@ -1520,7 +1571,7 @@ function loadUsers() {
     snap.forEach(function(doc) {
       var u = doc.data();
       html += '<div class="ucard">' +
-        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + (u.banned ? ' <span class="bdr">BAN</span>' : '') + '<br><small style="color:#999">Ур. ' + (u.level||1) + ' · ' + fmtDate(u.lastSeen) + '</small></div>' +
+        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + (u.banned ? ' <span class="bdr">BAN</span>' : '') + (u.hideFromTop ? ' <span style="color:#999;font-size:10px">👁‍🗨</span>' : '') + '<br><small style="color:#999">Ур. ' + (u.level||1) + ' · ' + fmtDate(u.lastSeen) + '</small></div>' +
         '<div class="actions">' +
           '<button class="bt ' + (u.banned ? 'btgr' : 'btr') + ' bt-sm" onclick="toggleBan(\'' + doc.id + '\',' + !u.banned + ')">' + (u.banned ? 'Разбан' : 'Бан') + '</button>' +
           '<button class="bt ' + (u.isPremium ? 'btg' : 'btgr') + ' bt-sm" onclick="toggleVip(\'' + doc.id + '\',' + !u.isPremium + ')">' + (u.isPremium ? '−VIP' : '+VIP') + '</button>' +
@@ -1531,12 +1582,10 @@ function loadUsers() {
 }
 function toggleBan(uid, val) { db.collection('users').doc(uid).update({ banned: val }).then(function() { toast(val ? 'Забанен' : 'Разбанен'); loadUsers(); }); }
 function toggleVip(uid, val) { db.collection('users').doc(uid).update({ isPremium: val }).then(function() { toast(val ? 'VIP выдан' : 'VIP снят'); loadUsers(); }); }
-
 function openMaintDialog() {
   db.collection('settings').doc('main').get().then(function(doc) {
     var data = doc.exists ? doc.data() : {};
     if (data.maintenance) {
-      // Уже закрыт — открываем
       db.collection('settings').doc('main').set({ maintenance: false }, { merge: true }).then(function() {
         toast('Сайт открыт'); refreshMtBtn();
       });
