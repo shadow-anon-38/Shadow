@@ -2,81 +2,86 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Тень</title>
 <style>
-:root{--blue:#4a76a8;--blue2:#3b5f8a;--bg:#edeef0;--w:#fff;--bd:#d8dbdf;--lk:#2b587a;--gold:#f5a623;--red:#d9534f;--green:#5cb85c;--hh:44px}
+:root{--blue:#4a76a8;--blue2:#3b5f8a;--bg:#edeef0;--w:#fff;--bd:#d8dbdf;--lk:#2b587a;--gold:#f5a623;--red:#d9534f;--green:#5cb85c;--hh:44px;--tabbar:56px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:Tahoma,Verdana,sans-serif;background:var(--bg);color:#2a2a2a;font-size:13px;line-height:1.4;padding-top:var(--hh);min-height:100vh}
+html,body{height:100%}
+body{font-family:Tahoma,Verdana,sans-serif;background:var(--bg);color:#2a2a2a;font-size:13px;line-height:1.4;padding-top:var(--hh);min-height:100vh;-webkit-text-size-adjust:100%}
+input,textarea,select{font-size:16px} /* против зума на iOS */
 .hd{position:fixed;top:0;left:0;right:0;height:var(--hh);background:var(--blue);z-index:1000;box-shadow:0 1px 3px rgba(0,0,0,.2);display:flex;align-items:center;padding:0 8px;gap:6px}
 .lg{color:#fff;font-weight:bold;font-size:15px;white-space:nowrap;text-decoration:none}
-.nv{display:flex;gap:2px;flex:1;overflow-x:auto}
+.nv{display:flex;gap:2px;flex:1;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .nv a{color:#dce4f0;text-decoration:none;padding:6px 8px;border-radius:3px;font-size:11px;white-space:nowrap}
 .nv a.ac{background:rgba(255,255,255,.2);color:#fff;font-weight:bold}
 .us{display:flex;align-items:center;gap:5px;color:#fff;font-size:11px;cursor:pointer;padding:3px 5px;border-radius:3px;white-space:nowrap}
 .av{width:28px;height:28px;border-radius:50%;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:11px;border:2px solid transparent;background-color:#999}
 .av.vp{border-color:var(--gold);box-shadow:0 0 5px var(--gold)}
-.ly{max-width:960px;margin:0 auto;padding:8px;display:flex;gap:8px}
+.ly{max-width:960px;margin:0 auto;padding:8px;display:flex;gap:8px;padding-bottom:calc(var(--tabbar) + 20px)}
 .sd{width:170px;flex-shrink:0}
 .mn{flex:1;min-width:0}
 .bk{background:var(--w);border:1px solid var(--bd);border-radius:4px;margin-bottom:8px;overflow:hidden}
 .bh{padding:9px 12px;border-bottom:1px solid var(--bd);font-weight:bold;font-size:13px;background:#fafbfc;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.bb{padding:10px 12px;max-height:60vh;overflow-y:auto}
-.mna a{display:block;padding:9px 12px;color:var(--lk);text-decoration:none;border-bottom:1px solid #f0f1f3;font-size:12px}
+.bb{padding:10px 12px;max-height:60vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mna a{display:block;padding:11px 12px;color:var(--lk);text-decoration:none;border-bottom:1px solid #f0f1f3;font-size:13px}
 .mna a.ac{background:#e8edf3;font-weight:bold;color:#333}
 .mna a:last-child{border-bottom:none}
 .ms{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #f2f3f5}
 .ms:last-child{border-bottom:none}
-.mva{width:38px;height:38px;border-radius:50%;flex-shrink:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:13px;border:2px solid transparent;background-color:#999}
+.mva{width:40px;height:40px;border-radius:50%;flex-shrink:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:14px;border:2px solid transparent;background-color:#999}
 .mva.vp{border-color:var(--gold);box-shadow:0 0 5px var(--gold)}
 .mbd{flex:1;min-width:0}
 .mmt{font-size:11px;color:#999;margin-bottom:2px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.au{font-weight:bold;color:var(--lk);cursor:pointer}
+.au{font-weight:bold;cursor:pointer}
 .au.an{color:#888;font-style:italic;cursor:default}
-.tx{word-break:break-word;font-size:12px;white-space:pre-wrap}
+.tx{word-break:break-word;font-size:13px;white-space:pre-wrap}
 .tag{color:#4a76a8;cursor:pointer}
-.bt{padding:7px 14px;background:var(--blue2);color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;font-weight:bold;font-family:inherit}
+.bt{padding:9px 16px;background:var(--blue2);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;font-weight:bold;font-family:inherit;min-height:40px}
 .bt:active{transform:scale(.97)}
 .bt:disabled{opacity:.5;cursor:not-allowed}
-.bt2{background:#5b88bd}.btg{background:#999}.btr{background:var(--red)}.btgr{background:var(--green)}
-.bt-sm{padding:3px 8px;font-size:10px}
+.bt2{background:#5b88bd}.btg{background:#999}.btr{background:var(--red)}.btgr{background:var(--green)}.btgold{background:var(--gold);color:#000}
+.bt-sm{padding:5px 10px;font-size:11px;min-height:auto}
 .bd{background:var(--gold);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px}
 .bdr{background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px}
-input,textarea,select{width:100%;border:1px solid var(--bd);border-radius:3px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;background:#fafbfc}
+.bdlvl{color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;font-weight:bold}
+input,textarea,select{width:100%;border:1px solid var(--bd);border-radius:4px;padding:10px 12px;font-family:inherit;outline:none;background:#fafbfc}
 input:focus,textarea:focus,select:focus{border-color:var(--blue);background:#fff}
-textarea{resize:vertical;min-height:45px}
+textarea{resize:vertical;min-height:50px}
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:15px}
 .mo.on{display:flex}
-.mb{background:#fff;border-radius:6px;padding:20px;width:100%;max-width:340px;max-height:90vh;overflow-y:auto;text-align:center}
-.mb h3{margin-bottom:12px;font-size:15px}
+.mb{background:#fff;border-radius:8px;padding:20px;width:100%;max-width:360px;max-height:90vh;overflow-y:auto;text-align:center}
+.mb h3{margin-bottom:12px;font-size:16px}
 .mb input,.mb textarea{margin-bottom:8px;text-align:left}
 .mb .bt{width:100%;margin-bottom:6px}
-.ts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 18px;border-radius:20px;font-size:12px;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
+.ts{position:fixed;bottom:calc(var(--tabbar) + 20px);left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 18px;border-radius:20px;font-size:12px;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
 .ts.on{opacity:1}
 .em{text-align:center;padding:30px 15px;color:#999;font-size:12px}
-.ct{padding:9px 10px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.ct{padding:11px 10px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:13px}
 .ct.ac{background:#e8edf3}
-.ct .rn{background:none;border:none;cursor:pointer;color:#999;font-size:14px;padding:0 4px}
+.ct .rn{background:none;border:none;cursor:pointer;color:#999;font-size:14px;padding:4px 8px}
 .ch{display:flex;height:55vh;border:1px solid var(--bd);border-radius:4px;overflow:hidden}
 .chl{width:150px;border-right:1px solid #eee;overflow-y:auto;background:#fafbfc;flex-shrink:0}
 .chm{flex:1;display:flex;flex-direction:column;min-width:0}
-.chms{flex:1;overflow-y:auto;padding:8px}
+.chms{flex:1;overflow-y:auto;padding:8px;-webkit-overflow-scrolling:touch}
 .chi{padding:8px;border-top:1px solid #eee;display:flex;gap:6px}
 .chi input{flex:1}
-.bl{display:inline-block;padding:5px 10px;border-radius:10px;background:#e8edf3;max-width:80%;word-break:break-word;font-size:12px}
+.bl{display:inline-block;padding:6px 11px;border-radius:12px;background:#e8edf3;max-width:80%;word-break:break-word;font-size:13px}
 .mn2{text-align:right}
 .mn2 .bl{background:#c9daf8}
 .mtm{font-size:9px;color:#999;margin-top:2px}
 
-/* ======= ПРОФИЛЬ ======= */
+/* Профиль */
 .profile-header{position:relative;background-size:cover;background-position:center;background-color:#4a76a8;min-height:150px}
 .profile-header.no-banner{background:linear-gradient(135deg,#4a76a8,#5b88bd)}
-.profile-header .banner-hint{position:absolute;top:8px;right:10px;color:#fff;font-size:10px;opacity:.75;background:rgba(0,0,0,.25);padding:2px 8px;border-radius:10px}
+.banner-hint{position:absolute;top:8px;right:10px;color:#fff;font-size:10px;opacity:.75;background:rgba(0,0,0,.25);padding:2px 8px;border-radius:10px}
 .prof-ava{width:90px;height:90px;border-radius:50%;margin:-45px auto 0;background-size:cover;background-position:center;border:4px solid #fff;position:relative;z-index:2;background-color:#999;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:30px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 .prof-ava.vp{border-color:var(--gold);box-shadow:0 0 16px var(--gold)}
 .prof-info{padding:10px 12px 18px;text-align:center}
-.prof-stats{display:flex;gap:12px;justify-content:center;margin-top:10px;font-size:12px;color:#666}
+.prof-stats{display:flex;gap:12px;justify-content:center;margin-top:10px;font-size:12px;color:#666;flex-wrap:wrap}
 .prof-stats span b{color:#333;font-size:14px}
+.xp-bar{height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin:8px 0 4px}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),#ffcc66);transition:width .3s}
 .file-inp{display:none}
 .adm-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .adm-stat{flex:1;min-width:100px;padding:10px;background:#fafbfc;border:1px solid var(--bd);border-radius:4px;text-align:center}
@@ -85,32 +90,86 @@ textarea{resize:vertical;min-height:45px}
 .ucard{padding:8px 10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px}
 .ucard b{font-size:12px}
 .ucard .actions{display:flex;gap:4px}
-.ucard .actions button{padding:3px 8px;font-size:10px}
+.ucard .actions button{padding:4px 8px;font-size:10px}
 .promo{padding:8px 10px;border-bottom:1px solid #eee;font-size:11px}
 .promo b{font-size:12px}
 .promo small{color:#666;display:block}
-
-/* Пост */
-.post-actions{display:flex;gap:10px;margin-top:6px;font-size:11px;color:#888;align-items:center;flex-wrap:wrap}
-.post-actions a{cursor:pointer;user-select:none}
+.post-actions{display:flex;gap:12px;margin-top:6px;font-size:11px;color:#888;align-items:center;flex-wrap:wrap}
+.post-actions a{cursor:pointer;user-select:none;padding:2px 4px}
 .post-actions a:hover{color:var(--blue)}
 .liked{color:var(--blue) !important;font-weight:bold}
 .post-img{max-width:100%;max-height:400px;border-radius:4px;margin-top:6px;cursor:pointer}
-.edit-area{margin-top:6px}
-.edit-area textarea{min-height:40px;font-size:12px}
-
-/* Сортировка */
-.sort-bar{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid var(--bd);background:#fafbfc;font-size:11px;align-items:center;flex-wrap:wrap}
-.sort-bar a{padding:4px 10px;border-radius:12px;cursor:pointer;color:#4a76a8;text-decoration:none}
+.sort-bar{display:flex;gap:4px;padding:8px 12px;border-bottom:1px solid var(--bd);background:#fafbfc;font-size:12px;align-items:center;flex-wrap:wrap}
+.sort-bar a{padding:6px 12px;border-radius:14px;cursor:pointer;color:#4a76a8;text-decoration:none}
 .sort-bar a.ac{background:var(--blue);color:#fff}
-
-/* Поиск */
 .search-bar{padding:8px 12px;border-bottom:1px solid var(--bd);background:#fafbfc}
-.search-bar input{font-size:12px;padding:6px 10px}
+.search-bar input{font-size:14px;padding:8px 12px}
+.sub-btn{background:none;border:1px solid #4a76a8;color:#4a76a8;border-radius:12px;font-size:10px;padding:2px 8px;cursor:pointer;margin-left:6px}
+.sub-btn.subd{background:#4a76a8;color:#fff}
 
-@media(max-width:800px){.sd{display:none}.ly{padding:6px}.nv a{font-size:10px;padding:5px 6px}.us span{display:none}}
-@media(max-width:800px) and (orientation:landscape){.sd{display:block;width:130px}.mna a{padding:7px 9px;font-size:11px}}
-@media(max-width:400px){.lg{font-size:13px}.nv a{padding:5px 4px;font-size:9px}.prof-ava{width:70px;height:70px;margin-top:-35px;font-size:22px}}
+/* Рейтинг */
+.leader{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #eee;cursor:pointer}
+.leader:hover{background:#fafbfc}
+.leader .pos{font-weight:bold;width:24px;text-align:center;color:#999}
+.leader .pos.top1{color:var(--gold);font-size:16px}
+.leader .pos.top2{color:#c0c0c0;font-size:15px}
+.leader .pos.top3{color:#cd7f32;font-size:15px}
+.leader .score{margin-left:auto;font-weight:bold;color:#333}
+
+/* Цвета уровней */
+.lvl-1,.lvl-2,.lvl-3{background:#9e9e9e}
+.lvl-4,.lvl-5,.lvl-6{background:#4caf50}
+.lvl-7,.lvl-8,.lvl-9{background:#2196f3}
+.lvl-10,.lvl-11,.lvl-12{background:#9c27b0}
+.lvl-13,.lvl-14,.lvl-15{background:#ff9800}
+.lvl-16,.lvl-17,.lvl-18{background:#e91e63}
+.lvl-19,.lvl-20{background:#d32f2f}
+.lvl-21,.lvl-22,.lvl-23,.lvl-24,.lvl-25{background:#000;box-shadow:0 0 6px var(--gold)}
+.lvl-26,.lvl-27,.lvl-28,.lvl-29,.lvl-30{background:linear-gradient(90deg,#ff0000,#ff8800,#ffff00,#00ff00,#00ffff,#0000ff,#8800ff);box-shadow:0 0 8px #fff}
+
+/* НИЖНИЙ ТАБ-БАР ДЛЯ ТЕЛЕФОНА */
+.tabbar{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--tabbar);background:#fff;border-top:1px solid var(--bd);z-index:900;box-shadow:0 -1px 4px rgba(0,0,0,.08)}
+.tabbar-inner{display:flex;height:100%}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:#888;font-size:10px;gap:2px;padding:4px}
+.tabbar a.ac{color:var(--blue);font-weight:bold}
+.tabbar a .ic{font-size:20px;line-height:1}
+
+/* МОБИЛЬНАЯ АДАПТАЦИЯ */
+@media(max-width:800px){
+  .sd{display:none}
+  .tabbar{display:block}
+  .ly{padding:6px;padding-bottom:calc(var(--tabbar) + 12px)}
+  .nv{display:none}
+  .lg{font-size:14px;flex:1}
+  .us span{display:none}
+  .us{padding:4px}
+  .bb{max-height:none}
+  .ch{height:auto;flex-direction:column}
+  .chl{width:100%;max-height:150px;border-right:none;border-bottom:1px solid #eee;display:flex;overflow-x:auto}
+  .chl .ct{min-width:120px;border-bottom:none;border-right:1px solid #eee}
+  .chm{height:60vh}
+  .bh{font-size:12px}
+  .prof-ava{width:80px;height:80px;margin-top:-40px;font-size:26px}
+  .profile-header{min-height:120px}
+  .sort-bar a{padding:6px 10px;font-size:11px}
+}
+@media(max-width:800px) and (orientation:landscape){
+  .sd{display:block;width:130px}
+  .mna a{padding:8px 10px;font-size:12px}
+  .tabbar{display:none}
+  .ly{padding-bottom:20px}
+  .bb{max-height:55vh}
+  .ch{flex-direction:row}
+  .chl{width:140px;max-height:none;flex-direction:column;border-right:1px solid #eee;border-bottom:none}
+  .chl .ct{min-width:auto;border-right:none;border-bottom:1px solid #eee}
+  .chm{height:auto}
+}
+@media(max-width:400px){
+  .lg{font-size:13px}
+  .prof-ava{width:70px;height:70px;margin-top:-35px;font-size:22px}
+  .profile-header{min-height:100px}
+  .sort-bar a{padding:5px 8px;font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -129,6 +188,8 @@ textarea{resize:vertical;min-height:45px}
 <div class="mn" id="app"></div>
 </div>
 
+<div class="tabbar" id="tabbar"><div class="tabbar-inner" id="tabbarInner"></div></div>
+
 <!-- Модалки -->
 <div class="mo" id="authModal"><div class="mb">
 <h3>Вход / Регистрация</h3>
@@ -145,19 +206,35 @@ textarea{resize:vertical;min-height:45px}
 <input id="profNick" placeholder="Никнейм" maxlength="20">
 <label style="display:block;text-align:left;font-size:11px;color:#666;margin:4px 0">Описание</label>
 <textarea id="profDesc" placeholder="О себе" maxlength="200" style="min-height:60px"></textarea>
+
 <label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Аватар</label>
 <input type="file" id="profAvaFile" accept="image/*" class="file-inp">
 <button class="bt bt2" onclick="document.getElementById('profAvaFile').click()">📷 Загрузить аватар</button>
 <img id="profAvaPreview" style="max-width:80px;max-height:80px;margin:6px auto;display:none;border-radius:50%">
+<button class="bt btg bt-sm" onclick="removeAva()" style="margin-top:4px">🗑 Убрать аватар</button>
+
 <label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Баннер (VIP)</label>
 <input type="file" id="profBannerFile" accept="image/*" class="file-inp">
 <button class="bt bt2" onclick="document.getElementById('profBannerFile').click()">🖼 Баннер</button>
 <img id="profBannerPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Фон (VIP)</label>
+<button class="bt btg bt-sm" onclick="removeBanner()" style="margin-top:4px">🗑 Убрать баннер</button>
+
+<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Фон профиля (VIP)</label>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+  <label style="font-size:11px"><input type="radio" name="bgType" value="color" onchange="bgTypeChange()"> Цвет</label>
+  <label style="font-size:11px"><input type="radio" name="bgType" value="image" onchange="bgTypeChange()"> Картинка</label>
+</div>
+<input type="color" id="profBgColor" value="#edeef0" style="height:40px">
 <input type="file" id="profBgFile" accept="image/*" class="file-inp">
-<button class="bt bt2" onclick="document.getElementById('profBgFile').click()">🎨 Фон</button>
+<button class="bt bt2" onclick="document.getElementById('profBgFile').click()" style="margin-top:4px">🎨 Загрузить фон</button>
 <img id="profBgPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
+<button class="bt btg bt-sm" onclick="removeBg()" style="margin-top:4px">🗑 Убрать фон</button>
+
+<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Цвет ника (VIP)</label>
+<input type="color" id="profNickColor" value="#2b587a" style="height:40px">
+
 <label style="display:block;text-align:left;font-size:12px;margin:8px 0"><input type="checkbox" id="hideStats" style="width:auto;margin-right:6px">Скрыть лайки и подписки</label>
+
 <button class="bt btgr" onclick="saveProfile()" style="margin-top:8px">💾 Сохранить</button>
 <button class="bt btg" onclick="closeModal('profModal')">Отмена</button>
 </div></div>
@@ -214,23 +291,24 @@ var db = firebase.firestore();
 // ============ STATE ============
 var state = {
   user: null,
-  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false },
+  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, xp: 0, level: 1, postsCount: 0 },
   page: 'profile',
   viewUid: null,
   dialogUid: null,
   contacts: [],
   topicId: null,
   isAdmin: false,
-  promoPreview: { ava: '', banner: '', bg: '' },
-  sortMode: 'latest',   // latest | top
+  promoPreview: { ava: null, banner: null, bg: null },
+  bgType: 'color',
+  sortMode: 'latest',
   wallSearch: '',
   forumSearch: '',
-  msgSearch: '',
-  userLikes: {},        // { postId: true } - кеш, что я лайкнул
-  userSubs: {}          // { uid: true } - на кого подписан
+  userLikes: {},
+  userSubs: {},
+  leaderTab: 'level'
 };
 
-var CLOUD_COOLDOWN = 5000;   // 5 сек на любое действие
+var CLOUD_COOLDOWN = 5000;
 var lastActionAt = 0;
 
 // ============ HELPERS ============
@@ -252,6 +330,48 @@ function fmtDate(ts) {
 function openModal(id) { $(id).classList.add('on'); }
 function closeModal(id) { $(id).classList.remove('on'); }
 
+// Уровни
+function xpForLevel(lvl) {
+  // XP, необходимый чтобы достичь этого уровня (cumulative)
+  // lvl 1 = 0 XP; каждое следующее требует квадратично больше
+  return Math.round(Math.pow(lvl - 1, 2) * 5);
+}
+function calcLevel(xp) {
+  xp = xp || 0;
+  var lvl = 1;
+  while (xpForLevel(lvl + 1) <= xp) lvl++;
+  return lvl;
+}
+function xpProgress(xp) {
+  var lvl = calcLevel(xp);
+  var cur = xpForLevel(lvl);
+  var next = xpForLevel(lvl + 1);
+  var pct = next > cur ? ((xp - cur) / (next - cur) * 100) : 100;
+  return { level: lvl, cur: xp - cur, need: next - cur, pct: Math.min(100, pct) };
+}
+function lvlClass(lvl) {
+  if (lvl <= 3) return 'lvl-1';
+  if (lvl <= 6) return 'lvl-4';
+  if (lvl <= 9) return 'lvl-7';
+  if (lvl <= 12) return 'lvl-10';
+  if (lvl <= 15) return 'lvl-13';
+  if (lvl <= 18) return 'lvl-16';
+  if (lvl <= 20) return 'lvl-19';
+  if (lvl <= 25) return 'lvl-21';
+  return 'lvl-26';
+}
+
+// Начисление XP
+function addXP(amount) {
+  if (!state.user || !amount) return;
+  state.profile.xp = (state.profile.xp || 0) + amount;
+  state.profile.level = calcLevel(state.profile.xp);
+  db.collection('users').doc(state.user.uid).update({
+    xp: state.profile.xp,
+    level: state.profile.level
+  }).catch(function(){});
+}
+
 function compressImage(file, maxW, maxH, quality, cb) {
   if (!file) return;
   var reader = new FileReader();
@@ -271,20 +391,16 @@ function compressImage(file, maxW, maxH, quality, cb) {
   reader.readAsDataURL(file);
 }
 
-// Извлекаем хештеги из текста
 function extractTags(text) {
   if (!text) return [];
   var m = text.match(/#[а-яa-z0-9_]+/gi) || [];
-  var uniq = {};
-  var out = [];
+  var uniq = {}, out = [];
   for (var i = 0; i < m.length; i++) {
     var tag = m[i].toLowerCase().replace('#','');
     if (!uniq[tag]) { uniq[tag] = 1; out.push(tag); }
   }
   return out;
 }
-
-// Рендер текста с подсветкой хештегов
 function renderText(text) {
   var escaped = esc(text);
   return escaped.replace(/#([а-яa-z0-9_]+)/gi, function(m, tag) {
@@ -292,7 +408,7 @@ function renderText(text) {
   });
 }
 
-// ============ КУЛДАУН + DDoS ============
+// ============ КУЛДАУН ============
 function checkCooldown() {
   var now = Date.now();
   if (now - lastActionAt < CLOUD_COOLDOWN) {
@@ -303,8 +419,6 @@ function checkCooldown() {
   lastActionAt = now;
   return true;
 }
-
-// Глобальный rate-limit (упрощённый)
 function checkGlobalRate() {
   var ref = db.collection('rateLimits').doc('global');
   var now = Date.now();
@@ -312,9 +426,7 @@ function checkGlobalRate() {
     return tx.get(ref).then(function(doc) {
       var data = doc.exists ? doc.data() : { events: [] };
       var events = (data.events || []).filter(function(t) { return now - t < 2000; });
-      if (events.length >= 3) {
-        return { blocked: true, reason: 'Слишком много запросов. Подождите немного.' };
-      }
+      if (events.length >= 3) return { blocked: true, reason: 'Слишком много запросов. Подождите.' };
       events.push(now);
       tx.set(ref, { events: events }, { merge: true });
       return { blocked: false };
@@ -324,11 +436,10 @@ function checkGlobalRate() {
 
 // ============ AUTH ============
 function onUserClick() { if (!state.user) openModal('authModal'); else nav('profile'); }
-
 function doRegister() {
   var email = $('authEmail').value.trim();
   var pass = $('authPass').value;
-  if (!email || !pass || pass.length < 6) { toast('Проверьте email и пароль (6+)'); return; }
+  if (!email || !pass || pass.length < 6) { toast('Email и пароль (6+)'); return; }
   auth.createUserWithEmailAndPassword(email, pass)
     .then(function() { closeModal('authModal'); toast('Регистрация успешна'); })
     .catch(function(e) { toast(e.message); });
@@ -349,12 +460,15 @@ auth.onAuthStateChanged(function(user) {
     db.collection('users').doc(user.uid).get().then(function(doc) {
       if (doc.exists) {
         state.profile = Object.assign(state.profile, doc.data());
+        // Обновим уровень, если XP есть
+        state.profile.level = calcLevel(state.profile.xp || 0);
       } else {
         state.profile = {
           nickname: user.email.split('@')[0],
-          isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '',
+          isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '',
           description: '', banned: false,
           likesReceived: 0, followers: 0, following: 0, hideStats: false,
+          xp: 0, level: 1, postsCount: 0,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           lastSeen: firebase.firestore.FieldValue.serverTimestamp()
         };
@@ -365,21 +479,14 @@ auth.onAuthStateChanged(function(user) {
     }).then(function(adm) {
       state.isAdmin = adm.exists;
       db.collection('users').doc(user.uid).update({ lastSeen: firebase.firestore.FieldValue.serverTimestamp() }).catch(function(){});
-      loadContacts();
-      loadUserLikes();
-      loadUserSubs();
-      updateUserUI();
-      render();
+      loadContacts(); loadUserLikes(); loadUserSubs();
+      updateUserUI(); render();
     }).catch(function(e) { console.error(e); toast('Ошибка: ' + e.message); });
   } else {
     state.user = null;
-    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false };
-    state.isAdmin = false;
-    state.contacts = [];
-    state.userLikes = {};
-    state.userSubs = {};
-    updateUserUI();
-    render();
+    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, xp: 0, level: 1, postsCount: 0 };
+    state.isAdmin = false; state.contacts = []; state.userLikes = {}; state.userSubs = {};
+    updateUserUI(); render();
   }
 });
 
@@ -400,16 +507,13 @@ function updateUserUI() {
 function loadUserLikes() {
   if (!state.user) return;
   db.collection('likes').doc(state.user.uid).get().then(function(doc) {
-    if (doc.exists) state.userLikes = doc.data().posts || {};
-    else state.userLikes = {};
+    state.userLikes = doc.exists ? (doc.data().posts || {}) : {};
   }).catch(function(){});
 }
-
 function loadUserSubs() {
   if (!state.user) return;
   db.collection('subs').doc(state.user.uid).get().then(function(doc) {
-    if (doc.exists) state.userSubs = doc.data().users || {};
-    else state.userSubs = {};
+    state.userSubs = doc.exists ? (doc.data().users || {}) : {};
   }).catch(function(){});
 }
 
@@ -418,25 +522,29 @@ function toggleLike(postId, collName) {
   if (!checkCooldown()) return;
   var liked = !!state.userLikes[postId];
   var ref = db.collection(collName).doc(postId);
-  db.runTransaction(function(tx) {
-    return tx.get(ref).then(function(doc) {
-      if (!doc.exists) return;
-      var data = doc.data();
-      var count = data.likesCount || 0;
-      tx.update(ref, { likesCount: liked ? Math.max(0, count - 1) : count + 1 });
+  ref.get().then(function(doc) {
+    if (!doc.exists) return;
+    var data = doc.data();
+    var count = data.likesCount || 0;
+    var authorId = data.authorId;
+    var delta = liked ? -1 : 1;
+    ref.update({ likesCount: Math.max(0, count + delta) }).then(function() {
+      if (liked) delete state.userLikes[postId]; else state.userLikes[postId] = true;
+      db.collection('likes').doc(state.user.uid).set({ posts: state.userLikes }, { merge: true });
+      // XP автору: +0.1 за лайк (если не себе)
+      if (!liked && authorId && authorId !== state.user.uid) {
+        db.runTransaction(function(tx) {
+          return tx.get(db.collection('users').doc(authorId)).then(function(u) {
+            if (!u.exists) return;
+            var d = u.data();
+            var xp = (d.xp || 0) + 0.1;
+            tx.update(db.collection('users').doc(authorId), { xp: xp, level: calcLevel(xp), likesReceived: (d.likesReceived || 0) + 1 });
+          });
+        }).catch(function(){});
+      }
+      render();
     });
-  }).then(function() {
-    var likesRef = db.collection('likes').doc(state.user.uid);
-    if (liked) {
-      delete state.userLikes[postId];
-    } else {
-      state.userLikes[postId] = true;
-    }
-    likesRef.set({ posts: state.userLikes }, { merge: true });
-    // Обновляем likesReceived у автора
-    // (упрощённо: без счётчика автора, либо можно добавить через Cloud Function)
-    render();
-  }).catch(function(e) { toast(e.message); });
+  });
 }
 
 function toggleSubscribe(targetUid) {
@@ -464,8 +572,7 @@ function toggleSubscribe(targetUid) {
       });
     });
   }).then(function() {
-    if (isSubbed) delete state.userSubs[targetUid];
-    else state.userSubs[targetUid] = true;
+    if (isSubbed) delete state.userSubs[targetUid]; else state.userSubs[targetUid] = true;
     subsRef.set({ users: state.userSubs }, { merge: true });
     toast(isSubbed ? 'Отписка' : 'Подписка оформлена');
     render();
@@ -496,15 +603,13 @@ function nav(page, uid) {
 function goProfile(uid) { if (!state.user) { openModal('authModal'); return; } nav('profile', uid); }
 function startChat(uid) { if (!state.user) { openModal('authModal'); return; } addOrUpdateContact(uid, ''); nav('messages', uid); }
 function searchTag(tag) {
-  state.wallSearch = '#' + tag;
-  state.forumSearch = '#' + tag;
-  state.page = 'wall';
-  render();
+  state.wallSearch = '#' + tag; state.forumSearch = '#' + tag;
+  state.page = 'wall'; render();
 }
 
 // ============ RENDER ============
 function render() {
-  renderTopNav(); renderSideMenu();
+  renderTopNav(); renderSideMenu(); renderTabbar();
   var app = $('app');
   if (!state.user) {
     app.innerHTML = '<div class="bk"><div class="bb" style="text-align:center;padding:40px 15px"><p style="margin-bottom:12px">Войдите или зарегистрируйтесь</p><button class="bt" onclick="openModal(\'authModal\')">Войти</button></div></div>';
@@ -519,6 +624,7 @@ function render() {
   else if (state.page === 'forum') renderForum(app);
   else if (state.page === 'topic') renderTopic(app);
   else if (state.page === 'messages') renderMessages(app);
+  else if (state.page === 'rating') renderRating(app);
   else if (state.page === 'admin' && state.isAdmin) renderAdmin(app);
   else if (state.page === 'premium') renderPremium(app);
   else renderProfile(app);
@@ -527,7 +633,8 @@ function render() {
 function renderTopNav() {
   var pages = [
     {id:'profile',l:'👤 Профиль'},{id:'wall',l:'📝 Стена'},
-    {id:'forum',l:'💬 Форум'},{id:'messages',l:'✉️ Сообщения'}
+    {id:'forum',l:'💬 Форум'},{id:'messages',l:'✉️ Сообщения'},
+    {id:'rating',l:'🏆 Рейтинг'}
   ];
   if (state.isAdmin) pages.push({id:'admin',l:'⚙️ Админка'});
   var html = '';
@@ -540,7 +647,8 @@ function renderTopNav() {
 function renderSideMenu() {
   var pages = [
     {id:'profile',l:'👤 Мой профиль'},{id:'wall',l:'📝 Стена'},
-    {id:'forum',l:'💬 Форум'},{id:'messages',l:'✉️ Сообщения'}
+    {id:'forum',l:'💬 Форум'},{id:'messages',l:'✉️ Сообщения'},
+    {id:'rating',l:'🏆 Рейтинг'}
   ];
   if (!state.profile.isPremium) pages.push({id:'premium',l:'⭐ Премиум'});
   if (state.isAdmin) pages.push({id:'admin',l:'⚙️ Админ-панель'});
@@ -549,6 +657,19 @@ function renderSideMenu() {
     html += '<a href="#" onclick="nav(\'' + pages[i].id + '\');return false" class="' + (state.page === pages[i].id ? 'ac' : '') + '">' + pages[i].l + '</a>';
   }
   $('sideMenu').innerHTML = html;
+}
+
+function renderTabbar() {
+  var pages = [
+    {id:'profile',l:'Профиль',ic:'👤'},{id:'wall',l:'Стена',ic:'📝'},
+    {id:'forum',l:'Форум',ic:'💬'},{id:'messages',l:'ЛС',ic:'✉️'},
+    {id:'rating',l:'Рейтинг',ic:'🏆'}
+  ];
+  var html = '';
+  for (var i = 0; i < pages.length; i++) {
+    html += '<a href="#" onclick="nav(\'' + pages[i].id + '\');return false" class="' + (state.page === pages[i].id ? 'ac' : '') + '"><span class="ic">' + pages[i].ic + '</span>' + pages[i].l + '</a>';
+  }
+  $('tabbarInner').innerHTML = html;
 }
 
 // ============ PROFILE ============
@@ -575,19 +696,31 @@ function showProfileCard(app, p, isMe, uid) {
     ? 'background-image:url(' + p.avatarUrl + ');background-size:cover;background-position:center;'
     : 'background-color:' + color(p.nickname) + ';';
   var initial = p.avatarUrl ? '' : (p.nickname || '?').substring(0,2).toUpperCase();
-  var pageBg = p.bgUrl ? 'background-image:url(' + p.bgUrl + ');background-size:cover;background-position:center;' : '';
+
+  var pageBg = '';
+  if (p.bgUrl) pageBg = 'background-image:url(' + p.bgUrl + ');background-size:cover;background-position:center;';
+  else if (p.bgColor) pageBg = 'background-color:' + p.bgColor + ';';
 
   var hideStats = !!p.hideStats && !isMe;
   var statsHtml = '';
   if (!hideStats) {
     statsHtml = '<div class="prof-stats">' +
-      '<span>❤️ <b>' + (p.likesReceived || 0) + '</b> лайков</span>' +
-      '<span>👥 <b>' + (p.followers || 0) + '</b> подписчиков</span>' +
-      '<span>📤 <b>' + (p.following || 0) + '</b> подписок</span>' +
+      '<span>❤️ <b>' + (p.likesReceived || 0) + '</b></span>' +
+      '<span>👥 <b>' + (p.followers || 0) + '</b></span>' +
+      '<span>📤 <b>' + (p.following || 0) + '</b></span>' +
+      '<span>📝 <b>' + (p.postsCount || 0) + '</b></span>' +
       '</div>';
   } else {
     statsHtml = '<div class="prof-stats" style="color:#999">Статистика скрыта</div>';
   }
+
+  var xpInfo = xpProgress(p.xp || 0);
+  var xpHtml = '<div style="margin:10px 0 0"><div class="xp-bar"><div class="xp-fill" style="width:' + xpInfo.pct + '%"></div></div>' +
+    '<div style="font-size:10px;color:#666">Уровень ' + xpInfo.level + ' · ' + xpInfo.cur.toFixed(1) + '/' + xpInfo.need + ' XP</div></div>';
+
+  var nickStyle = p.nickColor ? 'color:' + p.nickColor + ';' : '';
+  var lvl = p.level || 1;
+  var lvlBadge = '<span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span>';
 
   var subBtn = '';
   if (!isMe) {
@@ -600,13 +733,13 @@ function showProfileCard(app, p, isMe, uid) {
     '<div style="position:relative">' +
       '<div class="prof-ava' + (p.isPremium ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
       '<div class="prof-info">' +
-        '<h3 style="margin-bottom:6px;font-size:16px">' + esc(p.nickname) +
-          (p.isPremium ? ' <span class="bd">VIP</span>' : '') + '</h3>' +
+        '<h3 style="margin-bottom:6px;font-size:16px;' + nickStyle + '">' + esc(p.nickname) +
+          (p.isPremium ? ' <span class="bd">VIP</span>' : '') + ' ' + lvlBadge + '</h3>' +
         '<p style="color:#666;margin-bottom:12px;font-size:12px">' + esc(p.description || 'Нет описания') + '</p>' +
         (isMe ? '<button class="bt" onclick="openProfEdit()">✏️ Редактировать</button>'
               : '<button class="bt" onclick="startChat(\'' + uid + '\')">💬 Написать</button> ' + subBtn) +
-        (isMe && !p.isPremium ? ' <button class="bt" style="background:var(--gold);color:#000" onclick="nav(\'premium\')">⭐ VIP</button>' : '') +
-        statsHtml +
+        (isMe && !p.isPremium ? ' <button class="bt btgold" onclick="nav(\'premium\')">⭐ VIP</button>' : '') +
+        xpHtml + statsHtml +
       '</div>' +
     '</div></div>';
 }
@@ -615,11 +748,21 @@ function openProfEdit() {
   $('profNick').value = state.profile.nickname || '';
   $('profDesc').value = state.profile.description || '';
   $('hideStats').checked = !!state.profile.hideStats;
-  state.promoPreview = { ava: '', banner: '', bg: '' };
+  $('profBgColor').value = state.profile.bgColor || '#edeef0';
+  $('profNickColor').value = state.profile.nickColor || '#2b587a';
+  state.promoPreview = { ava: null, banner: null, bg: null };
+  state.bgType = state.profile.bgUrl ? 'image' : 'color';
+  document.querySelectorAll('input[name="bgType"]').forEach(function(r) { r.checked = (r.value === state.bgType); });
+  bgTypeChange();
   $('profAvaPreview').style.display = 'none';
   $('profBannerPreview').style.display = 'none';
   $('profBgPreview').style.display = 'none';
   openModal('profModal');
+}
+
+function bgTypeChange() {
+  var v = document.querySelector('input[name="bgType"]:checked');
+  state.bgType = v ? v.value : 'color';
 }
 
 document.addEventListener('change', function(e) {
@@ -643,6 +786,10 @@ document.addEventListener('change', function(e) {
   }
 });
 
+function removeAva() { state.promoPreview.ava = ''; state.profile.avatarUrl = ''; $('profAvaPreview').style.display = 'none'; toast('Аватар будет убран'); }
+function removeBanner() { state.promoPreview.banner = ''; state.profile.bannerUrl = ''; $('profBannerPreview').style.display = 'none'; toast('Баннер будет убран'); }
+function removeBg() { state.promoPreview.bg = ''; state.profile.bgUrl = ''; state.profile.bgColor = ''; $('profBgPreview').style.display = 'none'; toast('Фон будет убран'); }
+
 function saveProfile() {
   if (!state.user) return;
   var newP = {
@@ -650,10 +797,17 @@ function saveProfile() {
     description: $('profDesc').value.trim(),
     hideStats: $('hideStats').checked
   };
-  if (state.promoPreview.ava) newP.avatarUrl = state.promoPreview.ava;
+  if (state.promoPreview.ava !== null) newP.avatarUrl = state.promoPreview.ava;
   if (state.profile.isPremium) {
-    if (state.promoPreview.banner) newP.bannerUrl = state.promoPreview.banner;
-    if (state.promoPreview.bg) newP.bgUrl = state.promoPreview.bg;
+    if (state.promoPreview.banner !== null) newP.bannerUrl = state.promoPreview.banner;
+    if (state.promoPreview.bg !== null) {
+      if (state.bgType === 'image') { newP.bgUrl = state.promoPreview.bg; newP.bgColor = ''; }
+      else { newP.bgColor = $('profBgColor').value; newP.bgUrl = ''; }
+    } else if (state.bgType === 'color') {
+      newP.bgColor = $('profBgColor').value;
+      if (!state.profile.bgUrl) newP.bgUrl = '';
+    }
+    newP.nickColor = $('profNickColor').value;
   }
   state.profile = Object.assign(state.profile, newP);
   updateUserUI(); closeModal('profModal'); render();
@@ -667,18 +821,17 @@ function renderPremium(app) {
   app.innerHTML = '<div class="bk"><div class="bh">⭐ Премиум</div>' +
     '<div class="bb" style="text-align:center;padding:20px">' +
       (state.profile.isPremium
-        ? '<h3 style="color:var(--gold)">✅ У вас активен VIP</h3>'
-        : '<h3>Получите VIP</h3><p style="margin:8px 0">Введите промокод:</p><button class="bt" style="background:var(--gold);color:#000" onclick="openModal(\'promoModal\')">🎟 Активировать</button>') +
+        ? '<h3 style="color:var(--gold)">✅ У вас VIP</h3>'
+        : '<h3>Получите VIP</h3><p style="margin:8px 0">Введите промокод:</p><button class="bt btgold" onclick="openModal(\'promoModal\')">🎟 Активировать</button>') +
     '</div></div>';
 }
-
 function activatePromo() {
   var code = $('promoInput').value.trim().toUpperCase();
   if (!code) return;
   db.collection('promocodes').doc(code).get().then(function(doc) {
-    if (!doc.exists) { toast('Промокод не найден'); return; }
+    if (!doc.exists) { toast('Не найден'); return; }
     var p = doc.data();
-    if (p.used >= p.limit) { toast('Промокод исчерпан'); return; }
+    if (p.used >= p.limit) { toast('Исчерпан'); return; }
     var days = p.days || 30;
     var until = Date.now() + days * 24 * 60 * 60 * 1000;
     db.collection('users').doc(state.user.uid).update({ isPremium: true, premiumUntil: until }).then(function() {
@@ -691,10 +844,16 @@ function activatePromo() {
     }).then(function() {
       state.profile.isPremium = true;
       updateUserUI(); closeModal('promoModal'); $('promoInput').value = '';
-      toast('🎉 VIP активирован');
-      render();
-    }).catch(function(e) { toast(e.message); });
-  }).catch(function(e) { toast(e.message); });
+      toast('🎉 VIP активирован'); render();
+    });
+  });
+}
+
+// ============ SUB BUTTON ============
+function subBtnHtml(authorId, authorName) {
+  if (!authorId || authorId === state.user.uid) return '';
+  var subbed = !!state.userSubs[authorId];
+  return '<button class="sub-btn ' + (subbed ? 'subd' : '') + '" onclick="event.stopPropagation();toggleSubscribe(\'' + authorId + '\')">' + (subbed ? '✓' : '➕') + '</button>';
 }
 
 // ============ WALL ============
@@ -707,14 +866,14 @@ function renderWall(app) {
           '<a class="' + (state.sortMode==='top'?'ac':'') + '" onclick="setSort(\'top\')">🔥 Лучшее</a>' +
         '</div>' +
       '</div>' +
-      '<div class="search-bar"><input id="wallSearch" placeholder="🔍 Поиск по постам и #хештегам" value="' + esc(state.wallSearch) + '" oninput="onWallSearch(this.value)"></div>' +
+      '<div class="search-bar"><input id="wallSearch" placeholder="🔍 Поиск и #хештеги" value="' + esc(state.wallSearch) + '" oninput="onWallSearch(this.value)"></div>' +
       '<div class="bb" id="wallList">Загрузка...</div>' +
     '</div>' +
     '<div class="bk"><div class="bh">✍️ Новая запись</div><div class="bb">' +
       '<textarea id="wallText" placeholder="Что нового? #хештеги приветствуются"></textarea>' +
-      '<label style="display:block;text-align:left;font-size:11px;color:#666;margin:6px 0 4px">Фото (необязательно)</label>' +
+      '<label style="display:block;text-align:left;font-size:11px;color:#666;margin:6px 0 4px">Фото</label>' +
       '<input type="file" id="wallImgFile" accept="image/*" class="file-inp">' +
-      '<button class="bt bt2" onclick="document.getElementById(\'wallImgFile\').click()">📷 Прикрепить фото</button>' +
+      '<button class="bt bt2" onclick="document.getElementById(\'wallImgFile\').click()">📷 Фото</button>' +
       '<img id="wallImgPreview" style="max-width:100%;max-height:120px;margin:6px 0;display:none;border-radius:4px">' +
       '<div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
         '<button class="bt" onclick="postWall()">Отправить</button>' +
@@ -736,33 +895,21 @@ function renderWall(app) {
   }
   window._wallImgTmp = function() { return wallImgTmp; };
   window._clearWallImg = function() { wallImgTmp = ''; if ($('wallImgPreview')) $('wallImgPreview').style.display = 'none'; };
-
   listenWall();
 }
-
-function onWallSearch(v) {
-  state.wallSearch = v;
-  listenWall();
-}
-
-function setSort(mode) {
-  state.sortMode = mode;
-  render();
-}
+function onWallSearch(v) { state.wallSearch = v; listenWall(); }
+function setSort(mode) { state.sortMode = mode; render(); }
 
 function listenWall() {
   var ref = db.collection('wall');
   if (state.sortMode === 'top') ref = ref.orderBy('likesCount', 'desc').limit(50);
   else ref = ref.orderBy('timestamp', 'desc').limit(50);
-
   ref.onSnapshot(function(snap) {
     var list = $('wallList'); if (!list) return;
     var search = (state.wallSearch || '').toLowerCase().trim();
-    var html = '';
-    var count = 0;
+    var html = '', count = 0;
     snap.forEach(function(doc) {
       var m = doc.data();
-      // Поиск
       if (search) {
         var hay = (m.text || '').toLowerCase();
         var tags = (m.tags || []).join(' ');
@@ -771,8 +918,7 @@ function listenWall() {
       count++;
       html += renderWallPost(doc.id, m);
     });
-    if (!count) list.innerHTML = '<div class="em">Пока нет записей</div>';
-    else list.innerHTML = html;
+    list.innerHTML = count ? html : '<div class="em">Пока нет записей</div>';
   }, function(err) { var list = $('wallList'); if (list) list.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>'; });
 }
 
@@ -789,28 +935,26 @@ function renderWallPost(id, m) {
     ? 'background-image:url(' + ava + ');background-size:cover;background-position:center;'
     : 'background-color:' + color(name) + ';';
   var initial = ava ? '' : name.substring(0,2).toUpperCase();
-
   var imgHtml = m.imageUrl ? '<img class="post-img" src="' + m.imageUrl + '" onclick="openImg(\'' + m.imageUrl + '\')">' : '';
 
-  var actionsHtml = '<div class="post-actions">' +
-    '<a class="' + (liked ? 'liked' : '') + '" onclick="toggleLike(\'' + id + '\',\'wall\')">' + (liked ? '❤️' : '🤍') + ' <span>' + (m.likesCount || 0) + '</span></a>' +
-    (canEdit ? '<a onclick="editWall(\'' + id + '\')">✏️ Изменить</a>' : '') +
-    (canEdit ? '<a onclick="deleteWall(\'' + id + '\')" style="color:#d9534f">🗑 Удалить</a>' : '') +
-  '</div>';
+  var authorSpan = anon
+    ? '<span class="au an">Аноним</span>'
+    : '<span class="au" onclick="goProfile(\'' + m.authorId + '\')">' + esc(name) + '</span>' +
+      (vip ? ' <span class="bd">VIP</span>' : '') + subBtnHtml(m.authorId, name);
 
   return '<div class="ms">' +
     '<div class="mva' + (vip ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
-    '<div class="mbd"><div class="mmt">' +
-      (anon ? '<span class="au an">Аноним</span>'
-            : '<span class="au" onclick="goProfile(\'' + m.authorId + '\')">' + esc(name) + (vip ? ' <span class="bd">VIP</span>' : '') + '</span>') +
+    '<div class="mbd"><div class="mmt">' + authorSpan +
       '<span>' + fmtDate(m.timestamp) + '</span>' +
-    '</div><div class="tx">' + renderText(m.text).replace(/\n/g,'<br>') + '</div>' + imgHtml + actionsHtml + '</div></div>';
+    '</div><div class="tx">' + renderText(m.text).replace(/\n/g,'<br>') + '</div>' + imgHtml +
+    '<div class="post-actions">' +
+      '<a class="' + (liked ? 'liked' : '') + '" onclick="toggleLike(\'' + id + '\',\'wall\')">' + (liked ? '❤️' : '🤍') + ' ' + (m.likesCount || 0) + '</a>' +
+      (canEdit ? '<a onclick="editWall(\'' + id + '\')">✏️ Изменить</a>' : '') +
+      (canEdit ? '<a onclick="deleteWall(\'' + id + '\')" style="color:#d9534f">🗑 Удалить</a>' : '') +
+    '</div></div></div>';
 }
 
-function openImg(url) {
-  $('imgFull').src = url;
-  openModal('imgModal');
-}
+function openImg(url) { $('imgFull').src = url; openModal('imgModal'); }
 
 function postWall() {
   if (!state.user) return;
@@ -822,20 +966,19 @@ function postWall() {
     if (r.blocked) { toast('⚠️ ' + r.reason); return; }
     var anon = $('wallAnon').checked;
     db.collection('wall').add({
-      authorId: state.user.uid,
-      authorName: state.profile.nickname,
-      authorAvatar: state.profile.avatarUrl || '',
-      authorPremium: !!state.profile.isPremium,
-      anonymous: anon,
-      text: text,
-      imageUrl: img || '',
-      tags: extractTags(text),
-      likesCount: 0,
+      authorId: state.user.uid, authorName: state.profile.nickname,
+      authorAvatar: state.profile.avatarUrl || '', authorPremium: !!state.profile.isPremium,
+      anonymous: anon, text: text, imageUrl: img || '',
+      tags: extractTags(text), likesCount: 0,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).then(function() {
       $('wallText').value = ''; $('wallAnon').checked = false;
       if (window._clearWallImg) window._clearWallImg();
-      toast('Опубликовано');
+      // +0.5 XP
+      addXP(0.5);
+      db.collection('users').doc(state.user.uid).update({ postsCount: (state.profile.postsCount || 0) + 1 }).catch(function(){});
+      state.profile.postsCount = (state.profile.postsCount || 0) + 1;
+      toast('+0.5 XP · Опубликовано');
     }).catch(function(e) { toast(e.message); });
   });
 }
@@ -847,7 +990,6 @@ function editWall(id) {
   db.collection('wall').doc(id).update({ text: newText, tags: extractTags(newText) })
     .then(function() { toast('Изменено'); }).catch(function(e) { toast(e.message); });
 }
-
 function deleteWall(id) {
   if (!confirm('Удалить запись?')) return;
   if (!checkCooldown()) return;
@@ -864,7 +1006,7 @@ function renderForum(app) {
           '<a class="' + (state.sortMode==='top'?'ac':'') + '" onclick="setSort(\'top\')">🔥 Лучшее</a>' +
         '</div>' +
       '</div>' +
-      '<div class="search-bar"><input id="forumSearch" placeholder="🔍 Поиск тем и #хештегов" value="' + esc(state.forumSearch) + '" oninput="onForumSearch(this.value)"></div>' +
+      '<div class="search-bar"><input id="forumSearch" placeholder="🔍 Поиск и #хештеги" value="' + esc(state.forumSearch) + '" oninput="onForumSearch(this.value)"></div>' +
       '<div class="bb" id="forumList">Загрузка...</div>' +
     '</div>' +
     '<div class="bk"><div class="bh">➕ Новая тема</div><div class="bb">' +
@@ -874,19 +1016,16 @@ function renderForum(app) {
     '</div></div>';
   listenForum();
 }
-
 function onForumSearch(v) { state.forumSearch = v; listenForum(); }
 
 function listenForum() {
   var ref = db.collection('forumTopics');
   if (state.sortMode === 'top') ref = ref.orderBy('likesCount', 'desc').limit(50);
   else ref = ref.orderBy('createdAt', 'desc').limit(50);
-
   ref.onSnapshot(function(snap) {
     var list = $('forumList'); if (!list) return;
     var search = (state.forumSearch || '').toLowerCase().trim();
-    var html = '';
-    var count = 0;
+    var html = '', count = 0;
     snap.forEach(function(doc) {
       var t = doc.data();
       if (search) {
@@ -920,13 +1059,9 @@ function createTopic() {
     if (r.blocked) { toast('⚠️ ' + r.reason); return; }
     var ref = db.collection('forumTopics').doc();
     ref.set({
-      title: title,
-      authorId: state.user.uid,
-      authorName: state.profile.nickname,
-      authorAvatar: state.profile.avatarUrl || '',
-      authorPremium: !!state.profile.isPremium,
-      likesCount: 0,
-      tags: extractTags(text + ' ' + title),
+      title: title, authorId: state.user.uid, authorName: state.profile.nickname,
+      authorAvatar: state.profile.avatarUrl || '', authorPremium: !!state.profile.isPremium,
+      likesCount: 0, tags: extractTags(text + ' ' + title),
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(function() {
       return ref.collection('posts').add({
@@ -937,7 +1072,10 @@ function createTopic() {
       });
     }).then(function() {
       $('topicTitle').value = ''; $('topicText').value = '';
-      toast('Тема создана');
+      addXP(1);
+      db.collection('users').doc(state.user.uid).update({ postsCount: (state.profile.postsCount || 0) + 1 }).catch(function(){});
+      state.profile.postsCount = (state.profile.postsCount || 0) + 1;
+      toast('+1 XP · Тема создана');
     }).catch(function(e) { toast(e.message); });
   });
 }
@@ -955,9 +1093,9 @@ function renderTopic(app) {
     var canEdit = isMine || state.isAdmin;
 
     app.innerHTML = '<div class="bk">' +
-      '<div class="bh">📌 ' + esc(t.title) + ' <button class="bt bt2" style="margin-left:auto;padding:4px 10px;font-size:11px" onclick="nav(\'forum\')">← Назад</button></div>' +
+      '<div class="bh">📌 ' + esc(t.title) + ' <button class="bt bt2 bt-sm" style="margin-left:auto" onclick="nav(\'forum\')">← Назад</button></div>' +
       '<div class="bb" style="border-bottom:1px solid #f2f3f5">' +
-        '<div style="font-size:11px;color:#999;margin-bottom:6px">Автор: <span class="au" onclick="goProfile(\'' + t.authorId + '\')">' + esc(t.authorName) + '</span> · ' + fmtDate(t.createdAt) + '</div>' +
+        '<div style="font-size:11px;color:#999;margin-bottom:6px">Автор: <span class="au" onclick="goProfile(\'' + t.authorId + '\')">' + esc(t.authorName) + '</span>' + subBtnHtml(t.authorId, t.authorName) + ' · ' + fmtDate(t.createdAt) + '</div>' +
         '<div class="tx">' + renderText(t.text) + '</div>' +
         '<div class="post-actions">' +
           '<a class="' + (liked ? 'liked' : '') + '" onclick="toggleLike(\'' + topicId + '\',\'forumTopics\')">' + (liked ? '❤️' : '🤍') + ' ' + (t.likesCount || 0) + '</a>' +
@@ -967,7 +1105,7 @@ function renderTopic(app) {
       '</div>' +
       '<div class="bb" id="topicPosts">Загрузка...</div></div>' +
       '<div class="bk"><div class="bh">Ответить</div><div class="bb">' +
-        '<textarea id="replyText" placeholder="Ваше сообщение (#хештеги)"></textarea>' +
+        '<textarea id="replyText" placeholder="Ваше сообщение"></textarea>' +
         '<button class="bt" style="margin-top:6px" onclick="replyTopic(\'' + topicId + '\')">Отправить</button>' +
       '</div></div>';
 
@@ -989,7 +1127,7 @@ function renderTopic(app) {
           var pEdit = pMine || state.isAdmin;
           html += '<div class="ms">' +
             '<div class="mva' + (vip ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
-            '<div class="mbd"><div class="mmt"><span class="au" onclick="goProfile(\'' + p.authorId + '\')">' + esc(p.authorName) + (vip ? ' <span class="bd">VIP</span>' : '') + '</span><span>' + fmtDate(p.timestamp) + '</span></div>' +
+            '<div class="mbd"><div class="mmt"><span class="au" onclick="goProfile(\'' + p.authorId + '\')">' + esc(p.authorName) + '</span>' + (vip ? ' <span class="bd">VIP</span>' : '') + subBtnHtml(p.authorId, p.authorName) + '<span>' + fmtDate(p.timestamp) + '</span></div>' +
             '<div class="tx">' + renderText(p.text) + '</div>' +
             '<div class="post-actions">' +
               '<a class="' + (postLiked ? 'liked' : '') + '" onclick="togglePostLike(\'' + topicId + '\',\'' + pid + '\')">' + (postLiked ? '❤️' : '🤍') + ' ' + (p.likesCount || 0) + '</a>' +
@@ -1003,11 +1141,11 @@ function renderTopic(app) {
 }
 
 function editTopic(id) {
-  var nt = prompt('Новое название темы:');
+  var nt = prompt('Новое название:');
   if (nt === null) return;
   if (!checkCooldown()) return;
   db.collection('forumTopics').doc(id).update({ title: nt, tags: extractTags(nt) })
-    .then(function() { toast('Изменено'); }).catch(function(e) { toast(e.message); });
+    .then(function() { toast('Изменено'); });
 }
 function deleteTopic(id) {
   if (!confirm('Удалить всю тему?')) return;
@@ -1015,7 +1153,7 @@ function deleteTopic(id) {
   db.collection('forumTopics').doc(id).delete().then(function() { nav('forum'); });
 }
 function editForumPost(topicId, postId) {
-  var nt = prompt('Редактировать сообщение:');
+  var nt = prompt('Редактировать:');
   if (nt === null) return;
   if (!checkCooldown()) return;
   db.collection('forumTopics').doc(topicId).collection('posts').doc(postId).update({ text: nt, tags: extractTags(nt) })
@@ -1032,17 +1170,26 @@ function togglePostLike(topicId, postId) {
   var key = topicId + '_' + postId;
   var liked = !!state.userLikes[key];
   var ref = db.collection('forumTopics').doc(topicId).collection('posts').doc(postId);
-  db.runTransaction(function(tx) {
-    return tx.get(ref).then(function(doc) {
-      var data = doc.data();
-      var c = data.likesCount || 0;
-      tx.update(ref, { likesCount: liked ? Math.max(0, c-1) : c+1 });
+  ref.get().then(function(doc) {
+    if (!doc.exists) return;
+    var data = doc.data();
+    var c = data.likesCount || 0;
+    ref.update({ likesCount: Math.max(0, c + (liked ? -1 : 1)) }).then(function() {
+      if (liked) delete state.userLikes[key]; else state.userLikes[key] = true;
+      db.collection('likes').doc(state.user.uid).set({ posts: state.userLikes }, { merge: true });
+      if (!liked && data.authorId && data.authorId !== state.user.uid) {
+        db.runTransaction(function(tx) {
+          return tx.get(db.collection('users').doc(data.authorId)).then(function(u) {
+            if (!u.exists) return;
+            var d = u.data();
+            var xp = (d.xp || 0) + 0.1;
+            tx.update(db.collection('users').doc(data.authorId), { xp: xp, level: calcLevel(xp), likesReceived: (d.likesReceived || 0) + 1 });
+          });
+        }).catch(function(){});
+      }
+      render();
     });
-  }).then(function() {
-    if (liked) delete state.userLikes[key]; else state.userLikes[key] = true;
-    db.collection('likes').doc(state.user.uid).set({ posts: state.userLikes }, { merge: true });
-    render();
-  }).catch(function(e) { toast(e.message); });
+  });
 }
 
 function replyTopic(id) {
@@ -1058,6 +1205,11 @@ function replyTopic(id) {
       authorAvatar: state.profile.avatarUrl || '', authorPremium: !!state.profile.isPremium,
       text: text, likesCount: 0, tags: extractTags(text),
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function() {
+      addXP(0.5);
+      db.collection('users').doc(state.user.uid).update({ postsCount: (state.profile.postsCount || 0) + 1 }).catch(function(){});
+      state.profile.postsCount = (state.profile.postsCount || 0) + 1;
+      toast('+0.5 XP');
     }).catch(function(e) { toast(e.message); });
   });
 }
@@ -1065,13 +1217,12 @@ function replyTopic(id) {
 // ============ MESSAGES ============
 function renderMessages(app) {
   app.innerHTML = '<div class="bk"><div class="bh">✉️ Сообщения</div><div class="bb" style="padding:0"><div class="ch"><div class="chl" id="contactList"></div><div class="chm" id="chatArea"></div></div></div></div>';
-  renderContactList();
-  renderChat();
+  renderContactList(); renderChat();
 }
 
 function renderContactList() {
   var list = $('contactList'); if (!list) return;
-  var html = '<div style="padding:8px"><button class="bt" onclick="openModal(\'addContactModal\')">➕ Добавить</button></div>';
+  var html = '<div style="padding:8px"><button class="bt" onclick="openModal(\'addContactModal\')">➕</button></div>';
   for (var i = 0; i < state.contacts.length; i++) {
     var c = state.contacts[i];
     var name = c.customName || c.nickname || '...';
@@ -1123,11 +1274,10 @@ function renderChat() {
         cont.innerHTML = html;
         cont.scrollTop = cont.scrollHeight;
       }, function(err) { var cont = $('chatMsgs'); if (cont) cont.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>'; });
-  }).catch(function(err) { console.error(err); toast('Ошибка: ' + err.message); });
+  });
 }
 
 function openDialog(uid) { state.dialogUid = uid; render(); }
-
 function sendPrivate() {
   if (!state.user) return;
   var text = $('privInput').value.trim();
@@ -1138,6 +1288,8 @@ function sendPrivate() {
     from: state.user.uid, to: state.dialogUid,
     participants: [state.user.uid, state.dialogUid],
     text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function() {
+    addXP(0.1);
   }).catch(function(e) { toast(e.message); });
 }
 
@@ -1151,16 +1303,64 @@ function addContact() {
       addOrUpdateContact(doc.id, doc.data().nickname);
       closeModal('addContactModal'); $('findNick').value = '';
       state.dialogUid = doc.id; nav('messages', doc.id);
-    }).catch(function(e) { toast(e.message); });
+    });
 }
-
 function renameContact(uid) {
   var c = getContact(uid);
   var cur = c ? (c.customName || c.nickname || '') : '';
-  var nn = prompt('Переименовать контакт', cur);
+  var nn = prompt('Переименовать', cur);
   if (nn === null) return;
   if (c) { c.customName = nn.trim() || null; saveContacts(); render(); }
 }
+
+// ============ RATING ============
+function renderRating(app) {
+  var tabs = [
+    {id:'level', l:'⭐ Уровень'},
+    {id:'likes', l:'❤️ Лайки'},
+    {id:'followers', l:'👥 Подписки'},
+    {id:'posts', l:'📝 Сообщения'}
+  ];
+  var sortField = { level: 'level', likes: 'likesReceived', followers: 'followers', posts: 'postsCount' }[state.leaderTab] || 'level';
+
+  app.innerHTML = '<div class="bk"><div class="bh">🏆 Таблица лидеров</div>' +
+    '<div class="sort-bar">' +
+      tabs.map(function(t) {
+        return '<a class="' + (state.leaderTab === t.id ? 'ac' : '') + '" onclick="setLeaderTab(\'' + t.id + '\')">' + t.l + '</a>';
+      }).join('') +
+    '</div>' +
+    '<div class="bb" id="leaderList">Загрузка...</div></div>';
+
+  db.collection('users').orderBy(sortField, 'desc').limit(50).get()
+    .then(function(snap) {
+      var list = $('leaderList');
+      var html = '';
+      var pos = 1;
+      snap.forEach(function(doc) {
+        var u = doc.data();
+        var ava = u.avatarUrl || '';
+        var avaStyle = ava
+          ? 'background-image:url(' + ava + ');background-size:cover;background-position:center;'
+          : 'background-color:' + color(u.nickname) + ';';
+        var initial = ava ? '' : (u.nickname||'?').substring(0,2).toUpperCase();
+        var score = u[sortField] || 0;
+        var posCls = pos === 1 ? 'top1' : pos === 2 ? 'top2' : pos === 3 ? 'top3' : '';
+        var lvl = u.level || 1;
+        html += '<div class="leader" onclick="goProfile(\'' + doc.id + '\')">' +
+          '<span class="pos ' + posCls + '">' + pos + '</span>' +
+          '<div class="mva' + (u.isPremium ? ' vp' : '') + '" style="width:32px;height:32px;font-size:11px;' + avaStyle + '">' + initial + '</div>' +
+          '<div><b>' + esc(u.nickname) + '</b> <span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span></div>' +
+          '<span class="score">' + (typeof score === 'number' ? score.toFixed(score % 1 ? 1 : 0) : score) + '</span>' +
+        '</div>';
+        pos++;
+      });
+      list.innerHTML = html || '<div class="em">Нет данных</div>';
+    }).catch(function(e) {
+      var list = $('leaderList');
+      if (list) list.innerHTML = '<div class="em">Ошибка: ' + esc(e.message) + '</div>';
+    });
+}
+function setLeaderTab(t) { state.leaderTab = t; render(); }
 
 // ============ ADMIN ============
 function renderAdmin(app) {
@@ -1170,14 +1370,13 @@ function renderAdmin(app) {
     '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">' +
       '<button class="bt btgr" onclick="openModal(\'adminPromoModal\')">🎟 Промокод</button>' +
       '<button class="bt btr" onclick="toggleMaintenance()" id="mtBtn">🚧 Закрыть сайт</button>' +
-      '<button class="bt btr" onclick="fullReset()">💥 Полный сброс</button>' +
+      '<button class="bt btr" onclick="fullReset()">💥 Сброс</button>' +
     '</div>' +
     '<h4 style="margin:10px 0 6px">🎟 Промокоды</h4><div id="promoList">Загрузка...</div>' +
     '<h4 style="margin:14px 0 6px">👥 Пользователи</h4><div id="userList">Загрузка...</div>' +
     '</div></div>';
   loadAdminStats(); loadPromos(); loadUsers(); checkMaintenance();
 }
-
 function loadAdminStats() {
   var today = new Date(); today.setHours(0,0,0,0);
   Promise.all([db.collection('users').get(), db.collection('users').where('lastSeen', '>=', today).get()])
@@ -1187,7 +1386,6 @@ function loadAdminStats() {
         '<div class="adm-stat"><b>' + res[1].size + '</b><small>За сегодня</small></div>';
     });
 }
-
 function loadPromos() {
   db.collection('promocodes').orderBy('createdAt', 'desc').limit(50).get().then(function(snap) {
     var list = $('promoList'); if (!list) return;
@@ -1200,15 +1398,13 @@ function loadPromos() {
     list.innerHTML = html;
   });
 }
-
 function showPromoUses(code) {
   db.collection('promocodes').doc(code).collection('uses').orderBy('usedAt', 'desc').get().then(function(snap) {
     var txt = '';
-    snap.forEach(function(d) { var u = d.data(); txt += u.nickname + ' (' + u.uid.substring(0,8) + '...) — ' + fmtDate(u.usedAt) + '\n'; });
-    alert(txt || 'Никто не использовал');
+    snap.forEach(function(d) { var u = d.data(); txt += u.nickname + ' — ' + fmtDate(u.usedAt) + '\n'; });
+    alert(txt || 'Никто');
   });
 }
-
 function adminCreatePromo() {
   var code = $('apCode').value.trim().toUpperCase();
   var desc = $('apDesc').value.trim();
@@ -1219,14 +1415,11 @@ function adminCreatePromo() {
     description: desc, days: days, limit: limit, used: 0,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(function() {
-    closeModal('adminPromoModal');
-    $('apCode').value = ''; $('apDesc').value = '';
-    toast('Промокод создан'); loadPromos();
+    closeModal('adminPromoModal'); $('apCode').value = ''; $('apDesc').value = '';
+    toast('Создан'); loadPromos();
   });
 }
-
 function delPromo(code) { if (confirm('Удалить?')) db.collection('promocodes').doc(code).delete().then(loadPromos); }
-
 function loadUsers() {
   db.collection('users').orderBy('lastSeen', 'desc').limit(100).get().then(function(snap) {
     var list = $('userList'); if (!list) return;
@@ -1234,19 +1427,17 @@ function loadUsers() {
     snap.forEach(function(doc) {
       var u = doc.data();
       html += '<div class="ucard">' +
-        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + (u.banned ? ' <span class="bdr">BAN</span>' : '') + '<br><small style="color:#999">' + doc.id.substring(0,8) + '... · ' + fmtDate(u.lastSeen) + '</small></div>' +
+        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + (u.banned ? ' <span class="bdr">BAN</span>' : '') + '<br><small style="color:#999">Ур. ' + (u.level||1) + ' · ' + fmtDate(u.lastSeen) + '</small></div>' +
         '<div class="actions">' +
-          '<button class="bt ' + (u.banned ? 'btgr' : 'btr') + '" onclick="toggleBan(\'' + doc.id + '\',' + !u.banned + ')">' + (u.banned ? 'Разбан' : 'Бан') + '</button>' +
-          '<button class="bt ' + (u.isPremium ? 'btg' : 'btgr') + '" onclick="toggleVip(\'' + doc.id + '\',' + !u.isPremium + ')">' + (u.isPremium ? '−VIP' : '+VIP') + '</button>' +
+          '<button class="bt ' + (u.banned ? 'btgr' : 'btr') + ' bt-sm" onclick="toggleBan(\'' + doc.id + '\',' + !u.banned + ')">' + (u.banned ? 'Разбан' : 'Бан') + '</button>' +
+          '<button class="bt ' + (u.isPremium ? 'btg' : 'btgr') + ' bt-sm" onclick="toggleVip(\'' + doc.id + '\',' + !u.isPremium + ')">' + (u.isPremium ? '−VIP' : '+VIP') + '</button>' +
         '</div></div>';
     });
     list.innerHTML = html;
   });
 }
-
 function toggleBan(uid, val) { db.collection('users').doc(uid).update({ banned: val }).then(loadUsers); }
 function toggleVip(uid, val) { db.collection('users').doc(uid).update({ isPremium: val }).then(loadUsers); }
-
 function toggleMaintenance() {
   db.collection('settings').doc('main').get().then(function(doc) {
     var cur = doc.exists ? doc.data().maintenance : false;
@@ -1272,7 +1463,7 @@ function fullReset() {
       return batch.commit();
     });
   });
-  Promise.all(promises).then(function() { toast('Все данные удалены'); render(); });
+  Promise.all(promises).then(function() { toast('Все удалено'); render(); });
 }
 
 // ============ INIT ============
