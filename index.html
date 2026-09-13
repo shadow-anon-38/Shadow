@@ -64,10 +64,16 @@ textarea{resize:vertical;min-height:45px}
 .mn2{text-align:right}
 .mn2 .bl{background:#c9daf8}
 .mtm{font-size:9px;color:#999;margin-top:2px}
-.banner{width:100%;height:120px;background-size:cover;background-position:center;background-color:#4a76a8;position:relative}
-.banner-empty{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;opacity:.6}
-.prof-ava{width:80px;height:80px;border-radius:50%;margin:-40px auto 10px;background-size:cover;background-position:center;border:4px solid #fff;position:relative;z-index:2;background-color:#999;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:28px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
-.prof-ava.vp{border-color:var(--gold);box-shadow:0 0 12px var(--gold)}
+
+/* ======= ПРОФИЛЬ ======= */
+.profile-header{position:relative;background-size:cover;background-position:center;background-color:#4a76a8;min-height:150px;display:flex;align-items:flex-end;justify-content:center}
+.profile-header.no-banner{background:linear-gradient(135deg,#4a76a8,#5b88bd)}
+.profile-header .banner-hint{position:absolute;top:8px;right:10px;color:#fff;font-size:10px;opacity:.75;background:rgba(0,0,0,.25);padding:2px 8px;border-radius:10px}
+.profile-body-wrap{position:relative}
+.prof-ava{width:90px;height:90px;border-radius:50%;margin:-45px auto 0;background-size:cover;background-position:center;border:4px solid #fff;position:relative;z-index:2;background-color:#999;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:30px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.prof-ava.vp{border-color:var(--gold);box-shadow:0 0 16px var(--gold)}
+.prof-info{padding:10px 12px 18px;text-align:center}
+
 .file-inp{display:none}
 .adm-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .adm-stat{flex:1;min-width:100px;padding:10px;background:#fafbfc;border:1px solid var(--bd);border-radius:4px;text-align:center}
@@ -80,9 +86,10 @@ textarea{resize:vertical;min-height:45px}
 .promo{padding:8px 10px;border-bottom:1px solid #eee;font-size:11px}
 .promo b{font-size:12px}
 .promo small{color:#666;display:block}
+
 @media(max-width:800px){.sd{display:none}.ly{padding:6px}.nv a{font-size:10px;padding:5px 6px}.us span{display:none}}
 @media(max-width:800px) and (orientation:landscape){.sd{display:block;width:130px}.mna a{padding:7px 9px;font-size:11px}}
-@media(max-width:400px){.lg{font-size:13px}.nv a{padding:5px 4px;font-size:9px}}
+@media(max-width:400px){.lg{font-size:13px}.nv a{padding:5px 4px;font-size:9px}.prof-ava{width:70px;height:70px;margin-top:-35px;font-size:22px}}
 </style>
 </head>
 <body>
@@ -116,19 +123,23 @@ textarea{resize:vertical;min-height:45px}
 <input id="profNick" placeholder="Никнейм" maxlength="20">
 <label style="display:block;text-align:left;font-size:11px;color:#666;margin:4px 0">Описание</label>
 <textarea id="profDesc" placeholder="О себе" maxlength="200" style="min-height:60px"></textarea>
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:4px 0">Аватар (макс 300×300)</label>
+
+<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Аватар (макс 300×300)</label>
 <input type="file" id="profAvaFile" accept="image/*" class="file-inp">
 <button class="bt bt2" onclick="document.getElementById('profAvaFile').click()">📷 Загрузить аватар</button>
 <img id="profAvaPreview" style="max-width:80px;max-height:80px;margin:6px auto;display:none;border-radius:50%">
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:4px 0">Баннер профиля (VIP)</label>
+
+<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Баннер профиля (VIP)</label>
 <input type="file" id="profBannerFile" accept="image/*" class="file-inp">
 <button class="bt bt2" onclick="document.getElementById('profBannerFile').click()">🖼 Загрузить баннер</button>
 <img id="profBannerPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
-<label style="display:block;text-align:left;font-size:11px;color:#666;margin:4px 0">Фон профиля (VIP, ссылка или файл)</label>
+
+<label style="display:block;text-align:left;font-size:11px;color:#666;margin:8px 0 4px">Фон профиля (VIP)</label>
 <input type="file" id="profBgFile" accept="image/*" class="file-inp">
 <button class="bt bt2" onclick="document.getElementById('profBgFile').click()">🎨 Загрузить фон</button>
 <img id="profBgPreview" style="max-width:100%;max-height:80px;margin:6px 0;display:none">
-<button class="bt btgr" onclick="saveProfile()">💾 Сохранить</button>
+
+<button class="bt btgr" onclick="saveProfile()" style="margin-top:8px">💾 Сохранить</button>
 <button class="bt btg" onclick="closeModal('profModal')">Отмена</button>
 </div></div>
 
@@ -149,9 +160,9 @@ textarea{resize:vertical;min-height:45px}
 <div class="mo" id="adminPromoModal"><div class="mb">
 <h3>Создать промокод</h3>
 <input id="apCode" placeholder="Код (напр. VIP2026)" style="text-transform:uppercase">
-<input id="apDesc" placeholder="Описание (для чего)">
+<input id="apDesc" placeholder="Описание">
 <input id="apDays" type="number" value="30" placeholder="Дней VIP">
-<input id="apLimit" type="number" value="1" placeholder="Лимит использований">
+<input id="apLimit" type="number" value="1" placeholder="Лимит">
 <button class="bt btgr" onclick="adminCreatePromo()">Создать</button>
 <button class="bt btg" onclick="closeModal('adminPromoModal')">Отмена</button>
 </div></div>
@@ -161,7 +172,6 @@ textarea{resize:vertical;min-height:45px}
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
 <script>
 // ============ FIREBASE ============
@@ -222,8 +232,7 @@ function compressImage(file, maxW, maxH, quality, cb) {
       canvas.width = Math.round(w * ratio);
       canvas.height = Math.round(h * ratio);
       canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-      var data = canvas.toDataURL('image/jpeg', quality);
-      cb(data);
+      cb(canvas.toDataURL('image/jpeg', quality));
     };
     img.src = e.target.result;
   };
@@ -258,15 +267,19 @@ auth.onAuthStateChanged(function(user) {
       if (doc.exists) {
         state.profile = Object.assign(state.profile, doc.data());
       } else {
-        state.profile = { nickname: user.email.split('@')[0], isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', description: '', banned: false, createdAt: firebase.firestore.FieldValue.serverTimestamp(), lastSeen: firebase.firestore.FieldValue.serverTimestamp() };
+        state.profile = {
+          nickname: user.email.split('@')[0],
+          isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '',
+          description: '', banned: false,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+        };
         return db.collection('users').doc(user.uid).set(state.profile);
       }
     }).then(function() {
-      // Проверяем админа
       return db.collection('admins').doc(user.uid).get();
     }).then(function(adm) {
       state.isAdmin = adm.exists;
-      // Обновляем lastSeen
       db.collection('users').doc(user.uid).update({ lastSeen: firebase.firestore.FieldValue.serverTimestamp() }).catch(function(){});
       loadContacts();
       updateUserUI();
@@ -286,8 +299,13 @@ function updateUserUI() {
   var ava = $('miniAva'); var name = $('miniName');
   if (state.user) {
     name.textContent = state.profile.nickname || 'Гость';
-    if (state.profile.avatarUrl) { ava.style.backgroundImage = 'url(' + state.profile.avatarUrl + ')'; ava.textContent = ''; }
-    else { ava.style.backgroundImage = ''; ava.textContent = (state.profile.nickname || '?').substring(0,2).toUpperCase(); }
+    if (state.profile.avatarUrl) {
+      ava.style.backgroundImage = 'url(' + state.profile.avatarUrl + ')';
+      ava.textContent = '';
+    } else {
+      ava.style.backgroundImage = '';
+      ava.textContent = (state.profile.nickname || '?').substring(0,2).toUpperCase();
+    }
     ava.style.backgroundColor = color(state.profile.nickname);
     ava.className = 'av' + (state.profile.isPremium ? ' vp' : '');
   } else {
@@ -323,14 +341,14 @@ function startChat(uid) { if (!state.user) { openModal('authModal'); return; } a
 function render() {
   renderTopNav(); renderSideMenu();
   var app = $('app');
-  if (!state.user) { app.innerHTML = '<div class="bk"><div class="bb" style="text-align:center;padding:40px 15px"><p style="margin-bottom:12px">Войдите или зарегистрируйтесь</p><button class="bt" onclick="openModal(\'authModal\')">Войти</button></div></div>'; return; }
-
-  // Проверка бана
+  if (!state.user) {
+    app.innerHTML = '<div class="bk"><div class="bb" style="text-align:center;padding:40px 15px"><p style="margin-bottom:12px">Войдите или зарегистрируйтесь</p><button class="bt" onclick="openModal(\'authModal\')">Войти</button></div></div>';
+    return;
+  }
   if (state.profile.banned) {
     app.innerHTML = '<div class="bk"><div class="bb" style="text-align:center;padding:40px 15px"><h3 style="color:#d9534f;margin-bottom:10px">🚫 Вы забанены</h3><p>Обратитесь к администрации.</p><button class="bt btg" style="margin-top:12px" onclick="doLogout()">Выйти</button></div></div>';
     return;
   }
-
   if (state.page === 'profile') renderProfile(app);
   else if (state.page === 'wall') renderWall(app);
   else if (state.page === 'forum') renderForum(app);
@@ -381,37 +399,44 @@ function renderProfile(app) {
 }
 
 function showProfileCard(app, p, isMe, uid) {
-  var bannerStyle = p.bannerUrl ? 'background-image:url(' + p.bannerUrl + ');' : '';
-  var bannerClass = p.bannerUrl ? '' : ' banner-empty';
-  var bannerText = p.bannerUrl ? '' : (p.isPremium ? 'VIP баннер не установлен' : 'Баннер доступен VIP');
-  var avaStyle = p.avatarUrl ? 'background-image:url(' + p.avatarUrl + ');background-size:cover;' : 'background-color:' + color(p.nickname) + ';';
-  var initial = p.avatarUrl ? '' : (p.nickname || '?').substring(0,2).toUpperCase();
-  var pageStyle = p.bgUrl ? 'background-image:url(' + p.bgUrl + ');background-size:cover;background-attachment:fixed;' : '';
+  var hasBanner = !!p.bannerUrl;
+  var headerStyle = hasBanner ? 'background-image:url(' + p.bannerUrl + ');' : '';
+  var headerClass = hasBanner ? 'profile-header' : 'profile-header no-banner';
+  var bannerHint = '';
+  if (isMe && !hasBanner && p.isPremium) bannerHint = '<span class="banner-hint">Баннер не установлен</span>';
+  if (isMe && !p.isPremium) bannerHint = '<span class="banner-hint">VIP → баннер</span>';
 
-  app.innerHTML = '<div class="bk" style="' + pageStyle + '">' +
-    '<div class="banner' + bannerClass + '" style="' + bannerStyle + '">' + bannerText + '</div>' +
-    '<div class="bb" style="text-align:center;padding:0 12px 20px">' +
+  var avaStyle = p.avatarUrl
+    ? 'background-image:url(' + p.avatarUrl + ');background-size:cover;background-position:center;'
+    : 'background-color:' + color(p.nickname) + ';';
+  var initial = p.avatarUrl ? '' : (p.nickname || '?').substring(0,2).toUpperCase();
+  var pageBg = p.bgUrl ? 'background-image:url(' + p.bgUrl + ');background-size:cover;background-position:center;' : '';
+
+  app.innerHTML = '<div class="bk" style="' + pageBg + '">' +
+    '<div class="' + headerClass + '" style="' + headerStyle + '">' + bannerHint + '</div>' +
+    '<div class="profile-body-wrap">' +
       '<div class="prof-ava' + (p.isPremium ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
-      '<h3 style="margin-bottom:6px;font-size:16px">' + esc(p.nickname) +
-        (p.isPremium ? ' <span class="bd">VIP</span>' : '') + '</h3>' +
-      '<p style="color:#666;margin-bottom:12px;font-size:12px">' + esc(p.description || 'Нет описания') + '</p>' +
-      (isMe ? '<button class="bt" onclick="openProfEdit()">✏️ Редактировать</button>'
-            : '<button class="bt" onclick="startChat(\'' + uid + '\')">💬 Написать</button>') +
-      (isMe && !p.isPremium ? ' <button class="bt" style="background:var(--gold);color:#000" onclick="nav(\'premium\')">⭐ VIP</button>' : '') +
+      '<div class="prof-info">' +
+        '<h3 style="margin-bottom:6px;font-size:16px">' + esc(p.nickname) +
+          (p.isPremium ? ' <span class="bd">VIP</span>' : '') + '</h3>' +
+        '<p style="color:#666;margin-bottom:12px;font-size:12px">' + esc(p.description || 'Нет описания') + '</p>' +
+        (isMe ? '<button class="bt" onclick="openProfEdit()">✏️ Редактировать</button>'
+              : '<button class="bt" onclick="startChat(\'' + uid + '\')">💬 Написать</button>') +
+        (isMe && !p.isPremium ? ' <button class="bt" style="background:var(--gold);color:#000" onclick="nav(\'premium\')">⭐ VIP</button>' : '') +
+      '</div>' +
     '</div></div>';
 }
 
 function openProfEdit() {
   $('profNick').value = state.profile.nickname || '';
   $('profDesc').value = state.profile.description || '';
-  state.promoPreview = { ava: state.profile.avatarUrl || '', banner: state.profile.bannerUrl || '', bg: state.profile.bgUrl || '' };
+  state.promoPreview = { ava: '', banner: '', bg: '' };
   $('profAvaPreview').style.display = 'none';
   $('profBannerPreview').style.display = 'none';
   $('profBgPreview').style.display = 'none';
   openModal('profModal');
 }
 
-// Обработчики загрузки файлов
 document.addEventListener('change', function(e) {
   if (e.target.id === 'profAvaFile' && e.target.files[0]) {
     compressImage(e.target.files[0], 300, 300, 0.8, function(data) {
@@ -437,13 +462,12 @@ function saveProfile() {
   if (!state.user) return;
   var newP = {
     nickname: $('profNick').value.trim() || 'Гость',
-    description: $('profDesc').value.trim(),
-    avatarUrl: state.promoPreview.ava || state.profile.avatarUrl || ''
+    description: $('profDesc').value.trim()
   };
-  // Баннер и фон — только для VIP
+  if (state.promoPreview.ava) newP.avatarUrl = state.promoPreview.ava;
   if (state.profile.isPremium) {
-    newP.bannerUrl = state.promoPreview.banner || state.profile.bannerUrl || '';
-    newP.bgUrl = state.promoPreview.bg || state.profile.bgUrl || '';
+    if (state.promoPreview.banner) newP.bannerUrl = state.promoPreview.banner;
+    if (state.promoPreview.bg) newP.bgUrl = state.promoPreview.bg;
   }
   state.profile = Object.assign(state.profile, newP);
   updateUserUI(); closeModal('profModal'); render();
@@ -452,17 +476,13 @@ function saveProfile() {
     .catch(function(e) { toast(e.message); });
 }
 
-// ============ PREMIUM / PROMO ============
+// ============ PREMIUM ============
 function renderPremium(app) {
   app.innerHTML = '<div class="bk"><div class="bh">⭐ Премиум</div>' +
     '<div class="bb" style="text-align:center;padding:20px">' +
       (state.profile.isPremium
-        ? '<h3 style="color:var(--gold)">✅ У вас активен VIP</h3><p style="margin-top:8px">Доступны: баннер профиля, фон, без задержек на отправку.</p>'
-        : '<h3>Получите VIP</h3>' +
-          '<p style="margin:10px 0;font-size:12px;color:#666">Ускоренная отправка, баннер, фон профиля, значок VIP.</p>' +
-          '<p style="margin:8px 0">Введите промокод:</p>' +
-          '<button class="bt" style="background:var(--gold);color:#000" onclick="openModal(\'promoModal\')">🎟 Активировать промокод</button>'
-      ) +
+        ? '<h3 style="color:var(--gold)">✅ У вас активен VIP</h3><p style="margin-top:8px">Доступны: баннер профиля, фон, ускоренная отправка.</p>'
+        : '<h3>Получите VIP</h3><p style="margin:10px 0;font-size:12px;color:#666">Баннер, фон профиля, значок VIP.</p><p style="margin:8px 0">Введите промокод:</p><button class="bt" style="background:var(--gold);color:#000" onclick="openModal(\'promoModal\')">🎟 Активировать промокод</button>') +
     '</div></div>';
 }
 
@@ -473,26 +493,18 @@ function activatePromo() {
     if (!doc.exists) { toast('Промокод не найден'); return; }
     var p = doc.data();
     if (p.used >= p.limit) { toast('Промокод исчерпан'); return; }
-    // Применяем
     var days = p.days || 30;
     var until = Date.now() + days * 24 * 60 * 60 * 1000;
-    db.collection('users').doc(state.user.uid).update({
-      isPremium: true,
-      premiumUntil: until
-    }).then(function() {
+    db.collection('users').doc(state.user.uid).update({ isPremium: true, premiumUntil: until }).then(function() {
       return db.collection('promocodes').doc(code).collection('uses').add({
-        uid: state.user.uid,
-        nickname: state.profile.nickname,
+        uid: state.user.uid, nickname: state.profile.nickname,
         usedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }).then(function() {
       return db.collection('promocodes').doc(code).update({ used: (p.used || 0) + 1 });
     }).then(function() {
-      state.profile.isPremium = true;
-      state.profile.premiumUntil = until;
-      updateUserUI();
-      closeModal('promoModal');
-      $('promoInput').value = '';
+      state.profile.isPremium = true; state.profile.premiumUntil = until;
+      updateUserUI(); closeModal('promoModal'); $('promoInput').value = '';
       toast('🎉 VIP активирован на ' + days + ' дней');
       render();
     }).catch(function(e) { toast(e.message); });
@@ -518,18 +530,26 @@ function renderWall(app) {
         var m = doc.data();
         var anon = m.anonymous === true;
         var name = anon ? 'Аноним' : (m.authorName || 'Гость');
+        var ava = anon ? '' : (m.authorAvatar || '');
+        var vip = anon ? false : !!m.authorPremium;
         var del = (m.authorId === state.user.uid || state.isAdmin) ? '<a onclick="deleteWall(\'' + doc.id + '\')" style="color:#d9534f;margin-left:8px;cursor:pointer;font-size:10px">🗑</a>' : '';
+
+        var avaStyle = ava
+          ? 'background-image:url(' + ava + ');background-size:cover;background-position:center;'
+          : 'background-color:' + color(name) + ';';
+        var initial = ava ? '' : name.substring(0,2).toUpperCase();
+
         html += '<div class="ms">' +
-          '<div class="mva" style="background-color:' + color(name) + '">' + name.substring(0,2).toUpperCase() + '</div>' +
+          '<div class="mva' + (vip ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
           '<div class="mbd"><div class="mmt">' +
-            (anon ? '<span class="au an">Аноним</span>' : '<span class="au" onclick="goProfile(\'' + m.authorId + '\')">' + esc(name) + '</span>') +
+            (anon
+              ? '<span class="au an">Аноним</span>'
+              : '<span class="au" onclick="goProfile(\'' + m.authorId + '\')">' + esc(name) + (vip ? ' <span class="bd">VIP</span>' : '') + '</span>') +
             '<span>' + fmtDate(m.timestamp) + '</span>' + del +
           '</div><div class="tx">' + esc(m.text).replace(/\n/g,'<br>') + '</div></div></div>';
       });
       list.innerHTML = html;
-    }, function(err) {
-      var list = $('wallList'); if (list) list.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>';
-    });
+    }, function(err) { var list = $('wallList'); if (list) list.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>'; });
 }
 
 function postWall() {
@@ -539,8 +559,12 @@ function postWall() {
   var anon = $('wallAnon').checked;
   $('wallText').value = ''; $('wallAnon').checked = false;
   db.collection('wall').add({
-    authorId: state.user.uid, authorName: state.profile.nickname,
-    anonymous: anon, text: text,
+    authorId: state.user.uid,
+    authorName: state.profile.nickname,
+    authorAvatar: state.profile.avatarUrl || '',
+    authorPremium: !!state.profile.isPremium,
+    anonymous: anon,
+    text: text,
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
   }).catch(function(e) { toast(e.message); });
 }
@@ -566,7 +590,16 @@ function renderForum(app) {
       var html = '';
       snap.forEach(function(doc) {
         var t = doc.data();
-        html += '<div class="ct" onclick="openTopic(\'' + doc.id + '\')"><div><b>' + esc(t.title) + '</b><br><small style="color:#999">' + esc(t.authorName) + ' · ' + fmtDate(t.createdAt) + '</small></div></div>';
+        var ava = t.authorAvatar || '';
+        var avaStyle = ava
+          ? 'background-image:url(' + ava + ');background-size:cover;background-position:center;'
+          : 'background-color:' + color(t.authorName) + ';';
+        var initial = ava ? '' : (t.authorName||'?').substring(0,2).toUpperCase();
+        html += '<div class="ct" onclick="openTopic(\'' + doc.id + '\')">' +
+          '<div style="display:flex;gap:8px;align-items:center">' +
+            '<div class="mva' + (t.authorPremium ? ' vp' : '') + '" style="width:30px;height:30px;font-size:10px;' + avaStyle + '">' + initial + '</div>' +
+            '<div><b>' + esc(t.title) + '</b><br><small style="color:#999">' + esc(t.authorName) + ' · ' + fmtDate(t.createdAt) + '</small></div>' +
+          '</div></div>';
       });
       list.innerHTML = html;
     }, function(err) { var list = $('forumList'); if (list) list.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>'; });
@@ -578,9 +611,20 @@ function createTopic() {
   var text = $('topicText').value.trim();
   if (!title || !text) { toast('Заполните оба поля'); return; }
   var ref = db.collection('forumTopics').doc();
-  ref.set({ title: title, authorId: state.user.uid, authorName: state.profile.nickname, createdAt: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(function() { return ref.collection('posts').add({ authorId: state.user.uid, authorName: state.profile.nickname, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); })
-    .then(function() { $('topicTitle').value = ''; $('topicText').value = ''; toast('Тема создана'); })
+  ref.set({
+    title: title,
+    authorId: state.user.uid,
+    authorName: state.profile.nickname,
+    authorAvatar: state.profile.avatarUrl || '',
+    authorPremium: !!state.profile.isPremium,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function() {
+    return ref.collection('posts').add({
+      authorId: state.user.uid, authorName: state.profile.nickname,
+      authorAvatar: state.profile.avatarUrl || '', authorPremium: !!state.profile.isPremium,
+      text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }).then(function() { $('topicTitle').value = ''; $('topicText').value = ''; toast('Тема создана'); })
     .catch(function(e) { toast(e.message); });
 }
 
@@ -601,7 +645,15 @@ function renderTopic(app) {
         var html = '';
         snap.forEach(function(d) {
           var p = d.data();
-          html += '<div class="ms"><div class="mva" style="background-color:' + color(p.authorName) + '">' + p.authorName.substring(0,2).toUpperCase() + '</div><div class="mbd"><div class="mmt"><span class="au" onclick="goProfile(\'' + p.authorId + '\')">' + esc(p.authorName) + '</span><span>' + fmtDate(p.timestamp) + '</span></div><div class="tx">' + esc(p.text).replace(/\n/g,'<br>') + '</div></div></div>';
+          var ava = p.authorAvatar || '';
+          var vip = !!p.authorPremium;
+          var avaStyle = ava
+            ? 'background-image:url(' + ava + ');background-size:cover;background-position:center;'
+            : 'background-color:' + color(p.authorName) + ';';
+          var initial = ava ? '' : p.authorName.substring(0,2).toUpperCase();
+          html += '<div class="ms">' +
+            '<div class="mva' + (vip ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
+            '<div class="mbd"><div class="mmt"><span class="au" onclick="goProfile(\'' + p.authorId + '\')">' + esc(p.authorName) + (vip ? ' <span class="bd">VIP</span>' : '') + '</span><span>' + fmtDate(p.timestamp) + '</span></div><div class="tx">' + esc(p.text).replace(/\n/g,'<br>') + '</div></div></div>';
         });
         list.innerHTML = html;
       });
@@ -614,8 +666,9 @@ function replyTopic(id) {
   if (!text) { toast('Введите текст'); return; }
   $('replyText').value = '';
   db.collection('forumTopics').doc(id).collection('posts').add({
-    authorId: state.user.uid, authorName: state.profile.nickname, text: text,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    authorId: state.user.uid, authorName: state.profile.nickname,
+    authorAvatar: state.profile.avatarUrl || '', authorPremium: !!state.profile.isPremium,
+    text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
   }).catch(function(e) { toast(e.message); });
 }
 
@@ -640,26 +693,57 @@ function renderContactList() {
 function renderChat() {
   var area = $('chatArea'); if (!area) return;
   if (!state.dialogUid) { area.innerHTML = '<div class="em">Выберите контакт</div>'; return; }
+
   var c = getContact(state.dialogUid);
   var name = c ? (c.customName || c.nickname || '...') : '...';
-  area.innerHTML = '<div style="padding:8px;background:#fafbfc;border-bottom:1px solid #eee">💬 ' + esc(name) + '</div><div class="chms" id="chatMsgs"></div><div class="chi"><input id="privInput" placeholder="Сообщение..."><button class="bt" onclick="sendPrivate()">➤</button></div>';
 
-  db.collection('privateMessages')
-    .where('participants', 'array-contains', state.user.uid)
-    .orderBy('timestamp', 'asc')
-    .onSnapshot(function(snap) {
-      var cont = $('chatMsgs'); if (!cont) return;
-      var html = '';
-      snap.forEach(function(d) {
-        var m = d.data();
-        if ((m.from === state.user.uid && m.to === state.dialogUid) || (m.from === state.dialogUid && m.to === state.user.uid)) {
-          var isMe = m.from === state.user.uid;
-          html += '<div class="' + (isMe ? 'mn2' : '') + '" style="margin:4px 0"><span class="bl">' + esc(m.text) + '</span><div class="mtm">' + fmtTime(m.timestamp) + '</div></div>';
-        }
+  area.innerHTML =
+    '<div style="padding:8px;background:#fafbfc;border-bottom:1px solid #eee">💬 ' + esc(name) + '</div>' +
+    '<div class="chms" id="chatMsgs"></div>' +
+    '<div class="chi"><input id="privInput" placeholder="Сообщение...">' +
+    '<button class="bt" onclick="sendPrivate()">➤</button></div>';
+
+  var avatarCache = {};
+
+  Promise.all([
+    db.collection('users').doc(state.user.uid).get(),
+    db.collection('users').doc(state.dialogUid).get()
+  ]).then(function(res) {
+    var me = res[0].exists ? res[0].data() : {};
+    var other = res[1].exists ? res[1].data() : {};
+    avatarCache[state.user.uid] = { url: me.avatarUrl || '', name: me.nickname || 'Я', premium: !!me.isPremium };
+    avatarCache[state.dialogUid] = { url: other.avatarUrl || '', name: other.nickname || name, premium: !!other.isPremium };
+
+    db.collection('privateMessages')
+      .where('participants', 'array-contains', state.user.uid)
+      .orderBy('timestamp', 'asc')
+      .onSnapshot(function(snap) {
+        var cont = $('chatMsgs'); if (!cont) return;
+        var html = '';
+        snap.forEach(function(d) {
+          var m = d.data();
+          if ((m.from === state.user.uid && m.to === state.dialogUid) || (m.from === state.dialogUid && m.to === state.user.uid)) {
+            var isMe = m.from === state.user.uid;
+            var info = avatarCache[m.from] || { url: '', name: '?', premium: false };
+            var avaStyle = info.url
+              ? 'background-image:url(' + info.url + ');background-size:cover;background-position:center;'
+              : 'background-color:' + color(info.name) + ';';
+            var initial = info.url ? '' : info.name.substring(0,2).toUpperCase();
+            html += '<div style="display:flex;gap:6px;margin:6px 0;' + (isMe ? 'flex-direction:row-reverse;' : '') + '">' +
+              '<div class="mva' + (info.premium ? ' vp' : '') + '" style="width:28px;height:28px;font-size:10px;' + avaStyle + '">' + initial + '</div>' +
+              '<div style="' + (isMe ? 'text-align:right;' : '') + '">' +
+                '<span class="bl">' + esc(m.text) + '</span>' +
+                '<div class="mtm">' + fmtTime(m.timestamp) + '</div>' +
+              '</div></div>';
+          }
+        });
+        cont.innerHTML = html;
+        cont.scrollTop = cont.scrollHeight;
+      }, function(err) {
+        var cont = $('chatMsgs');
+        if (cont) cont.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>';
       });
-      cont.innerHTML = html;
-      cont.scrollTop = cont.scrollHeight;
-    }, function(err) { var cont = $('chatMsgs'); if (cont) cont.innerHTML = '<div class="em">Ошибка: ' + esc(err.message) + '</div>'; });
+  }).catch(function(err) { console.error(err); toast('Ошибка: ' + err.message); });
 }
 
 function openDialog(uid) { state.dialogUid = uid; render(); }
@@ -672,8 +756,7 @@ function sendPrivate() {
   db.collection('privateMessages').add({
     from: state.user.uid, to: state.dialogUid,
     participants: [state.user.uid, state.dialogUid],
-    text: text,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
   }).catch(function(e) { toast(e.message); });
 }
 
@@ -719,17 +802,13 @@ function renderAdmin(app) {
 
 function loadAdminStats() {
   var today = new Date(); today.setHours(0,0,0,0);
-  Promise.all([
-    db.collection('users').get(),
-    db.collection('users').where('lastSeen', '>=', today).get()
-  ]).then(function(res) {
-    var all = res[0].size;
-    var todayActive = res[1].size;
-    $('admStats').innerHTML =
-      '<div class="adm-stat"><b>' + all + '</b><small>Всего</small></div>' +
-      '<div class="adm-stat"><b>' + todayActive + '</b><small>За сегодня</small></div>' +
-      '<div class="adm-stat"><b id="onlineCount">-</b><small>Онлайн</small></div>';
-  });
+  Promise.all([db.collection('users').get(), db.collection('users').where('lastSeen', '>=', today).get()])
+    .then(function(res) {
+      $('admStats').innerHTML =
+        '<div class="adm-stat"><b>' + res[0].size + '</b><small>Всего</small></div>' +
+        '<div class="adm-stat"><b>' + res[1].size + '</b><small>За сегодня</small></div>' +
+        '<div class="adm-stat"><b id="onlineCount">-</b><small>Онлайн</small></div>';
+    });
 }
 
 function loadPromos() {
