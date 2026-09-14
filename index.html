@@ -154,11 +154,12 @@ textarea{resize:vertical;min-height:50px}
 .search-section{padding:8px 12px;background:#f0f6ff;border-bottom:1px solid var(--bd)}
 .search-section h4{font-size:11px;color:#666;margin-bottom:6px;font-weight:bold;text-transform:uppercase}
 
-/* VIP-лок */
 .vip-lock{background:#fff8e1 !important;border:1px dashed var(--gold) !important}
 .vip-lock .vip-label{color:var(--gold);font-size:11px;font-weight:bold;margin-right:6px}
 .locked{opacity:.5;pointer-events:none}
 .vip-hint{color:#c90;font-size:11px;margin:4px 0}
+.admin-lock{background:#ffe5e5 !important;border:1px dashed var(--red) !important}
+.admin-lock .admin-label{color:var(--red);font-size:11px;font-weight:bold;margin-right:6px}
 
 @media(max-width:800px){
   .sd{display:none}
@@ -234,8 +235,6 @@ textarea{resize:vertical;min-height:50px}
 
 <div class="mo" id="profModal"><div class="mb">
 <h3>Редактировать профиль</h3>
-
-<!-- ОБЫЧНЫЕ ФУНКЦИИ -->
 <input id="profNick" placeholder="Никнейм" maxlength="20">
 <label style="display:block;text-align:left;font-size:11px;color:#666;margin:4px 0">Описание</label>
 <textarea id="profDesc" placeholder="О себе" maxlength="200" style="min-height:60px"></textarea>
@@ -245,13 +244,11 @@ textarea{resize:vertical;min-height:50px}
 <img id="profAvaPreview" style="max-width:80px;max-height:80px;margin:6px auto;display:none;border-radius:50%">
 <button class="bt btg bt-sm" onclick="removeAva()" style="margin-top:4px">🗑 Убрать аватар</button>
 
-<!-- VIP: ЦВЕТ НИКА -->
 <div id="vipNickColorBlock" class="vip-lock">
   <label style="display:block;text-align:left;font-size:11px;margin:8px 0 4px"><span class="vip-label">⭐ VIP</span> Цвет ника</label>
   <input type="color" id="profNickColor" value="#2b587a" style="height:40px">
 </div>
 
-<!-- VIP: ФОН -->
 <div id="vipBgBlock" class="vip-lock">
   <label style="display:block;text-align:left;font-size:11px;margin:8px 0 4px"><span class="vip-label">⭐ VIP</span> Фон профиля</label>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
@@ -265,7 +262,6 @@ textarea{resize:vertical;min-height:50px}
   <button class="bt btg bt-sm" onclick="removeBg()" style="margin-top:4px">🗑 Убрать фон</button>
 </div>
 
-<!-- VIP: БАННЕР -->
 <div id="vipBannerBlock" class="vip-lock">
   <label style="display:block;text-align:left;font-size:11px;margin:8px 0 4px"><span class="vip-label">⭐ VIP</span> Баннер профиля</label>
   <input type="file" id="profBannerFile" accept="image/*" class="file-inp">
@@ -274,10 +270,13 @@ textarea{resize:vertical;min-height:50px}
   <button class="bt btg bt-sm" onclick="removeBanner()" style="margin-top:4px">🗑 Убрать баннер</button>
 </div>
 
-<!-- VIP: СКРЫТИЕ -->
 <div id="vipHideBlock" class="vip-lock">
   <label class="chk"><input type="checkbox" id="hideStats"> <span class="vip-label">⭐ VIP</span> Скрыть лайки и подписки</label>
   <label class="chk"><input type="checkbox" id="hideFromTop"> <span class="vip-label">⭐ VIP</span> Скрыть меня из топа и поиска</label>
+</div>
+
+<div id="adminAnonBlock" class="admin-lock" style="display:none;">
+  <label class="chk"><input type="checkbox" id="adminFullAnon"> <span class="admin-label">🛡️ АДМИН</span> Полная анонимность (не появляюсь в топе и поиске)</label>
 </div>
 
 <div id="vipHint" class="vip-hint" style="display:none;">⭐ Функции с пометкой VIP доступны только премиум-аккаунтам</div>
@@ -322,7 +321,7 @@ textarea{resize:vertical;min-height:50px}
 <h3>⚠️ Сброс сайта</h3>
 <p style="font-size:11px;color:#c00;margin-bottom:10px">Отметьте, что нужно удалить. Действие необратимо.</p>
 <label class="chk"><input type="checkbox" id="rContent" checked> Контент (стена, форум, ЛС, промокоды)</label>
-<label class="chk"><input type="checkbox" id="rProfiles"> Профили не-админов (ник, аватар, описание)</label>
+<label class="chk"><input type="checkbox" id="rProfiles"> Профили не-админов</label>
 <label class="chk"><input type="checkbox" id="rSubs"> Подписки и подписчики</label>
 <label class="chk"><input type="checkbox" id="rLikes"> Лайки и счётчики лайков</label>
 <label class="chk"><input type="checkbox" id="rXp"> Опыт и уровни (кроме админов)</label>
@@ -357,7 +356,7 @@ var db = firebase.firestore();
 
 var state = {
   user: null,
-  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, xp: 0, level: 1, postsCount: 0 },
+  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false, xp: 0, level: 1, postsCount: 0 },
   page: 'profile',
   viewUid: null,
   dialogUid: null,
@@ -490,18 +489,19 @@ function checkGlobalRate() {
   }).catch(function() { return { blocked: false }; });
 }
 
-// ============ VIP-БЛОКИРОВКА ============
+// ============ VIP / ADMIN ============
 function updateVipBlocks() {
   var isVip = !!state.profile.isPremium;
-  var blocks = ['vipNickColorBlock','vipBgBlock','vipBannerBlock','vipHideBlock'];
-  for (var i = 0; i < blocks.length; i++) {
-    var el = $(blocks[i]);
-    if (!el) continue;
-    if (isVip) el.classList.remove('locked');
-    else el.classList.add('locked');
-  }
+  var isAdmin = !!state.isAdmin;
+  ['vipNickColorBlock','vipBgBlock','vipBannerBlock','vipHideBlock'].forEach(function(id) {
+    var el = $(id);
+    if (!el) return;
+    if (isVip) el.classList.remove('locked'); else el.classList.add('locked');
+  });
   var hint = $('vipHint');
   if (hint) hint.style.display = isVip ? 'none' : 'block';
+  var adminBlock = $('adminAnonBlock');
+  if (adminBlock) adminBlock.style.display = isAdmin ? 'block' : 'none';
 }
 
 // ============ MAINTENANCE ============
@@ -557,7 +557,7 @@ auth.onAuthStateChanged(function(user) {
           nickname: user.email.split('@')[0],
           isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '',
           description: '', banned: false,
-          likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false,
+          likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false,
           xp: 0, level: 1, postsCount: 0,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           lastSeen: firebase.firestore.FieldValue.serverTimestamp()
@@ -587,7 +587,7 @@ auth.onAuthStateChanged(function(user) {
     }).catch(function(e) { console.error(e); toast('Ошибка: ' + e.message); });
   } else {
     state.user = null;
-    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, xp: 0, level: 1, postsCount: 0 };
+    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false, xp: 0, level: 1, postsCount: 0 };
     state.isAdmin = false; state.contacts = []; state.userLikes = {}; state.userSubs = {};
     state.unread = {}; state.unreadTotal = 0; state.searchUsers = [];
     if (unreadUnsub) { unreadUnsub(); unreadUnsub = null; }
@@ -750,7 +750,7 @@ function searchTag(tag) {
   state.page = 'wall'; render();
 }
 
-// ============ ПОИСК ============
+// ============ SEARCH ============
 function searchUsersByQuery(q, cb) {
   q = (q || '').trim().toLowerCase();
   if (q.length < 2) { cb([]); return; }
@@ -760,7 +760,12 @@ function searchUsersByQuery(q, cb) {
       var u = doc.data();
       var nick = (u.nickname || '').toLowerCase();
       if (nick.indexOf(q) === -1) return;
-      if (u.hideFromTop && !state.isAdmin) return;
+      // Скрытые: только VIP может hideFromTop, админ может hideFromTop + adminFullAnon.
+      // Обычные пользователи скрытых не видят, кроме админа — он видит всех.
+      if (!state.isAdmin) {
+        if (u.hideFromTop) return;
+        if (u.adminFullAnon) return;
+      }
       res.push({ uid: doc.id, nickname: u.nickname, avatarUrl: u.avatarUrl || '', isPremium: !!u.isPremium, level: u.level || 1, description: u.description || '' });
     });
     cb(res.slice(0, 10));
@@ -889,7 +894,6 @@ function renderProfile(app) {
   }).catch(function(e) { app.innerHTML = '<div class="bk"><div class="bb">Ошибка: ' + esc(e.message) + '</div></div>'; });
 }
 function showProfileCard(app, p, isMe, uid) {
-  // Баннер и фон видны только если владелец VIP
   var hasBanner = p.isPremium && !!p.bannerUrl;
   var headerStyle = hasBanner ? 'background-image:url(' + p.bannerUrl + ');' : '';
   var headerClass = hasBanner ? 'profile-header' : 'profile-header no-banner';
@@ -900,7 +904,6 @@ function showProfileCard(app, p, isMe, uid) {
     ? 'background-image:url(' + p.avatarUrl + ');background-size:cover;background-position:center;'
     : 'background-color:' + color(p.nickname) + ';';
   var initial = p.avatarUrl ? '' : (p.nickname || '?').substring(0,2).toUpperCase();
-  // Фон и цвет ника — только у VIP
   var pageBg = '';
   if (p.isPremium) {
     if (p.bgUrl) pageBg = 'background-image:url(' + p.bgUrl + ');background-size:cover;background-position:center;';
@@ -921,7 +924,6 @@ function showProfileCard(app, p, isMe, uid) {
   var xpInfo = xpProgress(p.xp || 0);
   var xpHtml = '<div style="margin:10px 0 0"><div class="xp-bar"><div class="xp-fill" style="width:' + xpInfo.pct + '%"></div></div>' +
     '<div style="font-size:10px;color:#666">Уровень ' + xpInfo.level + ' · ' + xpInfo.cur.toFixed(1) + '/' + xpInfo.need + ' XP</div></div>';
-  // Цвет ника — только у VIP
   var nickStyle = (p.isPremium && p.nickColor) ? 'color:' + p.nickColor + ';' : '';
   var lvl = p.level || 1;
   var lvlBadge = '<span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span>';
@@ -950,6 +952,7 @@ function openProfEdit() {
   $('profDesc').value = state.profile.description || '';
   $('hideStats').checked = !!state.profile.hideStats;
   $('hideFromTop').checked = !!state.profile.hideFromTop;
+  $('adminFullAnon').checked = !!state.profile.adminFullAnon;
   $('profBgColor').value = state.profile.bgColor || '#edeef0';
   $('profNickColor').value = state.profile.nickColor || '#2b587a';
   state.promoPreview = { ava: null, banner: null, bg: null };
@@ -1002,7 +1005,7 @@ function saveProfile() {
     description: $('profDesc').value.trim()
   };
   if (state.promoPreview.ava !== null) newP.avatarUrl = state.promoPreview.ava;
-  // VIP-поля сохраняются только если пользователь VIP
+  // VIP-поля сохраняются только если VIP
   if (state.profile.isPremium) {
     newP.hideStats = $('hideStats').checked;
     newP.hideFromTop = $('hideFromTop').checked;
@@ -1015,6 +1018,10 @@ function saveProfile() {
       if (!state.profile.bgUrl) newP.bgUrl = '';
     }
     newP.nickColor = $('profNickColor').value;
+  }
+  // adminFullAnon — только для админа
+  if (state.isAdmin) {
+    newP.adminFullAnon = $('adminFullAnon').checked;
   }
   state.profile = Object.assign(state.profile, newP);
   updateUserUI(); closeModal('profModal'); render();
@@ -1540,7 +1547,12 @@ function renderRating(app) {
       var html = '', pos = 1;
       snap.forEach(function(doc) {
         var u = doc.data();
-        if (u.hideFromTop && !state.isAdmin) return;
+        // Скрытые из топа: только VIP (hideFromTop) и админ (hideFromTop или adminFullAnon)
+        // Скрытые не видны обычным пользователям. Админ видит всех.
+        if (!state.isAdmin) {
+          if (u.hideFromTop) return;
+          if (u.adminFullAnon) return;
+        }
         var ava = u.avatarUrl || '';
         var avaStyle = ava
           ? 'background-image:url(' + ava + ');background-size:cover;background-position:center;'
@@ -1549,11 +1561,14 @@ function renderRating(app) {
         var score = u[sortField] || 0;
         var posCls = pos === 1 ? 'top1' : pos === 2 ? 'top2' : pos === 3 ? 'top3' : '';
         var lvl = u.level || 1;
+        var hiddenMark = '';
+        if (state.isAdmin && (u.hideFromTop || u.adminFullAnon)) {
+          hiddenMark = ' <span style="color:#c00;font-size:10px" title="Скрыт">👁‍🗨</span>';
+        }
         html += '<div class="leader" onclick="goProfile(\'' + doc.id + '\')">' +
           '<span class="pos ' + posCls + '">' + pos + '</span>' +
           '<div class="mva' + (u.isPremium ? ' vp' : '') + '" style="width:32px;height:32px;font-size:11px;' + avaStyle + '">' + initial + '</div>' +
-          '<div><b>' + esc(u.nickname) + '</b> <span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span>' +
-          (u.hideFromTop ? ' <span style="color:#999;font-size:10px" title="Скрыт из топа">👁‍🗨</span>' : '') + '</div>' +
+          '<div><b>' + esc(u.nickname) + '</b> <span class="bdlvl ' + lvlClass(lvl) + '">Ур. ' + lvl + '</span>' + hiddenMark + '</div>' +
           '<span class="score">' + (typeof score === 'number' ? score.toFixed(score % 1 ? 1 : 0) : score) + '</span>' +
         '</div>';
         pos++;
@@ -1630,8 +1645,9 @@ function loadUsers() {
     var html = '';
     snap.forEach(function(doc) {
       var u = doc.data();
+      var hidden = (u.hideFromTop || u.adminFullAnon) ? ' <span style="color:#c00;font-size:10px" title="Скрыт">👁‍🗨</span>' : '';
       html += '<div class="ucard">' +
-        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + (u.banned ? ' <span class="bdr">BAN</span>' : '') + (u.hideFromTop ? ' <span style="color:#999;font-size:10px">👁‍🗨</span>' : '') + '<br><small style="color:#999">Ур. ' + (u.level||1) + ' · ' + fmtDate(u.lastSeen) + '</small></div>' +
+        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + (u.banned ? ' <span class="bdr">BAN</span>' : '') + hidden + '<br><small style="color:#999">Ур. ' + (u.level||1) + ' · ' + fmtDate(u.lastSeen) + '</small></div>' +
         '<div class="actions">' +
           '<button class="bt ' + (u.banned ? 'btgr' : 'btr') + ' bt-sm" onclick="toggleBan(\'' + doc.id + '\',' + !u.banned + ')">' + (u.banned ? 'Разбан' : 'Бан') + '</button>' +
           '<button class="bt ' + (u.isPremium ? 'btg' : 'btgr') + ' bt-sm" onclick="toggleVip(\'' + doc.id + '\',' + !u.isPremium + ')">' + (u.isPremium ? '−VIP' : '+VIP') + '</button>' +
