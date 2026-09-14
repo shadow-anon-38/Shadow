@@ -42,10 +42,11 @@ input,textarea,select{font-size:16px}
 .bt{padding:9px 16px;background:var(--blue2);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;font-weight:bold;font-family:inherit;min-height:40px}
 .bt:active{transform:scale(.97)}
 .bt:disabled{opacity:.5;cursor:not-allowed}
-.bt2{background:#5b88bd}.btg{background:#999}.btr{background:var(--red)}.btgr{background:var(--green)}.btgold{background:var(--gold);color:#000}
+.bt2{background:#5b88bd}.btg{background:#999}.btr{background:var(--red)}.btgr{background:var(--green)}.btgold{background:var(--gold);color:#000}.btorange{background:#ff8c00;color:#fff}
 .bt-sm{padding:5px 10px;font-size:11px;min-height:auto}
 .bd{background:var(--gold);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px}
 .bdr{background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px}
+.bdm{background:#ff8c00;color:#fff;font-size:9px;padding:1px 5px;border-radius:8px}
 .bdlvl{color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;font-weight:bold}
 input,textarea,select{width:100%;border:1px solid var(--bd);border-radius:4px;padding:10px 12px;font-family:inherit;outline:none;background:#fafbfc}
 input:focus,textarea:focus,select:focus{border-color:var(--blue);background:#fff}
@@ -54,7 +55,8 @@ textarea{resize:vertical;min-height:50px}
 .mo.on{display:flex}
 .mb{background:#fff;border-radius:8px;padding:20px;width:100%;max-width:360px;max-height:90vh;overflow-y:auto;text-align:center}
 .mb h3{margin-bottom:12px;font-size:16px}
-.mb input,.mb textarea{margin-bottom:8px;text-align:left}
+.mb input,.mb textarea,.mb select{margin-bottom:8px;text-align:left}
+.mb label{display:block;text-align:left;font-size:12px;margin:8px 0 4px}
 .mb .bt{width:100%;margin-bottom:6px}
 .chk{display:block;text-align:left;font-size:12px;margin:6px 0;padding:6px 8px;background:#fafbfc;border-radius:4px;cursor:pointer}
 .chk input{width:auto;margin-right:8px;vertical-align:middle}
@@ -72,8 +74,6 @@ textarea{resize:vertical;min-height:50px}
 .chms{flex:1;overflow-y:auto;padding:8px;-webkit-overflow-scrolling:touch}
 .chi{padding:8px;border-top:1px solid #eee;display:flex;gap:6px;align-items:center}
 .chi input{flex:1;min-width:0}
-
-/* ПРАВИЛЬНЫЙ ПЕРЕНОС СЛОВ */
 .bl{display:inline-block;padding:6px 11px;border-radius:12px;background:#e8edf3;max-width:100%;word-break:break-word;overflow-wrap:break-word;hyphens:auto;white-space:pre-wrap;font-size:13px;text-align:left}
 .mn2{text-align:right}
 .mn2 .bl{background:#c9daf8}
@@ -87,8 +87,6 @@ textarea{resize:vertical;min-height:50px}
 .msg-actions a:hover{color:var(--blue)}
 .msg-actions a.del:hover{color:var(--red)}
 .msg-img{max-width:250px;max-height:250px;border-radius:8px;margin-top:4px;cursor:pointer;display:block}
-
-/* Медиа-превью в поле ввода */
 .attach-preview{padding:6px 8px;border-top:1px solid #eee;background:#f0f6ff;display:flex;align-items:center;gap:8px;font-size:11px}
 .attach-preview img{width:40px;height:40px;object-fit:cover;border-radius:4px}
 .attach-preview .rm{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px}
@@ -116,7 +114,7 @@ textarea{resize:vertical;min-height:50px}
 .adm-stat small{font-size:10px;color:#666}
 .ucard{padding:8px 10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px}
 .ucard b{font-size:12px}
-.ucard .actions{display:flex;gap:4px}
+.ucard .actions{display:flex;gap:4px;flex-wrap:wrap}
 .ucard .actions button{padding:4px 8px;font-size:10px}
 .promo{padding:8px 10px;border-bottom:1px solid #eee;font-size:11px}
 .promo b{font-size:12px}
@@ -173,6 +171,9 @@ textarea{resize:vertical;min-height:50px}
 .vip-hint{color:#c90;font-size:11px;margin:4px 0}
 .admin-lock{background:#ffe5e5 !important;border:1px dashed var(--red) !important}
 .admin-lock .admin-label{color:var(--red);font-size:11px;font-weight:bold;margin-right:6px}
+
+/* Мут-плашка */
+.muted-banner{background:#fff3e0;border:1px solid #ff8c00;color:#b35c00;padding:10px 12px;border-radius:4px;margin-bottom:8px;font-size:12px;text-align:center}
 
 @media(max-width:800px){
   .sd{display:none}
@@ -289,7 +290,7 @@ textarea{resize:vertical;min-height:50px}
 </div>
 
 <div id="adminAnonBlock" class="admin-lock" style="display:none;">
-  <label class="chk"><input type="checkbox" id="adminFullAnon"> <span class="admin-label">🛡️ АДМИН</span> Полная анонимность (не появляюсь в топе и поиске)</label>
+  <label class="chk"><input type="checkbox" id="adminFullAnon"> <span class="admin-label">🛡️ АДМИН</span> Полная анонимность</label>
 </div>
 
 <div id="vipHint" class="vip-hint" style="display:none;">⭐ Функции с пометкой VIP доступны только премиум-аккаунтам</div>
@@ -349,6 +350,29 @@ textarea{resize:vertical;min-height:50px}
 <button class="bt btg" onclick="closeModal('editMsgModal')">Отмена</button>
 </div></div>
 
+<!-- МОДАЛКА БАНА / МУТА -->
+<div class="mo" id="punishModal"><div class="mb">
+<h3 id="punishTitle">Бан</h3>
+<input type="hidden" id="punishUid">
+<input type="hidden" id="punishType">
+<label>Никнейм:</label>
+<input id="punishNick" readonly>
+<label>Причина:</label>
+<input id="punishReason" placeholder="Например: спам">
+<label>Срок:</label>
+<select id="punishDuration">
+<option value="0">Навсегда</option>
+<option value="1">1 час</option>
+<option value="6">6 часов</option>
+<option value="24">1 день</option>
+<option value="72">3 дня</option>
+<option value="168">7 дней</option>
+<option value="720">30 дней</option>
+</select>
+<button class="bt btr" onclick="applyPunish()" id="punishBtn">Выдать</button>
+<button class="bt btg" onclick="closeModal('punishModal')">Отмена</button>
+</div></div>
+
 <div class="mo" id="imgModal"><div class="mb" style="max-width:90vw;background:transparent;padding:0">
 <img id="imgFull" style="max-width:100%;max-height:85vh;border-radius:6px">
 <button class="bt btg" style="margin-top:10px" onclick="closeModal('imgModal')">Закрыть</button>
@@ -376,7 +400,7 @@ var db = firebase.firestore();
 
 var state = {
   user: null,
-  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false, xp: 0, level: 1, postsCount: 0 },
+  profile: { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, banUntil: 0, banReason: '', muted: false, muteUntil: 0, muteReason: '', likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false, xp: 0, level: 1, postsCount: 0 },
   page: 'profile',
   viewUid: null,
   dialogUid: null,
@@ -423,6 +447,16 @@ function fmtDate(ts) {
   var d = ts.toDate ? ts.toDate() : new Date(ts);
   return String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + ' ' + fmtTime(ts);
 }
+function fmtLeft(ms) {
+  if (!ms || ms <= 0) return '';
+  var s = Math.floor(ms / 1000);
+  var d = Math.floor(s / 86400); s -= d * 86400;
+  var h = Math.floor(s / 3600); s -= h * 3600;
+  var m = Math.floor(s / 60);
+  if (d > 0) return d + 'д ' + h + 'ч';
+  if (h > 0) return h + 'ч ' + m + 'м';
+  return m + 'м';
+}
 function openModal(id) { $(id).classList.add('on'); }
 function closeModal(id) { $(id).classList.remove('on'); }
 function xpForLevel(lvl) { return Math.round(Math.pow(lvl - 1, 2) * 5); }
@@ -447,6 +481,16 @@ function lvlClass(lvl) {
   if (lvl <= 20) return 'lvl-19';
   if (lvl <= 25) return 'lvl-21';
   return 'lvl-26';
+}
+function isMuted() {
+  if (!state.profile.muted) return false;
+  if (!state.profile.muteUntil) return true;
+  return Date.now() < state.profile.muteUntil;
+}
+function isBanned() {
+  if (!state.profile.banned) return false;
+  if (!state.profile.banUntil) return true;
+  return Date.now() < state.profile.banUntil;
 }
 function addXP(amount) {
   if (!state.user || !amount) return;
@@ -494,6 +538,15 @@ function checkCooldown() {
     return false;
   }
   lastActionAt = now;
+  return true;
+}
+function checkMute() {
+  if (isMuted()) {
+    var left = state.profile.muteUntil ? ' (осталось: ' + fmtLeft(state.profile.muteUntil - Date.now()) + ')' : '';
+    var reason = state.profile.muteReason ? ' Причина: ' + state.profile.muteReason : '';
+    toast('🔇 Вы в муте' + left + '.' + reason);
+    return false;
+  }
   return true;
 }
 function checkGlobalRate() {
@@ -578,7 +631,8 @@ auth.onAuthStateChanged(function(user) {
         state.profile = {
           nickname: user.email.split('@')[0],
           isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '',
-          description: '', banned: false,
+          description: '', banned: false, banUntil: 0, banReason: '',
+          muted: false, muteUntil: 0, muteReason: '',
           likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false,
           xp: 0, level: 1, postsCount: 0,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -594,11 +648,20 @@ auth.onAuthStateChanged(function(user) {
       if (profileUnsub) profileUnsub();
       profileUnsub = db.collection('users').doc(user.uid).onSnapshot(function(d) {
         if (!d.exists) return;
-        var prevBanned = state.profile.banned;
+        var prevBanned = isBanned();
+        var prevMuted = isMuted();
         var prevPremium = state.profile.isPremium;
         state.profile = Object.assign(state.profile, d.data());
         state.profile.level = calcLevel(state.profile.xp || 0);
-        if (prevBanned !== state.profile.banned || prevPremium !== state.profile.isPremium) {
+        // Автоснятие бана/мута по истечении
+        var data = d.data();
+        if (data.banned && data.banUntil && Date.now() >= data.banUntil) {
+          db.collection('users').doc(state.user.uid).update({ banned: false, banUntil: 0, banReason: '' }).catch(function(){});
+        }
+        if (data.muted && data.muteUntil && Date.now() >= data.muteUntil) {
+          db.collection('users').doc(state.user.uid).update({ muted: false, muteUntil: 0, muteReason: '' }).catch(function(){});
+        }
+        if (prevBanned !== isBanned() || prevMuted !== isMuted() || prevPremium !== state.profile.isPremium) {
           updateUserUI(); render();
         }
       });
@@ -609,7 +672,7 @@ auth.onAuthStateChanged(function(user) {
     }).catch(function(e) { console.error(e); toast('Ошибка: ' + e.message); });
   } else {
     state.user = null;
-    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false, xp: 0, level: 1, postsCount: 0 };
+    state.profile = { nickname: 'Гость', isPremium: false, avatarUrl: '', bannerUrl: '', bgUrl: '', bgColor: '', nickColor: '', description: '', banned: false, banUntil: 0, banReason: '', muted: false, muteUntil: 0, muteReason: '', likesReceived: 0, followers: 0, following: 0, hideStats: false, hideFromTop: false, adminFullAnon: false, xp: 0, level: 1, postsCount: 0 };
     state.isAdmin = false; state.contacts = []; state.userLikes = {}; state.userSubs = {};
     state.unread = {}; state.unreadTotal = 0; state.searchUsers = [];
     if (unreadUnsub) { unreadUnsub(); unreadUnsub = null; }
@@ -687,6 +750,7 @@ function loadUserSubs() {
 }
 function toggleLike(postId, collName) {
   if (!state.user) { openModal('authModal'); return; }
+  if (!checkMute()) return;
   if (!checkCooldown()) return;
   var liked = !!state.userLikes[postId];
   var ref = db.collection(collName).doc(postId);
@@ -715,6 +779,7 @@ function toggleLike(postId, collName) {
 }
 function toggleSubscribe(targetUid) {
   if (!state.user) { openModal('authModal'); return; }
+  if (!checkMute()) return;
   if (targetUid === state.user.uid) { toast('Нельзя подписаться на себя'); return; }
   if (!checkCooldown()) return;
   var isSubbed = !!state.userSubs[targetUid];
@@ -838,15 +903,24 @@ function render() {
     applyMaintenance();
     return;
   }
-  if (state.profile.banned && !state.isAdmin) {
-    app.innerHTML = '<div class="bk"><div class="bb" style="text-align:center;padding:40px 15px"><h3 style="color:#d9534f;margin-bottom:10px">🚫 Вы забанены</h3><p>Обратитесь к администрации.</p><button class="bt btg" style="margin-top:12px" onclick="doLogout()">Выйти</button></div></div>';
+  if (isBanned() && !state.isAdmin) {
+    var left = state.profile.banUntil ? ' Осталось: ' + fmtLeft(state.profile.banUntil - Date.now()) : '';
+    var reason = state.profile.banReason ? ' Причина: ' + state.profile.banReason : '';
+    app.innerHTML = '<div class="bk"><div class="bb" style="text-align:center;padding:40px 15px"><h3 style="color:#d9534f;margin-bottom:10px">🚫 Вы забанены</h3><p>' + esc(reason) + left + '</p><button class="bt btg" style="margin-top:12px" onclick="doLogout()">Выйти</button></div></div>';
     return;
   }
+  var mutedBanner = '';
+  if (isMuted() && !state.isAdmin) {
+    var left2 = state.profile.muteUntil ? ' Осталось: ' + fmtLeft(state.profile.muteUntil - Date.now()) : '';
+    var reason2 = state.profile.muteReason ? ' Причина: ' + state.profile.muteReason : '';
+    mutedBanner = '<div class="muted-banner">🔇 Вы в муте.' + esc(reason2) + esc(left2) + '</div>';
+  }
+
   if (state.page === 'profile') renderProfile(app);
-  else if (state.page === 'wall') renderWall(app);
-  else if (state.page === 'forum') renderForum(app);
-  else if (state.page === 'topic') renderTopic(app);
-  else if (state.page === 'messages') renderMessages(app);
+  else if (state.page === 'wall') renderWall(app, mutedBanner);
+  else if (state.page === 'forum') renderForum(app, mutedBanner);
+  else if (state.page === 'topic') renderTopic(app, mutedBanner);
+  else if (state.page === 'messages') renderMessages(app, mutedBanner);
   else if (state.page === 'rating') renderRating(app);
   else if (state.page === 'admin' && state.isAdmin) renderAdmin(app);
   else if (state.page === 'premium') renderPremium(app);
@@ -952,13 +1026,17 @@ function showProfileCard(app, p, isMe, uid) {
     var subbed = !!state.userSubs[uid];
     subBtn = '<button class="bt ' + (subbed ? 'btg' : 'btgr') + '" onclick="toggleSubscribe(\'' + uid + '\')">' + (subbed ? '❌ Отписаться' : '➕ Подписаться') + '</button>';
   }
+  // Метка BAN / MUTE в профиле
+  var punishMark = '';
+  if (p.banned && (!p.banUntil || Date.now() < p.banUntil)) punishMark = ' <span class="bdr">BAN</span>';
+  if (p.muted && (!p.muteUntil || Date.now() < p.muteUntil)) punishMark += ' <span class="bdm">MUTE</span>';
   app.innerHTML = '<div class="bk" style="' + pageBg + '">' +
     '<div class="' + headerClass + '" style="' + headerStyle + '">' + bannerHint + '</div>' +
     '<div style="position:relative">' +
       '<div class="prof-ava' + (p.isPremium ? ' vp' : '') + '" style="' + avaStyle + '">' + initial + '</div>' +
       '<div class="prof-info">' +
         '<h3 style="margin-bottom:6px;font-size:16px;' + nickStyle + '">' + esc(p.nickname) +
-          (p.isPremium ? ' <span class="bd">VIP</span>' : '') + ' ' + lvlBadge + '</h3>' +
+          (p.isPremium ? ' <span class="bd">VIP</span>' : '') + ' ' + lvlBadge + punishMark + '</h3>' +
         '<p style="color:#666;margin-bottom:12px;font-size:12px">' + esc(p.description || 'Нет описания') + '</p>' +
         (isMe ? '<button class="bt" onclick="openProfEdit()">✏️ Редактировать</button>'
               : '<button class="bt" onclick="startChat(\'' + uid + '\')">💬 Написать</button> ' + subBtn) +
@@ -1092,8 +1170,9 @@ function subBtnHtml(authorId, authorName) {
 }
 
 // ============ WALL ============
-function renderWall(app) {
+function renderWall(app, mutedBanner) {
   app.innerHTML =
+    (mutedBanner || '') +
     '<div class="bk">' +
       '<div class="bh">📝 Стена' +
         '<div class="sort-bar" style="margin-left:auto;padding:0;border:none;background:none">' +
@@ -1106,14 +1185,14 @@ function renderWall(app) {
       '<div class="bb" id="wallList">Загрузка...</div>' +
     '</div>' +
     '<div class="bk"><div class="bh">✍️ Новая запись</div><div class="bb">' +
-      '<textarea id="wallText" placeholder="Что нового? #хештеги приветствуются"></textarea>' +
+      '<textarea id="wallText" placeholder="Что нового? #хештеги приветствуются"' + (isMuted() && !state.isAdmin ? ' disabled' : '') + '></textarea>' +
       '<label style="display:block;text-align:left;font-size:11px;color:#666;margin:6px 0 4px">Фото</label>' +
       '<input type="file" id="wallImgFile" accept="image/*" class="file-inp">' +
-      '<button class="bt bt2" onclick="document.getElementById(\'wallImgFile\').click()">📷 Фото</button>' +
+      '<button class="bt bt2" onclick="document.getElementById(\'wallImgFile\').click()"' + (isMuted() && !state.isAdmin ? ' disabled' : '') + '>📷 Фото</button>' +
       '<img id="wallImgPreview" style="max-width:100%;max-height:120px;margin:6px 0;display:none;border-radius:4px">' +
       '<div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
-        '<button class="bt" onclick="postWall()">Отправить</button>' +
-        '<label style="font-size:12px"><input type="checkbox" id="wallAnon" style="width:auto;margin-right:4px">Анонимно</label>' +
+        '<button class="bt" onclick="postWall()"' + (isMuted() && !state.isAdmin ? ' disabled' : '') + '>Отправить</button>' +
+        '<label style="font-size:12px"><input type="checkbox" id="wallAnon" style="width:auto;margin-right:4px"' + (isMuted() && !state.isAdmin ? ' disabled' : '') + '>Анонимно</label>' +
       '</div>' +
     '</div></div>';
   var wallImgTmp = '';
@@ -1195,6 +1274,7 @@ function renderWallPost(id, m) {
 function openImg(url) { $('imgFull').src = url; openModal('imgModal'); }
 function postWall() {
   if (!state.user) return;
+  if (!checkMute()) return;
   var text = $('wallText').value.trim();
   var img = window._wallImgTmp ? window._wallImgTmp() : '';
   if (!text && !img) { toast('Введите текст или фото'); return; }
@@ -1232,8 +1312,9 @@ function deleteWall(id) {
 }
 
 // ============ FORUM ============
-function renderForum(app) {
+function renderForum(app, mutedBanner) {
   app.innerHTML =
+    (mutedBanner || '') +
     '<div class="bk">' +
       '<div class="bh">💬 Темы форума' +
         '<div class="sort-bar" style="margin-left:auto;padding:0;border:none;background:none">' +
@@ -1246,9 +1327,9 @@ function renderForum(app) {
       '<div class="bb" id="forumList">Загрузка...</div>' +
     '</div>' +
     '<div class="bk"><div class="bh">➕ Новая тема</div><div class="bb">' +
-      '<input id="topicTitle" placeholder="Название темы" style="margin-bottom:6px">' +
-      '<textarea id="topicText" placeholder="Первое сообщение (#хештеги)"></textarea>' +
-      '<button class="bt" style="margin-top:6px" onclick="createTopic()">Создать</button>' +
+      '<input id="topicTitle" placeholder="Название темы" style="margin-bottom:6px"' + (isMuted() && !state.isAdmin ? ' disabled' : '') + '>' +
+      '<textarea id="topicText" placeholder="Первое сообщение (#хештеги)"' + (isMuted() && !state.isAdmin ? ' disabled' : '') + '></textarea>' +
+      '<button class="bt" style="margin-top:6px" onclick="createTopic()"' + (isMuted() && !state.isAdmin ? ' disabled' : '') + '>Создать</button>' +
     '</div></div>';
   listenForum();
 }
@@ -1286,6 +1367,7 @@ function listenForum() {
 }
 function createTopic() {
   if (!state.user) return;
+  if (!checkMute()) return;
   var title = $('topicTitle').value.trim();
   var text = $('topicText').value.trim();
   if (!title || !text) { toast('Заполните оба поля'); return; }
@@ -1315,8 +1397,8 @@ function createTopic() {
   });
 }
 function openTopic(id) { state.topicId = id; state.page = 'topic'; render(); }
-function renderTopic(app) {
-  app.innerHTML = '<div class="bk"><div class="bb">Загрузка...</div></div>';
+function renderTopic(app, mutedBanner) {
+  app.innerHTML = (mutedBanner || '') + '<div class="bk"><div class="bb">Загрузка...</div></div>';
   var topicId = state.topicId;
   db.collection('forumTopics').doc(topicId).get().then(function(doc) {
     if (!doc.exists) { nav('forum'); return; }
@@ -1324,7 +1406,8 @@ function renderTopic(app) {
     var liked = !!state.userLikes[topicId];
     var isMine = t.authorId === state.user.uid;
     var canEdit = isMine || state.isAdmin;
-    app.innerHTML = '<div class="bk">' +
+    var muted = isMuted() && !state.isAdmin;
+    app.innerHTML = (mutedBanner || '') + '<div class="bk">' +
       '<div class="bh">📌 ' + esc(t.title) + ' <button class="bt bt2 bt-sm" style="margin-left:auto" onclick="nav(\'forum\')">← Назад</button></div>' +
       '<div class="bb" style="border-bottom:1px solid #f2f3f5">' +
         '<div style="font-size:11px;color:#999;margin-bottom:6px">Автор: <span class="au" onclick="goProfile(\'' + t.authorId + '\')">' + esc(t.authorName) + '</span>' + subBtnHtml(t.authorId, t.authorName) + ' · ' + fmtDate(t.createdAt) + '</div>' +
@@ -1337,8 +1420,8 @@ function renderTopic(app) {
       '</div>' +
       '<div class="bb" id="topicPosts">Загрузка...</div></div>' +
       '<div class="bk"><div class="bh">Ответить</div><div class="bb">' +
-        '<textarea id="replyText" placeholder="Ваше сообщение"></textarea>' +
-        '<button class="bt" style="margin-top:6px" onclick="replyTopic(\'' + topicId + '\')">Отправить</button>' +
+        '<textarea id="replyText" placeholder="Ваше сообщение"' + (muted ? ' disabled' : '') + '></textarea>' +
+        '<button class="bt" style="margin-top:6px" onclick="replyTopic(\'' + topicId + '\')"' + (muted ? ' disabled' : '') + '>Отправить</button>' +
       '</div></div>';
     db.collection('forumTopics').doc(topicId).collection('posts').orderBy('timestamp', 'asc')
       .onSnapshot(function(snap) {
@@ -1394,6 +1477,7 @@ function deleteForumPost(topicId, postId) {
 }
 function togglePostLike(topicId, postId) {
   if (!state.user) { openModal('authModal'); return; }
+  if (!checkMute()) return;
   if (!checkCooldown()) return;
   var key = topicId + '_' + postId;
   var liked = !!state.userLikes[key];
@@ -1421,6 +1505,7 @@ function togglePostLike(topicId, postId) {
 }
 function replyTopic(id) {
   if (!state.user) return;
+  if (!checkMute()) return;
   var text = $('replyText').value.trim();
   if (!text) { toast('Введите текст'); return; }
   if (!checkCooldown()) return;
@@ -1442,8 +1527,8 @@ function replyTopic(id) {
 }
 
 // ============ MESSAGES ============
-function renderMessages(app) {
-  app.innerHTML = '<div class="bk"><div class="bh">✉️ Сообщения</div><div class="bb" style="padding:0"><div class="ch"><div class="chl" id="contactList"></div><div class="chm" id="chatArea"></div></div></div></div>';
+function renderMessages(app, mutedBanner) {
+  app.innerHTML = (mutedBanner || '') + '<div class="bk"><div class="bh">✉️ Сообщения</div><div class="bb" style="padding:0"><div class="ch"><div class="chl" id="contactList"></div><div class="chm" id="chatArea"></div></div></div></div>';
   renderContactList();
   renderChat();
 }
@@ -1472,6 +1557,7 @@ function renderChat() {
   if (!state.dialogUid) { area.innerHTML = '<div class="em">Выберите контакт</div>'; return; }
   var c = getContact(state.dialogUid);
   var name = c ? (c.customName || c.nickname || '...') : '...';
+  var muted = isMuted() && !state.isAdmin;
   area.innerHTML =
     '<div style="padding:8px;background:#fafbfc;border-bottom:1px solid #eee">💬 ' + esc(name) + '</div>' +
     '<div class="chms" id="chatMsgs"></div>' +
@@ -1481,10 +1567,10 @@ function renderChat() {
       '<button class="rm" onclick="clearPrivImg()">✕</button>' +
     '</div>' +
     '<div class="chi">' +
-      '<input type="file" id="privImgFile" accept="image/*" class="file-inp">' +
-      '<button class="bt bt2" onclick="document.getElementById(\'privImgFile\').click()" title="Фото">📷</button>' +
-      '<input id="privInput" placeholder="Сообщение...">' +
-      '<button class="bt" onclick="sendPrivate()">➤</button>' +
+      '<input type="file" id="privImgFile" accept="image/*" class="file-inp"' + (muted ? ' disabled' : '') + '>' +
+      '<button class="bt bt2" onclick="document.getElementById(\'privImgFile\').click()" title="Фото"' + (muted ? ' disabled' : '') + '>📷</button>' +
+      '<input id="privInput" placeholder="Сообщение..."' + (muted ? ' disabled' : '') + '>' +
+      '<button class="bt" onclick="sendPrivate()"' + (muted ? ' disabled' : '') + '>➤</button>' +
     '</div>';
 
   var fileInput = $('privImgFile');
@@ -1524,11 +1610,9 @@ function renderChat() {
               ? 'background-image:url(' + info.url + ');background-size:cover;background-position:center;'
               : 'background-color:' + color(info.name) + ';';
             var initial = info.url ? '' : info.name.substring(0,2).toUpperCase();
-
             var bodyHtml = '';
             if (m.text) bodyHtml += '<div class="bl">' + esc(m.text) + '</div>';
             if (m.imageUrl) bodyHtml += '<img class="msg-img" src="' + m.imageUrl + '" onclick="openImg(\'' + m.imageUrl + '\')">';
-
             var actionsHtml = '';
             if (isMe) {
               actionsHtml = '<div class="msg-actions">' +
@@ -1536,7 +1620,6 @@ function renderChat() {
                 '<a class="del" onclick="deletePrivMsg(\'' + d.id + '\')">🗑 Удалить</a>' +
               '</div>';
             }
-
             html += '<div class="msg-row' + (isMe ? ' mine' : '') + '">' +
               '<div class="mva' + (info.premium ? ' vp' : '') + '" style="width:28px;height:28px;font-size:10px;' + avaStyle + '">' + initial + '</div>' +
               '<div class="msg-body" style="' + (isMe ? 'text-align:right;' : '') + '">' +
@@ -1559,6 +1642,7 @@ function clearPrivImg() {
 function openDialog(uid) { state.dialogUid = uid; state.privImgTmp = ''; markDialogRead(uid); render(); }
 function sendPrivate() {
   if (!state.user) return;
+  if (!checkMute()) return;
   var text = $('privInput').value.trim();
   var img = state.privImgTmp || '';
   if (!text && !img) return;
@@ -1740,21 +1824,81 @@ function loadUsers() {
   db.collection('users').orderBy('lastSeen', 'desc').limit(100).get().then(function(snap) {
     var list = $('userList'); if (!list) return;
     var html = '';
+    var now = Date.now();
     snap.forEach(function(doc) {
       var u = doc.data();
+      var isBannedActive = u.banned && (!u.banUntil || now < u.banUntil);
+      var isMutedActive = u.muted && (!u.muteUntil || now < u.muteUntil);
+      var banLabel = '';
+      if (isBannedActive) {
+        var banLeft = u.banUntil ? ' (' + fmtLeft(u.banUntil - now) + ')' : ' (∞)';
+        banLabel = ' <span class="bdr" title="' + esc(u.banReason || '') + '">BAN' + banLeft + '</span>';
+      }
+      var muteLabel = '';
+      if (isMutedActive) {
+        var muteLeft = u.muteUntil ? ' (' + fmtLeft(u.muteUntil - now) + ')' : ' (∞)';
+        muteLabel = ' <span class="bdm" title="' + esc(u.muteReason || '') + '">MUTE' + muteLeft + '</span>';
+      }
       var hidden = (u.hideFromTop || u.adminFullAnon) ? ' <span style="color:#c00;font-size:10px" title="Скрыт">👁‍🗨</span>' : '';
       html += '<div class="ucard">' +
-        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + (u.banned ? ' <span class="bdr">BAN</span>' : '') + hidden + '<br><small style="color:#999">Ур. ' + (u.level||1) + ' · ' + fmtDate(u.lastSeen) + '</small></div>' +
+        '<div><b>' + esc(u.nickname) + '</b> ' + (u.isPremium ? '<span class="bd">VIP</span>' : '') + banLabel + muteLabel + hidden + '<br><small style="color:#999">Ур. ' + (u.level||1) + ' · ' + fmtDate(u.lastSeen) + '</small></div>' +
         '<div class="actions">' +
-          '<button class="bt ' + (u.banned ? 'btgr' : 'btr') + ' bt-sm" onclick="toggleBan(\'' + doc.id + '\',' + !u.banned + ')">' + (u.banned ? 'Разбан' : 'Бан') + '</button>' +
+          '<button class="bt ' + (isBannedActive ? 'btgr' : 'btr') + ' bt-sm" onclick="openPunish(\'' + doc.id + '\',\'' + esc(u.nickname || '') + '\',\'ban\', ' + !!isBannedActive + ')">' + (isBannedActive ? 'Разбан' : 'Бан') + '</button>' +
+          '<button class="bt ' + (isMutedActive ? 'btgr' : 'btorange') + ' bt-sm" onclick="openPunish(\'' + doc.id + '\',\'' + esc(u.nickname || '') + '\',\'mute\', ' + !!isMutedActive + ')">' + (isMutedActive ? 'Размут' : 'Мут') + '</button>' +
           '<button class="bt ' + (u.isPremium ? 'btg' : 'btgr') + ' bt-sm" onclick="toggleVip(\'' + doc.id + '\',' + !u.isPremium + ')">' + (u.isPremium ? '−VIP' : '+VIP') + '</button>' +
         '</div></div>';
     });
     list.innerHTML = html;
   });
 }
-function toggleBan(uid, val) { db.collection('users').doc(uid).update({ banned: val }).then(function() { toast(val ? 'Забанен' : 'Разбанен'); loadUsers(); }); }
 function toggleVip(uid, val) { db.collection('users').doc(uid).update({ isPremium: val }).then(function() { toast(val ? 'VIP выдан' : 'VIP снят'); loadUsers(); }); }
+
+// Открыть модалку бана/мута
+function openPunish(uid, nick, type, alreadyActive) {
+  if (alreadyActive) {
+    // Снять бан/мут
+    if (!confirm('Снять ' + (type === 'ban' ? 'бан' : 'мут') + ' с ' + nick + '?')) return;
+    var upd = {};
+    if (type === 'ban') upd = { banned: false, banUntil: 0, banReason: '' };
+    else upd = { muted: false, muteUntil: 0, muteReason: '' };
+    db.collection('users').doc(uid).update(upd).then(function() {
+      toast(type === 'ban' ? 'Разбанен' : 'Размучен');
+      loadUsers();
+    });
+    return;
+  }
+  state.punishUid = uid;
+  state.punishType = type;
+  $('punishUid').value = uid;
+  $('punishType').value = type;
+  $('punishNick').value = nick;
+  $('punishReason').value = '';
+  $('punishDuration').value = '0';
+  $('punishTitle').textContent = type === 'ban' ? '🚫 Выдать бан' : '🔇 Выдать мут';
+  $('punishBtn').className = 'bt ' + (type === 'ban' ? 'btr' : 'btorange');
+  $('punishBtn').textContent = type === 'ban' ? '🚫 Забанить' : '🔇 Замутить';
+  openModal('punishModal');
+}
+function applyPunish() {
+  var uid = $('punishUid').value;
+  var type = $('punishType').value;
+  var reason = $('punishReason').value.trim();
+  var hours = parseInt($('punishDuration').value) || 0;
+  var until = hours > 0 ? Date.now() + hours * 60 * 60 * 1000 : 0;
+  var upd = {};
+  if (type === 'ban') {
+    upd = { banned: true, banUntil: until, banReason: reason };
+  } else {
+    upd = { muted: true, muteUntil: until, muteReason: reason };
+  }
+  db.collection('users').doc(uid).update(upd).then(function() {
+    closeModal('punishModal');
+    var when = hours > 0 ? 'на ' + hours + ' ч.' : 'навсегда';
+    toast((type === 'ban' ? 'Забанен ' : 'Замучен ') + when);
+    loadUsers();
+  }).catch(function(e) { toast(e.message); });
+}
+
 function openMaintDialog() {
   db.collection('settings').doc('main').get().then(function(doc) {
     var data = doc.exists ? doc.data() : {};
